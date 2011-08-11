@@ -7,11 +7,11 @@
 /**
 * $DB_CONFIG_FILE - Absolute Path to file where Database access details are specified. Expecting a php file.
 */
-$DB_CONFIG_FILE="/var/www/html/lgi/php/includes/db.inc.php";
+$DB_CONFIG_FILE=dirname(__FILE__)."/php/includes/db.inc.php";
 /**
  * CA certificate file to be used when requesting to project server
  */
-$CA_FILE="/var/local/home/apache/lgikey/ca.crt";
+$CA_FILE=dirname(__FILE__)."/lgi-ca.crt";
 
 /**
  * _AUTH_MECHANISM_ - defines which authentication mechanism to use. Currently two methods are possible.
@@ -23,6 +23,6 @@ define('_AUTH_MECHANISM_',"DATABASE");  //Possible "DATABASE","DIGEST"
 /**
  * _LGI_ROOT_ - Defines the root folder where this application is deployed. The path should be with respect to web root.
  */
-define('_LGI_ROOT_',"/lgi/");
+define('_LGI_ROOT_',"/lgi");
  
 ?>
