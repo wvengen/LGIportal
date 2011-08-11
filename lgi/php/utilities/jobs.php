@@ -42,14 +42,15 @@ function submitJob()
 	$group=$user;		//TODO : verify what to set for groups
 	$CA=$CA_FILE;
 
-	//Get inputs from user
-	$application=$_POST['application'];
-	$server=$_POST['server'];
-	$project=$_POST['project'];
-	$readaccess=$_POST['readaccess'];
-	$writeaccess=$_POST['writeaccess'];
-	$target=$_POST['target'];
-	$jobspecifics=$_POST['jobspecifics'];
+	// Get inputs from user or defaults
+	// TODO possibly warn if predefined things and they differ from input
+	$application = defined('_LGI_APPLICATION_') ? _LGI_APPLICATION_ : $_POST['application'];
+	$server = defined('_LGI_SERVER_') ? _LGI_SERVER_ : $_POST['server'];
+	$project = defined('_LGI_PROJECT_') ? _LGI_PROJECT_ : $_POST['project'];
+	$readaccess = $_POST['readaccess'];
+	$writeaccess = $_POST['writeaccess'];
+	$target = $_POST['target'];
+	$jobspecifics = $_POST['jobspecifics'];
 
 	//Create instance of Job
 	$newjob=new Job($key,$cert,$CA,$user,$group);
@@ -108,9 +109,9 @@ function deleteJob()
 	$CA=$CA_FILE;
 
 
-	$server=$_POST['server'];
-	$project=$_POST['project'];
-	$jobid=$_POST['jobid'];
+	$server = defined('_LGI_SERVER_') ? _LGI_SERVER_ : $_POST['server'];
+	$project = defined('_LGI_PROJECT_') ? _LGI_PROJECT_ : $_POST['project'];
+	$jobid = $_POST['jobid'];
 
 
 	//create instance of Job
@@ -158,9 +159,9 @@ function viewJob()
 	$CA=$CA_FILE;
 
 
-	$server=$_POST['server'];
-	$project=$_POST['project'];
-	$jobid=$_POST['jobid'];
+	$server = defined('_LGI_SERVER_') ? _LGI_SERVER_ : $_POST['server'];
+	$project = defined('_LGI_PROJECT_') ? _LGI_PROJECT_ : $_POST['project'];
+	$jobid = $_POST['jobid'];
 
 
 	$newjob=new Job($key,$cert,$CA,$user,$group);
@@ -215,8 +216,8 @@ function listJobs()
 	$CA=$CA_FILE;
 
 
-	$server=$_POST['server'];
-	//$project=$_POST['project'];
+	$server = defined('_LGI_SERVER_') ? _LGI_SERVER_ : $_POST['server'];
+	//$project = defined('_LGI_PROJECT_') ? _LGI_PROJECT_ : $_POST['project'];
 	
 	$newjob=new Job($key,$cert,$CA,$user,$group);
 
@@ -272,8 +273,8 @@ function listResources()
 	$CA=$CA_FILE;
 
 
-	$server=$_POST['server'];
-	//$project=$_POST['project'];
+	$server = defined('_LGI_SERVER_') ? _LGI_SERVER_ : $_POST['server'];
+	//$project = defined('_LGI_PROJECT_') ? _LGI_PROJECT_ : $_POST['project'];
 	//$jobid=$_POST['jobid'];
 
 	$newjob=new Job($key,$cert,$CA,$user,$group);

@@ -15,12 +15,6 @@
 					<li>					
         					<label for="application">Application:</label> <input type="text" name="application" id="applicaton" /> <br/>
         			 	</li>
-        			 	<li>					
-        					<label for="server">Server Url:</label> <input type="text" name="server" id="server" /> <br/>
-        			 	</li>
-        			 	<li>					
-        					<label for="project">Project:</label> <input type="text" name="project" id="project" /> <br/>
-        			 	</li>
         			 	<li>
         			 		<label for="readaccess">Extra read access:</label> <input type="text" name="readaccess" id="readaccess" /> <br/>
         			 	</li>

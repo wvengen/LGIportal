@@ -24,5 +24,30 @@ define('_AUTH_MECHANISM_',"DATABASE");  //Possible "DATABASE","DIGEST"
  * _LGI_ROOT_ - Defines the root folder where this application is deployed. The path should be with respect to web root.
  */
 define('_LGI_ROOT_',"/lgi");
+
+/**
+ * _LGI_SERVER_ - LGI server to communicate with
+ *
+ * Ideally LGIportal would implement the following behaviour:
+ * - when a single value is present, this is enforced
+ * - when the value is an array, the user can select one from this list
+ * - when the key is not present, the user may input any value
+ * This is not yet fully implemented though.
+ */
+define('_LGI_SERVER_', 'https://example.com/LGI/');
+
+/**
+ * _LGI_PROJECT_ - LGI project on server to work on
+ *
+ * (note at _LGI_SERVER_ applies here as well)
+ */
+define('_LGI_PROJECT_', 'helloworld');
+
+/**
+ * _LGI_APPLICATION- LGI application to use
+ *
+ * (note at _LGI_SERVER_ applies here as well)
+ */
+define('_LGI_APPLICATION_', 'helloworld');
  
 ?>

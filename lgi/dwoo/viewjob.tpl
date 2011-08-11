@@ -16,12 +16,6 @@
 					<li>					
         					<label for="jobid">Job ID:</label> <input type="text" name="jobid" id="jobid" /> <br/>
         			 	</li>
-        			 	<li>					
-        					<label for="server">Server Url:</label> <input type="text" name="server" id="server" /> <br/>
-        			 	</li>
-        			 	<li>					
-        					<label for="project">Project:</label> <input type="text" name="project" id="project" /> <br/>
-        			 	</li>
         			 	
         			 	<li>
         			 		<input type="submit" value="View Job Details" />
