@@ -25,9 +25,9 @@ function pushErrorMessage($msg)
 {
 	session_start();
 	if(!isset($_SESSION["ErrorMessage"]))
-	    $_SESSION["ErrorMessage"]="Error: <br>".$msg;
+	    $_SESSION["ErrorMessage"]="Error: ".$msg;
 	else
-	    $_SESSION["ErrorMessage"]=$_SESSION["ErrorMessage"]."<br>".$msg;
+	    $_SESSION["ErrorMessage"]=$_SESSION["ErrorMessage"]."<br/>".$msg;
 }
 
 /**
