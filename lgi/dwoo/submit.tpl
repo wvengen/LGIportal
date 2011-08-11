@@ -6,7 +6,7 @@
 {extends "home_base.tpl"}
 {block "content"}
 			<h2>
-				Welcome to LGI portal !
+				Welcome to the the LGI portal !
 			</h2>
 			
 				<form action="submit.php" method="post" class="cmxform">				

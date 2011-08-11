@@ -1,12 +1,12 @@
 {*****************************************************************************************
- *	The template for deleting a job. It extends the homs_base.tpl. 
+ *	The template for deleting a job. It extends the home_base.tpl. 
  * 	The heading, menus, footer are same as base template. Only the content is changed. 
  *****************************************************************************************}
 
 {extends "home_base.tpl"}
 {block "content"}
 			<h2>
-				Welcome to LGI portal !
+				Welcome to the LGI portal !
 			</h2>
 			
 				<form action="viewjob.php" method="post" class="cmxform">				

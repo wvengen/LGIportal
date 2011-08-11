@@ -35,7 +35,7 @@ function submitJob()
 	$key= getKeyFile($user);
 	if(empty($cert) || empty($key))
 	{
-		pushErrorMessage("You donot have a valid certificate or key. Please contact System administrator");
+		pushErrorMessage("You do not have a valid certificate or key. Please contact System administrator");
 		header("Location: submit.php");
 		die();
 	}
@@ -100,7 +100,7 @@ function deleteJob()
 	$key= getKeyFile($user);
 	if(empty($cert) || empty($key))
 	{
-		pushErrorMessage("You donot have a valid certificate or key. Please contact your system administrator");
+		pushErrorMessage("You do not have a valid certificate or key. Please contact your system administrator");
 		header("Location: delete.php");
 		die();
 	}
@@ -150,7 +150,7 @@ function viewJob()
 	$key= getKeyFile($user);
 	if(empty($cert) || empty($key))
 	{
-		pushErrorMessage("You donot have a valid certificate or key. Please contact your system administrator");
+		pushErrorMessage("You do not have a valid certificate or key. Please contact your system administrator");
 		header("Location: viewjob.php");
 		die();
 	}
@@ -207,7 +207,7 @@ function listJobs()
 
 	if(empty($cert) || empty($key))
 	{
-		pushErrorMessage("You donot have a valid certificate or key. Please contact your system administrator");
+		pushErrorMessage("You do not have a valid certificate or key. Please contact your system administrator");
 		header("Location: listjobs.php");
 		die();
 	}
@@ -264,7 +264,7 @@ function listResources()
 
 	if(empty($cert) || empty($key))
 	{
-		pushErrorMessage("You donot have a valid certificate or key. Please contact your system administrator");
+		pushErrorMessage("You do not have a valid certificate or key. Please contact your system administrator");
 		header("Location: listjobs.php");
 		die();
 	}

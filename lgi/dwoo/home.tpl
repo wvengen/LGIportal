@@ -4,7 +4,7 @@
 				Welcome {$user} !
 			</h2>
 			<p>
-				You are now logged into LGI portal.
+				You are now logged into the LGI portal.
 			</p>
 			
 {/block}
