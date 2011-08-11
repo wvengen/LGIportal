@@ -251,7 +251,7 @@ class ServerResponse
 						$this->resources[0]=$newresource;
 					}
 				}
-				else if($this->noofresource!=0)		//if there are more resources, then result contains an array of jobs.
+				else if($this->noofresources!=0)		//if there are more resources, then result contains an array of jobs.
 				{
 					$resourcelists=$result['resource'];
 
