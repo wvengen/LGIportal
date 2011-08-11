@@ -186,23 +186,20 @@ class Job
 
 
 	/**
-	 * Setup cURL for operations. It sets necessary curl options for contacting a project server.
 	 * @param string $posturl
 	 */
 	private function setUpcURL($posturl)
 	{
 		$this->cURLhandle=curl_init();
-		curl_setopt($this->cURLhandle,CURLOPT_URL,$this->server.$posturl);
-		curl_setopt($this->cURLhandle,CURLOPT_SSLCERT,$this->certificate);
-		curl_setopt($this->cURLhandle,CURLOPT_SSLKEY,$this->keyfile);
-		curl_setopt($this->cURLhandle,CURLOPT_CAINFO,$this->CA);
-		curl_setopt($this->cURLhandle,CURLOPT_SSL_VERIFYPEER, true );
-		curl_setopt($this->cURLhandle,CURLOPT_SSL_VERIFYHOST, 0);
-		curl_setopt($this->cURLhandle,CURLOPT_NOSIGNAL, true );
-		curl_setopt($this->cURLhandle,CURLOPT_VERBOSE, false );
-		curl_setopt($this->cURLhandle,CURLOPT_NOPROGRESS, true);
-			
-
+		curl_setopt($this->cURLhandle, CURLOPT_URL, $this->server.$posturl);
+		curl_setopt($this->cURLhandle, CURLOPT_SSLCERT, $this->certificate);
+		curl_setopt($this->cURLhandle, CURLOPT_SSLKEY, $this->keyfile);
+		curl_setopt($this->cURLhandle, CURLOPT_CAINFO, $this->CA);
+		curl_setopt($this->cURLhandle, CURLOPT_SSL_VERIFYPEER, true);
+		curl_setopt($this->cURLhandle, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($this->cURLhandle, CURLOPT_NOSIGNAL, true);
+		curl_setopt($this->cURLhandle, CURLOPT_VERBOSE, false);
+		curl_setopt($this->cURLhandle, CURLOPT_NOPROGRESS, true);
 	}
 
 	/**
@@ -492,47 +489,40 @@ class Job
 		$errortype=0;
 		if( !isset($this->keyfile)or empty($this->keyfile))
 		{
-			$errortype=ErrorType::INPUTERROR;;
+			$errortype=ErrorType::INPUTERROR;
 			$errorno=Error::NOKEY;
-			$this->error->setError($errorno,$errortype);
-			return $errortype;
 		}
-		if( !isset($this->certificate) or empty($this->certificate))
+		elseif( !isset($this->certificate) or empty($this->certificate))
 		{
-			$errortype=ErrorType::INPUTERROR;;
+			$errortype=ErrorType::INPUTERROR;
 			$errorno=Error::NOCERT;
-			$this->error->setError($errorno,$errortype);
-			return $errortype;
 		}
-		if( !isset($this->CA) or empty($this->CA))
+		elseif( !isset($this->CA) or empty($this->CA))
 		{
-			$errortype=ErrorType::INPUTERROR;;
+			$errortype=ErrorType::INPUTERROR;
 			$errorno=Error::NOCA;
-			$this->error->setError($errorno,$errortype);
-			return $errortype;
 		}
-		if( !isset($this->user)or empty($this->user))
+		elseif( !isset($this->user)or empty($this->user))
 		{
-			$errortype=ErrorType::INPUTERROR;;
+			$errortype=ErrorType::INPUTERROR;
 			$errorno=Error::NOUSER;
-			$this->error->setError($errorno,$errortype);
-			return $errortype;
 		}
-		if( !isset($this->groups)or empty($this->groups))
+		elseif( !isset($this->groups)or empty($this->groups))
 		{
-			$errortype=ErrorType::INPUTERROR;;
+			$errortype=ErrorType::INPUTERROR;
 			$errorno=Error::NOGROUP;
-			$this->error->setError($errorno,$errortype);
-			return $errortype;
 		}
-		if( !isset($this->server)or empty($this->server))
+		elseif( !isset($this->server)or empty($this->server))
 		{
-			$errortype=ErrorType::INPUTERROR;;
+			$errortype=ErrorType::INPUTERROR;
 			$errorno=Error::NOSERVER;
-			$this->error->setError($errorno,$errortype);
-			return $errortype;
 		}
-			
+		else
+		{
+			return 0;
+		}
+
+		$this->error->setError($errorno,$errortype);
 		return $errortype;
 	}
 }
