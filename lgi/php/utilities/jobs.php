@@ -9,7 +9,6 @@
 /**
  *
  */
-require_once 'Dwoo/dwooAutoload.php';
 require_once dirname(__FILE__).'/../../lgi.config.php';
 require_once dirname(__FILE__).'/../lgijob/jobmanage.php';
 require_once dirname(__FILE__).'/../lgijob/errors.php';

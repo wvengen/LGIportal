@@ -6,7 +6,7 @@
  * @author Deepthi
  */
 
-require_once 'Dwoo/dwooAutoload.php';
+require_once 'dwoo.php';
 require_once 'errors.php'; 
 
 /**

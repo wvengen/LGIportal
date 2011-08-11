@@ -8,13 +8,13 @@
  *
  */
 // Include the main class, the rest will be automatically loaded
-require_once 'Dwoo/dwooAutoload.php';
+require_once 'utilities/dwoo.php';
 require_once 'utilities/login_utilities.php';
 require_once 'utilities/sessions.php';
 require_once 'utilities/errors.php';
 
 
-$dwoo = new Dwoo();
+$dwoo = new LGIDwoo();
 
 session_start();
 //if user has already logged in redirect to home page.

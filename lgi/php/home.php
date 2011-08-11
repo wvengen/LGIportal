@@ -8,9 +8,9 @@
  /**
   *
   */
-include 'Dwoo/dwooAutoload.php';
-include 'utilities/sessions.php';
-include 'utilities/login_utilities.php';
+require_once 'utilities/dwoo.php';
+require_once 'utilities/sessions.php';
+require_once 'utilities/login_utilities.php';
 require_once 'utilities/data.php';
 
 	session_start();
@@ -18,7 +18,7 @@ require_once 'utilities/data.php';
 	authenticateUser();
 		
 	//Display home page
-	$dwoo = new Dwoo(); 
+	$dwoo = new LGIDwoo(); 
 	$data=createDwooData();	
     $dwoo->output('../dwoo/home.tpl', $data);      
 	

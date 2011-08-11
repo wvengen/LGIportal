@@ -1,10 +1,10 @@
 
  <?php
 
-include 'Dwoo/dwooAutoload.php';
+require_once 'utilities/dwoo.php';
 
 // Create the controller, it is reusable and can render multiple templates
-$dwoo = new Dwoo(); 
+$dwoo = new LGIDwoo(); 
 
    session_start();
    session_destroy();

@@ -7,7 +7,7 @@
 /**
  *
  */
-include 'Dwoo/dwooAutoload.php';
+require_once 'utilities/dwoo.php';
 require_once 'utilities/sessions.php';
 require_once 'utilities/login_utilities.php';
 require_once 'utilities/jobs.php';
@@ -22,7 +22,7 @@ authenticateUser();
 if(!isset($_POST['submitrequest']))
 {
 	//display form
-	$dwoo = new Dwoo();
+	$dwoo = new LGIDwoo();
 	$data= createDwooData();
 	
 	//To prevent cross site request forgery attack - set a nonce in the form and session. Verify the nonce before deleting the job.

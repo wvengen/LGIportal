@@ -7,7 +7,7 @@
 /**
  *
  */
-include 'Dwoo/dwooAutoload.php';
+require_once 'utilities/dwoo.php';
 require_once 'utilities/sessions.php';
 require_once 'utilities/login_utilities.php';
 require_once 'utilities/jobs.php';
@@ -20,13 +20,13 @@ authenticateUser();
 if(!isset($_POST['submitrequest']))
 {
 	//display form
-	$dwoo = new Dwoo();
+	$dwoo = new LGIDwoo();
 	$data= createDwooData();
 	$dwoo->output('../dwoo/listjobs.tpl', $data);
 }
 else //request for getting all job details.
 {
-	$dwoo = new Dwoo();
+	$dwoo = new LGIDwoo();
 	$data=createDwooData();
 	$output=listJobs(); //$output is an array containing details of all jobs
 	

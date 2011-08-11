@@ -8,7 +8,7 @@
 /**
  *
  */
-include 'Dwoo/dwooAutoload.php';
+require_once 'utilities/dwoo.php';
 require_once 'utilities/sessions.php';
 require_once 'utilities/login_utilities.php';
 require_once 'utilities/jobs.php';
@@ -21,7 +21,7 @@ authenticateUser();
 if(!isset($_POST['submitrequest']))
 {
 	//display form
-	$dwoo = new Dwoo();
+	$dwoo = new LGIDwoo();
 	$data= createDwooData();
 	//To prevent cross site request forgery
 	$nonce=uniqid(rand(), true);
@@ -31,7 +31,7 @@ if(!isset($_POST['submitrequest']))
 }
 else //request for submit job.
 {
-	$dwoo = new Dwoo();
+	$dwoo = new LGIDwoo();
 	$data=createDwooData();
 
 	//To prever cross site request forgery
