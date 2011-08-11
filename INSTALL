@@ -3,16 +3,14 @@ How to deploy LGI portal
 
 Requirements
         1. Apache webserver
-        2. PHP
-             with mysql,curl support
+        2. PHP 5+
+             with MySQL and Curl support
         3. Dwoo
                 http://dwoo.org/                
         4. Pear XML_Serializer package
-                http://pear.php.net/package/XML_Serializer/redirected
+                http://pear.php.net/package/XML_Serializer
         5. MySQL Server
-        6. libCurl
-                http://curl.haxx.se/       
-        
+
         
 Step 1:- Setting up database
 ----------------------------
