@@ -7,6 +7,7 @@
 *
 *	@author wvengen
 */
+require_once 'errors.php';
 
 # try to include from PEAR location or Debian package location
 if (!class_exists('Dwoo'))
@@ -26,6 +27,30 @@ if (!class_exists('Dwoo'))
  */
 class LGIDwoo extends Dwoo
 {
+	/** Session variables to expose in templates by default
+	 * @var array */
+	protected $session_expose = array('user');
+
+	/** Parses Dwoo template, adds default variables and default template directory.
+	 *
+	 * Default variables are set using {@link completeData completeData}.
+	 * Templates are prefixed with {@link $template_dir $template_dir}.
+	 *
+	 * {@inheritdoc}
+	 * @see get */
+	public function get($_tpl, $data=array(), $_compiler=null, $_output=false)
+	{
+		# complete data
+		$this->completeData($data);
+		# add default template include path
+		if (is_string($_tpl))
+			$_tpl = new Dwoo_Template_File($_tpl);
+		$inc = $_tpl->getIncludePath() ? $_tpl->getIncludePath() : array();
+		$_tpl->setIncludePath($inc + array(_TEMPLATE_DIR_));
+		# parse template
+		return parent::get($_tpl, $data, $_compiler, $_output);
+	}
+
 	public function getCompileDir()
 	{
 		# use default first
@@ -59,6 +84,35 @@ class LGIDwoo extends Dwoo
 		$this->setCompileDir($dir);
 		return true;
 	}
+
+	/**
+	 * Assigns default variables.
+	 *
+	 * This includes the user variable, so session_start() is called as well.
+	 */
+	public function completeData(&$data)
+	{
+		session_start();
+		# expose some session variables
+		foreach ($this->session_expose as $var)
+		{
+			if (!isset($_SESSION[$var])) continue;
+			set_dwoo_or_array($data, $var, $_SESSION[$var]);
+		}
+		# add error message, if any
+		set_dwoo_or_array($data, 'errormessage', getErrorMessage(), true);
+		clearErrorMessage();
+	}
+}
+
+/** Set variable in either array or Dwoo_Data
+ * @access private */
+function set_dwoo_or_array(&$arr, $key, $val, $overwrite=false)
+{
+	if ($arr instanceof Dwoo_Data && ($overwrite || !isset($arr->$key)))
+		$arr->assign($key, $val);
+	elseif ($overwrite || !isset($arr[$key]))
+		$arr[$key] = $val;
 }
 
 ?>

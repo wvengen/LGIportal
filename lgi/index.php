@@ -3,7 +3,6 @@
 // Include the main class, the rest will be automatically loaded
 require_once 'php/utilities/dwoo.php';
 require_once 'php/utilities/sessions.php';
-require_once 'php/utilities/data.php';
 require_once 'lgi.config.php';
 
 session_start();
@@ -17,8 +16,8 @@ else
          //check which authentication mechanism
           if(strcmp(_AUTH_MECHANISM_,"DATABASE")==0)
           {
-               $dwoo =new LGIDwoo();
-               $dwoo->output('dwoo/login.tpl',createDwooData());
+               $dwoo = new LGIDwoo();
+               $dwoo->output('login.tpl');
           }
           else if(strcmp(_AUTH_MECHANISM_,"DIGEST")==0)
           {

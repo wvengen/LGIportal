@@ -1,32 +1,21 @@
 <?php
 /**
  * This file stores the user specified configurations to use this application
- * 
  */
 
-/**
-* $DB_CONFIG_FILE - Absolute Path to file where Database access details are specified. Expecting a php file.
-*/
-$DB_CONFIG_FILE=dirname(__FILE__)."/php/includes/db.inc.php";
-/**
- * CA certificate file to be used when requesting to project server
- */
+/** CA certificate file to be used when requesting to project server */
 $CA_FILE=dirname(__FILE__)."/lgi-ca.crt";
 
-/**
- * _AUTH_MECHANISM_ - defines which authentication mechanism to use. Currently two methods are possible.
+/** Authentication mechanism to use. Currently two methods are possible.
  *  1. Form based - username and password stored in database
  *  2. HTTP digest authentication
  */
 define('_AUTH_MECHANISM_',"DATABASE");  //Possible "DATABASE","DIGEST"
 
-/**
- * _LGI_ROOT_ - Defines the root folder where this application is deployed. The path should be with respect to web root.
- */
+/** Web location where this application is deployed, relative to web root. */
 define('_LGI_ROOT_',"/lgi");
 
-/**
- * _LGI_SERVER_ - LGI server to communicate with
+/** LGI server to communicate with
  *
  * Ideally LGIportal would implement the following behaviour:
  * - when a single value is present, this is enforced
@@ -36,18 +25,30 @@ define('_LGI_ROOT_',"/lgi");
  */
 define('_LGI_SERVER_', 'https://example.com/LGI/');
 
-/**
- * _LGI_PROJECT_ - LGI project on server to work on
+/** LGI project on server to work on
  *
  * (note at _LGI_SERVER_ applies here as well)
  */
 define('_LGI_PROJECT_', 'helloworld');
 
-/**
- * _LGI_APPLICATION- LGI application to use
+/** LGI application to use
  *
  * (note at _LGI_SERVER_ applies here as well)
  */
 define('_LGI_APPLICATION_', 'helloworld');
- 
+
+
+/*
+ * You probably won't need to change the following settings.
+ */
+
+/** Absolute path to file where database access details are specified. Expecting a php file. */
+$DB_CONFIG_FILE=dirname(__FILE__)."/php/includes/db.inc.php";
+
+/** File system location where this application is installed. */
+define('_LGI_PREFIX_',dirname(__FILE__));
+
+/** File system location of template directory */
+define('_TEMPLATE_DIR_', _LGI_PREFIX_.'/dwoo');
+
 ?>

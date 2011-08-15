@@ -12,7 +12,6 @@ require_once 'utilities/dwoo.php';
 require_once 'utilities/sessions.php';
 require_once 'utilities/login_utilities.php';
 require_once 'utilities/jobs.php';
-require_once 'utilities/data.php';
 
 session_start();
 //authenticate User. If user is not logged in, request for log in.
@@ -22,17 +21,17 @@ if(!isset($_POST['submitrequest']))
 {
 	//display form
 	$dwoo = new LGIDwoo();
-	$data= createDwooData();
+	$data = new Dwoo_Data();
 	//To prevent cross site request forgery
 	$nonce=uniqid(rand(), true);
 	$data->assign("nonce",$nonce);
 	$_SESSION["submitnonce"]=$nonce;
-	$dwoo->output('../dwoo/submit.tpl', $data);
+	$dwoo->output('submit.tpl', $data);
 }
 else //request for submit job.
 {
 	$dwoo = new LGIDwoo();
-	$data=createDwooData();
+	$data = new Dwoo_Data();
 
 	//To prever cross site request forgery
 	$nonce=$_POST["nonce"];
@@ -49,7 +48,7 @@ else //request for submit job.
 		$data->assign('jobOwner',$output['jobOwner']);
 		$data->assign('readAccess',$output['readAccess']);
 
-		$dwoo->output('../dwoo/submitsuccess.tpl', $data);
+		$dwoo->output('submitsuccess.tpl', $data);
 	}
 	else
 	{

@@ -14,7 +14,6 @@ require_once dirname(__FILE__).'/../lgijob/jobmanage.php';
 require_once dirname(__FILE__).'/../lgijob/errors.php';
 require_once dirname(__FILE__).'/../utilities/errors.php';
 require_once dirname(__FILE__).'/../utilities/login_utilities.php';
-require_once dirname(__FILE__).'/../utilities/data.php';
 
 
 
@@ -234,7 +233,6 @@ function listJobs()
 	}
 	else
 	{
-
 		$result=$newjob->getResults(); // Return an object of ServerResponse
 		$jobs=$result->getJobs();
 		$output=array();
@@ -316,7 +314,6 @@ function listResources()
  */
 function handleError($error,$redirect)
 {
-
 	$errormessage=$error->getErrorString();
 	pushErrorMessage($errormessage);
 	header("Location: ".$redirect);

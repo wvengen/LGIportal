@@ -5,6 +5,7 @@
 */
 
 include 'utilities/errors.php';
+
 	$errormessage=getErrorMessage();
 	echo $errormessage;
 	clearErrorMessage();
