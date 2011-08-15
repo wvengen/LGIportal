@@ -9,6 +9,7 @@
  * @package utilities
  */
 
+require_once dirname(__FILE__).'/../../lgi.config.php';
 require_once 'errors.php';
 
 # try to include from PEAR location or Debian package location
@@ -101,6 +102,8 @@ class LGIDwoo extends Dwoo
 			if (!isset($_SESSION[$var])) continue;
 			set_dwoo_or_array($data, $var, $_SESSION[$var]);
 		}
+		# lgi root
+		set_dwoo_or_array($data, 'webroot', _LGI_ROOT_);
 		# add error message, if any
 		set_dwoo_or_array($data, 'errormessage', getErrorMessage(), true);
 		clearErrorMessage();

@@ -1,13 +1,10 @@
 {*****************************************************************************************
- *	The template for submiting a job. It extends the homs_base.tpl. 
+ *	The template for submiting a job. It extends the home_base.tpl. 
  * 	The heading, menus, footer are same as base template. Only the content is changed. 
  *****************************************************************************************}
-
 {extends "home_base.tpl"}
 {block "content"}
-			<h2>
-				Welcome to the the LGI portal !
-			</h2>
+			<h2>Welcome to the the LGI portal!</h2>
 			
 				<form action="submit.php" method="post" class="cmxform">				
 				<fieldset>
