@@ -1,12 +1,10 @@
 <?php
 /**
- * This is the page for deleting a job.
+ * Delete job page
  * @author Deepthi
+ * @package default
  */
 
-/**
- *
- */
 require_once 'utilities/dwoo.php';
 require_once 'utilities/sessions.php';
 require_once 'utilities/login_utilities.php';

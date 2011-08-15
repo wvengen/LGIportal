@@ -1,12 +1,14 @@
 <?php
 /**
-*	Dwoo include, use this instead of including Dwoo directly.
-*
-*	Dwoo may have different include directories, multiple are tried.
-*       This makes sure that a cache directory is setup automatically when not available.
-*
-*	@author wvengen
-*/
+ * Dwoo include, use this instead of including Dwoo directly.
+ *
+ * Dwoo may have different include directories, multiple are tried.
+ * This makes sure that a cache directory is setup automatically when not available.
+ *
+ * @author wvengen
+ * @package utilities
+ */
+
 require_once 'errors.php';
 
 # try to include from PEAR location or Debian package location
@@ -20,10 +22,10 @@ if (!class_exists('Dwoo'))
 	trigger_error("Cannot find Dwoo template library", E_USER_ERROR);
 
 /**
- *	Dwoo templating object with LGIportal-specific settings.
+ * Dwoo templating object with LGIportal-specific settings.
  *
- *	It sets a number of default LGIportal-related variables and tries to find
- *	a default compile directory that works.
+ * It sets a number of default LGIportal-related variables and tries to find
+ * a default compile directory that works.
  */
 class LGIDwoo extends Dwoo
 {

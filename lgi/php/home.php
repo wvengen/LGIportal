@@ -1,23 +1,20 @@
 <?php 
-
 /**
- * This is the page a user sees after logging in.
+ * Page the user sees after logging in (home)
  * @author Deepthi 
+ * @package default
  */
- 
- /**
-  *
-  */
+
 require_once 'utilities/dwoo.php';
 require_once 'utilities/sessions.php';
 require_once 'utilities/login_utilities.php';
 
-	session_start();
-	//authenticate User. If user is not logged in, request for log in.
-	authenticateUser();
-		
-	//Display home page
-	$dwoo = new LGIDwoo(); 
-	$dwoo->output('home.tpl');
+session_start();
+//authenticate User. If user is not logged in, request for log in.
+authenticateUser();
+
+//Display home page
+$dwoo = new LGIDwoo(); 
+$dwoo->output('home.tpl');
 	
 ?>

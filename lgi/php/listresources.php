@@ -1,7 +1,8 @@
 <?php
 /**
- * This is the page for viewing all resources.
+ * Resource list page
  * @author Deepthi
+ * @package default
  */
 
 /**

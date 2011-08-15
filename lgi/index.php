@@ -1,6 +1,10 @@
 <?php
+/**
+ * Entry page, redirecting to either login or home
+ * @author Deepthi 
+ * @package pages
+ */
 
-// Include the main class, the rest will be automatically loaded
 require_once 'php/utilities/dwoo.php';
 require_once 'php/utilities/sessions.php';
 require_once 'lgi.config.php';
@@ -8,8 +12,7 @@ require_once 'lgi.config.php';
 session_start();
 if(checkValidSession()) //if already logged in redirect it to home
 {	
-	header("Location:./php/home.php");
-	//echo "Hi! You have logged in.";
+	header("Location: php/home.php");
 }
 else
 {

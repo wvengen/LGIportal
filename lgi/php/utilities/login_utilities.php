@@ -1,21 +1,19 @@
 <?php
 /**
- *	This file has utility functions for user authentication
- *	@author Deepthi
- *	@package utilities
- */
-
-/**
+ * Utility functions for user authentication
  *
+ * @author Deepthi
+ * @package utilities
  */
 
 //include necessary files
 $root=realpath($_SERVER["DOCUMENT_ROOT"]);
-require_once dirname(__FILE__).'/sessions.php';
-require_once dirname(__FILE__).'/errors.php';
+require_once 'sessions.php';
+require_once 'errors.php';
 //include the global configration file. It contains $DB_CONFIG_FILE which is the file that has database access details.
 //require $root.'/lgi/lgi.config.php';
 require_once dirname(__FILE__).'/../../lgi.config.php';
+
 //$DB_CONFIG_FILE is set by the administrator. Hence check whether the file exists or not. If file doesnot exists we cannot access database. Hence report error!
 if(!file_exists($DB_CONFIG_FILE))
 {
@@ -30,10 +28,10 @@ if(!file_exists($DB_CONFIG_FILE))
 require $DB_CONFIG_FILE;
 
 /**
- *	Checks whether username and passwords corresponds to a valid user. Returns True if credentials are valid otherwise returns false.
- *	@param string $user	plaintext username to be checked
- *	@param string $password	plaintext password
- *	@return boolean
+ * Checks whether username and passwords corresponds to a valid user. Returns True if credentials are valid otherwise returns false.
+ * @param string $user	plaintext username to be checked
+ * @param string $password	plaintext password
+ * @return boolean
  */
 function verifyUserPassword($user,$password)	//input plain text username and password
 {
@@ -76,10 +74,10 @@ function verifyUserPassword($user,$password)	//input plain text username and pas
 }
 
 /**
- *	Finds the hash of concatenated string of two parameters passed. Returns the resulting hash. Used for password hashing with salt.
- *	@param string $password
- *	@param string $salt
- *	@return string
+ * Find the hash of concatenated string of two parameters passed. Returns the resulting hash. Used for password hashing with salt.
+ * @param string $password
+ * @param string $salt
+ * @return string
  */
 function hashPassword($password,$salt)
 {
@@ -88,7 +86,7 @@ function hashPassword($password,$salt)
 }
 
 /**
- *	Requests user for relogin
+ * Request user for relogin
  */
 function relogin()
 {
@@ -96,7 +94,7 @@ function relogin()
 }
 
 /**
- *	Checks whether current session belongs to an authenticated user. If not request for log in. To be called before doing any function where user authentication is required.
+ * Check whether current session belongs to an authenticated user. If not request for log in. To be called before doing any function where user authentication is required.
  */
 function authenticateUser()
 {
@@ -111,7 +109,7 @@ function authenticateUser()
 }
 
 /**
- * Retrieves the reference to certificate of the user
+ * Retrieve the reference to certificate of the user
  * @param string $user
  * @return string
  */
@@ -158,7 +156,7 @@ function getCertificateFile($user)
 }
 
 /**
- * Retreives the reference to key of the user stored in database
+ * Retreive the reference to key of the user stored in database
  * @param string $user
  * @return string
  */
@@ -284,7 +282,7 @@ function authenticateDigest()
 }
 
 /**
- * function to parse the http auth header. To be used by authenticateDigest()
+ * Parse http auth header. To be used by authenticateDigest()
  */
 function http_digest_parse($txt)
 {

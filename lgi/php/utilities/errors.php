@@ -1,15 +1,16 @@
 <?php
-
-require dirname(__FILE__).'/../../lgi.config.php';
 /**
-*	This file has utility functions for error handling
-*	@author Deepthi
-*	@package utilities
-*/
+ * Error handling
+ *
+ * @author Deepthi
+ * @package utilities
+ */
+
+require_once dirname(__FILE__).'/../../lgi.config.php';
 
 /**
- *	Sets an error message. This function can be called before it is redirected to error page. getErrorMessage() can be called to see the error message.
- * 	@param string $msg Error message
+ * Sets an error message. This function can be called before it is redirected to error page. getErrorMessage() can be called to see the error message.
+ * @param string $msg Error message
  */
 function setErrorMessage($msg)
 {
@@ -19,8 +20,8 @@ function setErrorMessage($msg)
 }
 
 /**
- *	Appends an error message. This function can be called before it is redirected to error page. getErrorMessage() can be called to see the error message.
- * 	@param string $msg Error message
+ * Appends an error message. This function can be called before it is redirected to error page. getErrorMessage() can be called to see the error message.
+ * @param string $msg Error message
  */
 function pushErrorMessage($msg)
 {
@@ -33,8 +34,8 @@ function pushErrorMessage($msg)
 }
 
 /**
- *	Returns the error message set by setErrorMessage().
- * 	@return string
+ * Returns the error message set by setErrorMessage().
+ * @return string
  */
 function getErrorMessage()
 {
@@ -45,8 +46,7 @@ function getErrorMessage()
 		return ""; 
 }
 /**
- *	Clears the error message set by setErrorMessage().This function should be called explicitly to clear error message after reading it. 
- * 	
+ * Clears the error message set by setErrorMessage().This function should be called explicitly to clear error message after reading it. 
  */
 function clearErrorMessage()
 {

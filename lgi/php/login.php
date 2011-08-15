@@ -1,13 +1,10 @@
 <?php
 /**
- * This file handles user login.
+ * User login page
  * @author Deepthi
+ * @package default
  */
 
-/**
- *
- */
-// Include the main class, the rest will be automatically loaded
 require_once 'utilities/login_utilities.php';
 require_once 'utilities/sessions.php';
 require_once 'utilities/errors.php';

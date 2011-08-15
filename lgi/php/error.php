@@ -1,13 +1,13 @@
 <?php
 /**
-*	This file displays an error page
-*	@author Deepthi
-*/
+ * Show error message
+ * @author Deepthi
+ * @package default
+ */
 
 include 'utilities/errors.php';
 
-	$errormessage=getErrorMessage();
-	echo $errormessage;
-	clearErrorMessage();
+echo getErrorMessage();
+clearErrorMessage();
 
 ?>

@@ -1,27 +1,22 @@
 <?php
-
 /**
- * This file handles job related function such submission and deletion.
- * @package utilities
- * @author Deepthi
- */
-
-/**
+ * Job related functions such as submission and deletion.
  *
+ * @author Deepthi
+ * @package utilities
  */
+
 require_once dirname(__FILE__).'/../../lgi.config.php';
 require_once dirname(__FILE__).'/../lgijob/jobmanage.php';
 require_once dirname(__FILE__).'/../lgijob/errors.php';
-require_once dirname(__FILE__).'/../utilities/errors.php';
-require_once dirname(__FILE__).'/../utilities/login_utilities.php';
-
+require_once 'errors.php';
+require_once 'login_utilities.php';
 
 
 /**
  * Function for submitting job. It takes parameters from POST variables and use the class Job for submitting job.
  * @return string output
  */
-
 function submitJob()
 {
 
@@ -86,7 +81,6 @@ function submitJob()
  * Function for deleting job. It takes parameters from POST variables and use the class Job for submitting job.
  * @return string output
  */
-
 function deleteJob()
 {
 	//session_start();

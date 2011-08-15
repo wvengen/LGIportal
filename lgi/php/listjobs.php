@@ -1,12 +1,10 @@
 <?php
 /**
- * This is the page for viewing a job details.
+ * Job details page
  * @author Deepthi
+ * @package default
  */
 
-/**
- *
- */
 require_once 'utilities/dwoo.php';
 require_once 'utilities/sessions.php';
 require_once 'utilities/login_utilities.php';
