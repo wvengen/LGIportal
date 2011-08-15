@@ -13,6 +13,7 @@ require dirname(__FILE__).'/../../lgi.config.php';
  */
 function setErrorMessage($msg)
 {
+	user_error($msg);
 	session_start();
 	$_SESSION["ErrorMessage"]=$msg;
 }
@@ -23,6 +24,7 @@ function setErrorMessage($msg)
  */
 function pushErrorMessage($msg)
 {
+	user_error($msg);
 	session_start();
 	if(!isset($_SESSION["ErrorMessage"]))
 	    $_SESSION["ErrorMessage"]="Error: ".$msg;
