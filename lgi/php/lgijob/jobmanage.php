@@ -48,9 +48,10 @@ class Job
 	private $response;
 
 	/**
-	 * Contains the Error details occured during execution. Error numbers are described in class Error.
-	 * The error should be set by each operation. Each error will overwrite previous error.
-	 * @var Error
+	 * Contains the error details occured during execution. Error numbers are described in class
+	 * {@link LGIError LGIError}. The error should be set by each operation. Each error will overwrite
+	 * the previous one.
+	 * @var LGIError
 	 */
 	private $error; 
 
@@ -70,7 +71,7 @@ class Job
 		$this->user=$user;
 		$this->groups=$groups;
 		//$this->project=$project;
-		$this->error=new Error();		//initialize error object
+		$this->error=new LGIError();		//initialize error object
 		$this->targetresources="any";	//default
 	}
 
@@ -145,7 +146,7 @@ class Job
 
 	/**
 	 * Get errors occured in last operation.
-	 * @return Error
+	 * @return LGIError
 	 */
 	public function getError()
 	{
@@ -256,7 +257,7 @@ class Job
 
 	public function deleteJob($jobid)
 	{
-		$errortype=ErrorType::NOERROR;
+		$errortype=LGIErrorType::NOERROR;
 		//Check whether all necessary parameters are set
 		$errortype=$this->validateCommonData();
 		if($errortype)
@@ -265,8 +266,8 @@ class Job
 		}
 		if(empty($jobid))
 		{
-			$this->error->setError(Error::NOJOBID,ErrorType::INPUTERROR);
-			return ErrorType::INPUTERROR;
+			$this->error->setError(LGIError::NOJOBID,LGIErrorType::INPUTERROR);
+			return LGIErrorType::INPUTERROR;
 		}
 		$postArray=array("job_id" => $jobid);
 		//First setup cURL
@@ -278,8 +279,8 @@ class Job
 
 		if(!$ret)	//if $ret not 0, there was some error in cURL execution. See cURL error no to know what error it was
 		{
-			$errortype=ErrorType::CURLERROR;
-			$this->error->setError(curl_errno($this->cURLhandle),ErrorType::CURLERROR,curl_error($this->cURLhandle));
+			$errortype=LGIErrorType::CURLERROR;
+			$this->error->setError(curl_errno($this->cURLhandle),LGIErrorType::CURLERROR,curl_error($this->cURLhandle));
 		}
 		else
 		{
@@ -290,8 +291,8 @@ class Job
 			$errorno=$this->response->getErrorNo();
 			if(!empty($errorno))  //error in response message
 			{
-				$this->error->setError(Error::RESPONSE,ErrorType::RESPONSEERROR,$this->response->getErrorMessage());
-				return ErrorType::RESPONSEERROR;
+				$this->error->setError(LGIError::RESPONSE,LGIErrorType::RESPONSEERROR,$this->response->getErrorMessage());
+				return LGIErrorType::RESPONSEERROR;
 			}
 		}
 		return $errortype;
@@ -314,8 +315,8 @@ class Job
 		}
 		if(empty($jobid))
 		{
-			$this->error->setError(Error::NOJOBID,ErrorType::INPUTERROR);
-			return ErrorType::INPUTERROR;
+			$this->error->setError(LGIError::NOJOBID,LGIErrorType::INPUTERROR);
+			return LGIErrorType::INPUTERROR;
 		}
 		$postArray=array("job_id" => $jobid);
 		$this->setUpcURL("/interfaces/interface_job_state.php");
@@ -324,8 +325,8 @@ class Job
 
 		if(!$ret)
 		{
-			$errortype=ErrorType::CURLERROR;
-			$this->error->setError(curl_errno($this->cURLhandle),ErrorType::CURLERROR,curl_error($this->cURLhandle));
+			$errortype=LGIErrorType::CURLERROR;
+			$this->error->setError(curl_errno($this->cURLhandle),LGIErrorType::CURLERROR,curl_error($this->cURLhandle));
 		}
 		else
 		{
@@ -334,8 +335,8 @@ class Job
 			if(!empty($errorno))  //error in response message
 			{
 
-				$this->error->setError(Error::RESPONSE,ErrorType::RESPONSEERROR,$this->response->getErrorMessage());
-				return ErrorType::RESPONSEERROR;
+				$this->error->setError(LGIError::RESPONSE,LGIErrorType::RESPONSEERROR,$this->response->getErrorMessage());
+				return LGIErrorType::RESPONSEERROR;
 			}
 		}
 		return $errortype;
@@ -356,8 +357,8 @@ class Job
 		}
 		if(empty($this->application))
 		{
-			$this->error->setError(Error::NOAPPLICATION,ErrorType::INPUTERROR);
-			return ErrorType::INPUTERROR;
+			$this->error->setError(LGIError::NOAPPLICATION,LGIErrorType::INPUTERROR);
+			return LGIErrorType::INPUTERROR;
 		}
 		$postArray=array("application" => $this->application);
 		if( isset($this->targetresources))
@@ -387,8 +388,8 @@ class Job
 		//die();
 		if(!$ret)
 		{
-			$errortype=ErrorType::CURLERROR;
-			$this->error->setError(curl_errno($this->cURLhandle),ErrorType::CURLERROR,curl_error($this->cURLhandle));
+			$errortype=LGIErrorType::CURLERROR;
+			$this->error->setError(curl_errno($this->cURLhandle),LGIErrorType::CURLERROR,curl_error($this->cURLhandle));
 		}
 		else
 		{
@@ -397,8 +398,8 @@ class Job
 			if(!empty($errorno))  //error in response message
 			{
 
-				$this->error->setError(Error::RESPONSE,ErrorType::RESPONSEERROR,$this->response->getErrorMessage());
-				return ErrorType::RESPONSEERROR;
+				$this->error->setError(LGIError::RESPONSE,LGIErrorType::RESPONSEERROR,$this->response->getErrorMessage());
+				return LGIErrorType::RESPONSEERROR;
 			}
 		}
 		return $errortype;
@@ -425,8 +426,8 @@ class Job
 		//die();
 		if(!$ret)
 		{
-			$errortype=ErrorType::CURLERROR;
-			$this->error->setError(curl_errno($this->cURLhandle),ErrorType::CURLERROR,curl_error($this->cURLhandle));
+			$errortype=LGIErrorType::CURLERROR;
+			$this->error->setError(curl_errno($this->cURLhandle),LGIErrorType::CURLERROR,curl_error($this->cURLhandle));
 		}
 		else
 		{
@@ -434,8 +435,8 @@ class Job
 			$errorno=$this->response->getErrorNo();
 			if(!empty($errorno))  //error in response message
 			{
-				$this->error->setError(Error::RESPONSE,ErrorType::RESPONSEERROR,$this->response->getErrorMessage());
-				return ErrorType::RESPONSEERROR;
+				$this->error->setError(LGIError::RESPONSE,LGIErrorType::RESPONSEERROR,$this->response->getErrorMessage());
+				return LGIErrorType::RESPONSEERROR;
 			}
 		}
 		return $errortype;
@@ -462,8 +463,8 @@ class Job
 		//die();
 		if(!$ret)
 		{
-			$errortype=ErrorType::CURLERROR;
-			$this->error->setError(curl_errno($this->cURLhandle),ErrorType::CURLERROR,curl_error($this->cURLhandle));
+			$errortype=LGIErrorType::CURLERROR;
+			$this->error->setError(curl_errno($this->cURLhandle),LGIErrorType::CURLERROR,curl_error($this->cURLhandle));
 		}
 		else
 		{
@@ -471,8 +472,8 @@ class Job
 			$errorno=$this->response->getErrorNo();
 			if(!empty($errorno))  //error in response message
 			{
-				$this->error->setError(Error::RESPONSE,ErrorType::RESPONSEERROR,$this->response->getErrorMessage());
-				return ErrorType::RESPONSEERROR;
+				$this->error->setError(LGIError::RESPONSE,LGIErrorType::RESPONSEERROR,$this->response->getErrorMessage());
+				return LGIErrorType::RESPONSEERROR;
 			}
 		}
 		return $errortype;
@@ -489,33 +490,33 @@ class Job
 		$errortype=0;
 		if( !isset($this->keyfile)or empty($this->keyfile))
 		{
-			$errortype=ErrorType::INPUTERROR;
-			$errorno=Error::NOKEY;
+			$errortype=LGIErrorType::INPUTERROR;
+			$errorno=LGIError::NOKEY;
 		}
 		elseif( !isset($this->certificate) or empty($this->certificate))
 		{
-			$errortype=ErrorType::INPUTERROR;
-			$errorno=Error::NOCERT;
+			$errortype=LGIErrorType::INPUTERROR;
+			$errorno=LGIError::NOCERT;
 		}
 		elseif( !isset($this->CA) or empty($this->CA))
 		{
-			$errortype=ErrorType::INPUTERROR;
-			$errorno=Error::NOCA;
+			$errortype=LGIErrorType::INPUTERROR;
+			$errorno=LGIError::NOCA;
 		}
 		elseif( !isset($this->user)or empty($this->user))
 		{
-			$errortype=ErrorType::INPUTERROR;
-			$errorno=Error::NOUSER;
+			$errortype=LGIErrorType::INPUTERROR;
+			$errorno=LGIError::NOUSER;
 		}
 		elseif( !isset($this->groups)or empty($this->groups))
 		{
-			$errortype=ErrorType::INPUTERROR;
-			$errorno=Error::NOGROUP;
+			$errortype=LGIErrorType::INPUTERROR;
+			$errorno=LGIError::NOGROUP;
 		}
 		elseif( !isset($this->server)or empty($this->server))
 		{
-			$errortype=ErrorType::INPUTERROR;
-			$errorno=Error::NOSERVER;
+			$errortype=LGIErrorType::INPUTERROR;
+			$errorno=LGIError::NOSERVER;
 		}
 		else
 		{

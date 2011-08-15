@@ -34,9 +34,7 @@ function submitJob()
 	$key= getKeyFile($user);
 	if(empty($cert) || empty($key))
 	{
-		pushErrorMessage("You do not have a valid certificate or key. Please contact System administrator");
-		header("Location: submit.php");
-		die();
+		handleError("You do not have a valid certificate or key. Please contact System administrator","submit.php");
 	}
 	$group=$user;		//TODO : verify what to set for groups
 	$CA=$CA_FILE;
@@ -66,8 +64,7 @@ function submitJob()
 
 	if($errorset)
 	{
-		$error=$newjob->getError();
-		handleError($error,"submit.php");	
+		handleError($newjob->getError(),"submit.php");	
 	}
 	else
 	{
@@ -100,9 +97,7 @@ function deleteJob()
 	$key= getKeyFile($user);
 	if(empty($cert) || empty($key))
 	{
-		pushErrorMessage("You do not have a valid certificate or key. Please contact your system administrator");
-		header("Location: delete.php");
-		die();
+		handleError("You do not have a valid certificate or key. Please contact your system administrator","delete.php");
 	}
 	$group=$user;
 	$CA=$CA_FILE;
@@ -124,8 +119,7 @@ function deleteJob()
 
 	if($errorset)
 	{
-		$error=$newjob->getError();
-		handleError($error,"delete.php");
+		handleError($newjob->getError(),"delete.php");
 	}
 	else
 	{
@@ -150,9 +144,7 @@ function viewJob()
 	$key= getKeyFile($user);
 	if(empty($cert) || empty($key))
 	{
-		pushErrorMessage("You do not have a valid certificate or key. Please contact your system administrator");
-		header("Location: viewjob.php");
-		die();
+		handleError("You do not have a valid certificate or key. Please contact your system administrator","viewjob.php");
 	}
 	$group=$user;
 	$CA=$CA_FILE;
@@ -175,8 +167,7 @@ function viewJob()
 
 	if($errorset)
 	{
-		$error=$newjob->getError();
-		handleError($error,"viewjob.php");
+		handleError($newjob->getError(),"viewjob.php");
 	}
 	else
 	{
@@ -207,9 +198,7 @@ function listJobs()
 
 	if(empty($cert) || empty($key))
 	{
-		pushErrorMessage("You do not have a valid certificate or key. Please contact your system administrator");
-		header("Location: listjobs.php");
-		die();
+		handleError("You do not have a valid certificate or key. Please contact your system administrator","listjobs.php");
 	}
 	$group=$user;
 	$CA=$CA_FILE;
@@ -228,8 +217,7 @@ function listJobs()
 
 	if($errorset)
 	{
-		$error=$newjob->getError();
-		handleError($error,"listjobs.php");
+		handleError($newjob->getError(),"listjobs.php");
 	}
 	else
 	{
@@ -263,9 +251,7 @@ function listResources()
 
 	if(empty($cert) || empty($key))
 	{
-		pushErrorMessage("You do not have a valid certificate or key. Please contact your system administrator");
-		header("Location: listjobs.php");
-		die();
+		handleError("You do not have a valid certificate or key. Please contact your system administrator","listjobs.php");
 	}
 	$group=$user;
 	$CA=$CA_FILE;
@@ -285,8 +271,7 @@ function listResources()
 
 	if($errorset)
 	{
-		$error=$newjob->getError();
-		handleError($error,"listresources.php");
+		handleError($newjob->getError(),"listresources.php");
 	}
 	else
 	{
@@ -309,13 +294,15 @@ function listResources()
 
 /**
  * Function to be called when an error encountered while requesting to the project server
- * @param Error $error
+ * @param LGIError|string $error the error
  * @param string $redirect url to which the page should be redirected after handling error
  */
 function handleError($error,$redirect)
 {
-	$errormessage=$error->getErrorString();
-	pushErrorMessage($errormessage);
+	if ($error instanceof LGIError)
+		$error=$error->getErrorString();
+	pushErrorMessage($error);
 	header("Location: ".$redirect);
+	die();
 }
 ?>

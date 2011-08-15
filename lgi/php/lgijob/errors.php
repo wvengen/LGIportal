@@ -6,7 +6,7 @@
  * @package lgijob
  *
  */
-class Error
+class LGIError
 {
 	const NOAPPLICATION=0;
 	const NOSERVER   =1;
@@ -19,19 +19,19 @@ class Error
 	const RESPONSE=20;
 
 	static $errormessage=array(
-	Error::NOAPPLICATION => "No Application specified",
-	Error::NOSERVER => "No Project server specified",
-	Error::NOKEY => "No user key specified",
-	Error::NOCERT => "No user certificate specified",
-	Error::NOCA => "No CA certificate specified",
-	Error::NOUSER => "No User specified",
-	Error::NOGROUP => "No group specified",
-	Error::NOJOBID => "No Job specified"
+	LGIError::NOAPPLICATION => "No Application specified",
+	LGIError::NOSERVER => "No Project server specified",
+	LGIError::NOKEY => "No user key specified",
+	LGIError::NOCERT => "No user certificate specified",
+	LGIError::NOCA => "No CA certificate specified",
+	LGIError::NOUSER => "No User specified",
+	LGIError::NOGROUP => "No group specified",
+	LGIError::NOJOBID => "No Job specified"
               
 	);
 
 	private $lasterrorno;
-	private $lasterrortype=ErrorType::NOERROR;
+	private $lasterrortype=LGIErrorType::NOERROR;
 	private $lasterrormessage;
 	 
 	/**
@@ -63,7 +63,7 @@ class Error
 	 */
 	function initError()
 	{
-		$this->lasterrortype=ErrorType::NOERROR;
+		$this->lasterrortype=LGIErrorType::NOERROR;
 		$this->lasterrorno=0;
 		$this->lasterrormessage="";
 	}
@@ -76,19 +76,19 @@ class Error
 	{
 		switch($this->lasterrortype)
 		{
-			case ErrorType::NOERROR:
+			case LGIErrorType::NOERROR:
 				return NULL;
 				break;
-			case ErrorType::INPUTERROR:
-				return Error::$errormessage[$this->lasterrorno];
+			case LGIErrorType::INPUTERROR:
+				return LGIError::$errormessage[$this->lasterrorno];
 				break;
-			case ErrorType::CURLERROR:
+			case LGIErrorType::CURLERROR:
 				return $this->lasterrormessage;
 				break;
-			case ErrorType::RESPONSEERROR:
+			case LGIErrorType::RESPONSEERROR:
 				return $this->lasterrormessage;
 				break;
-			case ErrorType::EXECERROR:
+			case LGIErrorType::EXECERROR:
 				return $this->lasterrormessage;
 				break;
 			default:
@@ -101,7 +101,7 @@ class Error
 
 }
  
-class ErrorType
+class LGIErrorType
 {
 	const NOERROR=0;
 	const INPUTERROR=1;
