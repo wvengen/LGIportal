@@ -214,11 +214,12 @@ table.joblist .id   { width:  2em; text-align: right; }
 table.joblist .app  { min-width: 5em; }
 
 /* make table cells clicklable, not just links */
-table.joblist .id, table.joblist .name, table.joblist .app {
+table.joblist td.id, table.joblist td.name, table.joblist td.app {
   display: table-cell;
-  padding: 0 0.3em;
+  padding-left: 0;
+  padding-right: 0;
 }
-table.joblist .id a, table.joblist .name a, table.joblist .app a {
+table.joblist td.id a, table.joblist td.name a, table.joblist td.app a {
   display: block;
   padding-left: 0.4em;
   padding-right: 0.2em;
