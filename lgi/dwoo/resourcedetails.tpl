@@ -1,7 +1,7 @@
 {extends "home_base.tpl"}
 {block "title"}Available resources{/block}
 {block "content"}
-			<table class="resourcelist">
+			<table class="resourcelist list">
 				<tr>
 					<th class="name">Name</th>
 					<th class="cap">Capabilities</th>
