@@ -14,6 +14,21 @@ require_once 'login_utilities.php';
 
 
 /**
+ * Verify that job id is a valid expression, or return to page.
+ *
+ * @param string $jobid job id supplied by user
+ * @param string $returnto page to return to in case of error
+ * @return int jobid on success
+ */
+function verifyJobid($jobid, $returnto)
+{
+	if (preg_match('/^[0-9]+$/', $jobid))
+		return (int)$jobid;
+	else
+		handleError('Invalid job id, must be an integer', $returnto);
+}
+
+/**
  * Function for submitting job. It takes parameters from POST variables and use the class Job for submitting job.
  * @return string output
  */

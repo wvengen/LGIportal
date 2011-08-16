@@ -16,8 +16,8 @@
         			 	
         			 	<li>
         			 		<input type="submit" value="Delete Job" />
-        			 		<input type="hidden" name="submitrequest" value="request"/>
-        			 		<input type="hidden" name="nonce" value={$nonce}/>
+        			 		<input type="hidden" name="submitrequest" value="request" />
+        			 		<input type="hidden" name="nonce" value="{$nonce}" />
         			 	</li>
         			 </ol>
 				</fieldset>

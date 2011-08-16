@@ -34,4 +34,46 @@ function setValidSession($user)
 	$_SESSION['user']=$user;
 	return true;
 }
-?> 
+
+/**
+ * Generates a nonce for a future call and stores in into the session.
+ *
+ * Assumes that a session was started before.
+ *
+ * This is required for modifying operations to avoid cross-site request forgery (CRSF).
+ * These requests should be POSTed and require a valid
+ *
+ * @return string nonce
+ * @see verifyNonce
+ */
+function generateNonce()
+{
+	$nonce=uniqid(rand(), true); 
+	$_SESSION['nonce']=$nonce;
+	return $nonce;
+}
+
+/**
+ * Verifies that the supplied nonce matches the session
+ *
+ * Assumes that a session was started before.
+ *
+ * Current implementation also deletes the nonce from the session, so that
+ * a single nonce can only be used once.
+ *
+ * @param string $supplied nonce from user request
+ * @return boolean whether the nonce was valid or not
+ * @see generateNonce
+ */
+function verifyNonce($supplied)
+{
+	if (!isset($_SESSION['nonce']))
+		return false;
+	if (strcmp($supplied, $_SESSION['nonce'])!=0)
+		return false;
+	# ok, we can delete it as well now
+	unset($_SESSION['nonce']);
+	return true;
+}
+
+?>

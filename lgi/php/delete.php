@@ -16,36 +16,35 @@ session_start();
 authenticateUser();
 
 //if request does not have details about job, display the form . post variable 'submitrequest' is set in the form.
-if(!isset($_POST['submitrequest']))
+if(!isset($_POST['jobid']))
 {
 	//display form
 	$dwoo = new LGIDwoo();
 	$data = new Dwoo_Data();
 	
-	//To prevent cross site request forgery attack - set a nonce in the form and session. Verify the nonce before deleting the job.
-	$nonce=uniqid(rand(), true); 
-	$data->assign("nonce",$nonce);
-	$_SESSION["deletenonce"]=$nonce;
+	// set nonce to avoid cross-site request forgery (see generateNonce)
+	$data->assign('nonce', generateNonce());
 	$dwoo->output('delete.tpl', $data);
 }
-else //request for delete job.
+else
 {
-	$dwoo = new Dwoo();
+	// delete job
+	$jobid = verifyJobid($_POST['jobid'], 'viewjob.php');
+
+	$dwoo = new LGIDwoo();
 	$data = new Dwoo_Data();
+
 	//Verify the nonce from POST fields before deleting the job (Test the following code)
-	$nonce=$_POST["nonce"];
-	if(strcmp($_SESSION["deletenonce"],$nonce)==0)
+	if (verifyNonce($_POST['nonce']))
 	{
-		unset($_SESSION["deletenonce"]);
-		$output=deleteJob();	
+		$output = deleteJob();
 		$data->assign('message',$output);
 		$dwoo->output('deletesuccess.tpl', $data);
 	}
 	else
 	{
-		header("Location: delete.php");
+		handleError('Suspected cross-site request forgery attack', 'delete.php');
 	}
-
 }
 
 ?>

@@ -18,6 +18,7 @@ $dwoo = new LGIDwoo();
 $data = new Dwoo_Data();
 $output=listJobs(); //$output is an array containing details of all jobs
 
-$data->assign('jobs',$output);
+$data->assign('jobs', $output);
+$data->assign('nonce', generateNonce()); // required for delete buttons
 $dwoo->output('jobslist.tpl', $data);
 

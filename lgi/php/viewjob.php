@@ -24,11 +24,7 @@ if(!isset($_REQUEST['jobid']))
 else
 {
 	// job id supplied, show details
-	$jobid = null;
-	if (preg_match('/^[0-9]+$/', $_REQUEST['jobid']))
-		$jobid = $_REQUEST['jobid'];
-	else
-		handleError('Invalid job id, must be an integer', 'viewjob.php');
+	$jobid = verifyJobid($_REQUEST['jobid'], 'viewjob.php');
 
 	$dwoo = new LGIDwoo();
 	$data = new Dwoo_Data();
