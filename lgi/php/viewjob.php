@@ -37,6 +37,8 @@ else
 	$data->assign('target',$output['target']);
 	$data->assign('jobOwner',$output['jobOwner']);
 	$data->assign('readAccess',$output['readAccess']);
+
+	$data->assign('nonce', generateNonce()); // for abort/delete button
 	
 	$dwoo->output('jobdetails.tpl', $data);
 }
