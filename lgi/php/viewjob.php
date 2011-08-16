@@ -9,22 +9,28 @@ require_once 'utilities/dwoo.php';
 require_once 'utilities/sessions.php';
 require_once 'utilities/login_utilities.php';
 require_once 'utilities/jobs.php';
+require_once 'utilities/errors.php';
 
 session_start();
 //authenticate User. If user is not logged in, request for log in.
 authenticateUser();
 
-if(!isset($_POST['submitrequest']))
+if(!isset($_REQUEST['jobid']))
 {
-	//display form
+	// no job id supplied, show form
 	$dwoo = new LGIDwoo();
 	$dwoo->output('viewjob.tpl');
 }
-else //request for submit job.
+else
 {
+	// job id supplied, show details
+	$jobid = filter_var($_REQUEST['jobid'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+	if ($jobid===null)
+		handleError('Invalid job id, must be an integer', 'viewjob.php');
+
 	$dwoo = new LGIDwoo();
 	$data = new Dwoo_Data();
-	$output=viewJob();
+	$output = viewJob($jobid);
 	
 	//Add more details to $output in viewJob() to get more details. Add them to $data and update jobdetails.tpl	
 	$data->assign('jobId',$output['jobId']);

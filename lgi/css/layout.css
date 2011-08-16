@@ -1,3 +1,7 @@
+
+/*
+ * global page layout
+ */
 #container
 {
 	margin: 0 auto;
@@ -8,16 +12,20 @@
 #header
 {
 	background: #ccc;
-	padding: 20px;
+	padding: 0.9em;
 }
 
-#header h1 { margin: 0; }
+#header h1
+{
+	margin: 0;
+}
 
 #navigation
 {
 	float: left;
 	width: 100%;
 	background: #333;
+	color: #fff;
 }
 
 #navigation ul
@@ -26,7 +34,7 @@
 	padding: 0;
 }
 
-#navigation ul li
+#navigation li
 {
 	list-style-type: none;
 	display: inline;
@@ -38,32 +46,38 @@
 	float: left;
 	padding: 5px 10px;
 	color: #fff;
+	background: #333;
 	text-decoration: none;
 	border-right: 1px solid #fff;
 }
 
-#navigation li a:hover { background: #383; }
+#navigation li a:hover
+{
+	background: #383;
+}
 
-#user
+#navigation .user
 {
 	float: right;	
+}
+#navigation .user li a {
+	border-right: none;
+	border-left: 1px solid #fff;
 }
 #content-container
 {
 	float: left;
 	width: 100%;
-	background: #FFF url(layoutbg.gif) repeat-y 68% 0;
+	background: #fff url('layoutbg.gif') repeat-y 68% 0;
 }
 
 #error
 {
-     clear: left;
-     color: red;
-     text-align: left;
-     width: 60%;
-	 padding: 20px 0;
-	 margin: 0 0 0 4%;
-	 display: inline;
+	clear: left;
+	color: #a00;
+	text-align: left;
+	margin-top: 0.2em;
+	margin-bottom: 0.5em;
 }
 
 #content
@@ -71,23 +85,28 @@
 	clear: left;
 	float: left;
 	width: 60%;
-	padding: 20px 0;
-	margin: 0 0 0 4%;
-	display: inline;
+	padding: 3ex 0 3ex 3ex;
+	margin: 0;
 }
 
-#content h2 { margin: 0; }
+#content h2
+{
+	margin: 0;
+}
 
 #aside
 {
 	float: right;
 	width: 26%;
 	padding: 20px 0;
-	margin: 0 3% 0 0;
+	margin: 0 2% 0 0;
 	display: inline;
 }
 
-#aside h3 { margin: 0; }
+#aside h3
+{
+	margin: 0;
+}
 
 #footer
 {
@@ -99,8 +118,23 @@
 }
 
 
-/***************************/
+/*
+ * random general stuff
+ */
+a img {
+	border: none;
+}
+form {
+	padding: 0;
+	margin: 0;
+}
+td.spacer, th.spacer {
+	padding-left: 1em;
+}
 
+/*
+ * Forms
+ */
 form.cmxform fieldset {
   margin-bottom: 10px;
 }
@@ -145,4 +179,50 @@ form.cmxform label {
 form.cmxform fieldset fieldset label {
   margin-left: 123px; /* Width plus 3 (html space) */
 }
+
+/*
+ * Tables
+ */
+table
+{
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+}
+tr
+{
+	background: #fff;
+}
+tr.even
+{
+	background: #eee;
+}
+.interactive tr:hover, th
+{
+	background: #ddd;
+}
+td, th
+{
+	padding-left: 0.4em;
+	padding-right: 0.2em;
+}
+
+/*
+ * Job list
+ */
+table.joblist .name { width: 10em; text-align: left; }
+table.joblist .id   { width:  2em; text-align: right; }
+table.joblist .app  { min-width: 5em; }
+
+/* make table cells clicklable, not just links */
+table.joblist .id, table.joblist .name, table.joblist .app {
+  display: table-cell;
+  padding: 0 0.3em;
+}
+table.joblist .id a, table.joblist .name a, table.joblist .app a {
+  display: block;
+  padding-left: 0.4em;
+  padding-right: 0.2em;
+}
+table.joblist .owners a { text-decoration: none; color: #333; }
+
 

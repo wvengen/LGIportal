@@ -1,6 +1,6 @@
 {extends "home_base.tpl"}
 {block "content"}
-			<table border="1">
+			<table class="jobdetails">
 				<tr class="id">
 					<th>Job ID</th>
 					<td>{$jobId}</td>

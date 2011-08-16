@@ -23,17 +23,17 @@
 			<li><a href="listjobs.php">List all Jobs</a> </li>
 			<li><a href="listresources.php">List all Resources</a> </li>				
 		</ul>
-		<div id="user">
+		<ul class="user">
 			<li><a href="logout.php">Logout {$user}</a></li>
-		</div>
+		</ul>
 {/block}
 	</div>
 	<div id="content-container">
-		<div id="error">{$errormessage}</div>
 		<div id="content">
+		{if $errormessage}<div id="error">{$errormessage}</div>{/if}
 {block "content"}
 			<h2>Welcome {$user}! </h2>
-			<p>You are now logged into LGI portal.</p>
+			<p>You are now logged into the LGI portal.</p>
 {/block}		
 		</div>
 		<div id="aside">{block "aside"}{/block}</div>

@@ -128,7 +128,7 @@ function deleteJob()
  * Function for viewing status of job. It takes parameters from POST variables and use the class Job for submitting job.
  * @return array output
  */
-function viewJob()
+function viewJob($jobid)
 {
 	//session_start();
 	global $CA_FILE;
@@ -146,7 +146,6 @@ function viewJob()
 
 	$server = defined('_LGI_SERVER_') ? _LGI_SERVER_ : $_POST['server'];
 	$project = defined('_LGI_PROJECT_') ? _LGI_PROJECT_ : $_POST['project'];
-	$jobid = $_POST['jobid'];
 
 
 	$newjob=new Job($key,$cert,$CA,$user,$group);

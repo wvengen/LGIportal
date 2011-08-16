@@ -1,7 +1,7 @@
 {extends "home_base.tpl"}
 {block "content"}
 {load_templates "functions.tpl"}
-			<table border="1">
+			<table class="joblist interactive">
 				<tr>
 					<th class="state"></th>
 					<th class="id">ID</th>
@@ -15,9 +15,9 @@
 					<td class="state">
 						<img src="icons/state-{$jobStatus}.{tif $jobState=='running' ? 'gif' : 'png'}" width="16" height="16" alt="{$jobStatus}" title="{$jobStatus}"/>
 					</td>
-					<td class="id">{$jobId}</td>    						
-					<td class="app">{$application}</td>
-					<td class="name">{$jobName}</td>
+					<td class="id"><a href="viewjob.php?jobid={$jobId}">{$jobId}</a></td>
+					<td class="app"><a href="viewjob.php?jobid={$jobId}">{$application}</a></td>
+					<td class="name"><a href="viewjob.php?jobid={$jobId}">{tif $jobName ? $jobName : '(untitled)'}</a></td>
 					<td class="owners">{$jobOwner}</td>
 					<td class="target">{$target}</td>
 					<td class="action spacer">
