@@ -4,24 +4,20 @@
 
 *}<html>
 <head>
-  <title>LGI Portal</title>
+  <title>LGI Portal - {block "title"}{/block}</title>
   <link rel="stylesheet" href="{$webroot}/css/layout.css" type="text/css" media="screen" />
 </head>
 <body><div id="container">
 	<div id="header">
-{block "heading"}
-		<h1>LGI Portal</h1>
-{/block}
+		<h1>{block "title"}LGI Portal{/block}</h1>
 	</div>
 	<div id="navigation">
 {block "menu"}
 		<ul>
 			<li><a href="home.php">Home</a></li>
-			<li><a href="submit.php">Submit Job</a></li>
-			<li><a href="delete.php">Delete Job</a></li>
-			<li><a href="viewjob.php">View Job</a></li>
-			<li><a href="listjobs.php">List all Jobs</a> </li>
-			<li><a href="listresources.php">List all Resources</a> </li>				
+			<li><a href="listjobs.php">Jobs</a> </li>
+			<li><a href="listresources.php">Resources</a> </li>				
+			<li><a href="submit.php">New job</a></li>
 		</ul>
 		<ul class="user">
 			<li><a href="logout.php">Logout {$user}</a></li>

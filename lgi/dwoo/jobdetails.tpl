@@ -1,4 +1,8 @@
 {extends "home_base.tpl"}
+{block "title"}
+{if $jobOwner == $user}Your job {$jobId}{*
+*}{else}{capitalize $jobOwner}'s job {$jobId}{/if}
+{/block}
 {block "content"}
 			<table class="jobdetails">
 				<tr class="id">

@@ -91,7 +91,7 @@
 
 #content h2
 {
-	margin: 0;
+	margin-top: 0;
 }
 
 #aside
@@ -185,8 +185,9 @@ form.cmxform fieldset fieldset label {
  */
 table
 {
-	border: 1px solid #ccc;
+	border: 2px solid #ccc;
 	border-collapse: collapse;
+	width: 100%;
 }
 tr
 {
@@ -204,6 +205,10 @@ td, th
 {
 	padding-left: 0.4em;
 	padding-right: 0.2em;
+}
+table td {
+	border: 1px solid #eee;
+	border-collapse: collapse;
 }
 
 /*

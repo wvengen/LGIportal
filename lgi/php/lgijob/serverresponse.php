@@ -12,7 +12,6 @@
 
 require_once dirname(__FILE__).'/errors.php';;
 require_once "XML/Unserializer.php";
-require_once "XML/Serializer.php";
 
 /**
  * This class stores the response from the project server. 
@@ -241,12 +240,8 @@ class ServerResponse
 					{
 						$resource=$result['resource'];
 						$resourcename=$resource['resource_name'];
-						$ser=new XML_Serializer();
-						$ser->serialize($resource['resource_capabilities']);
-						$capabilities=htmlspecialchars($ser->getSerializedData());
-
+						$capabilities=$resource['resource_capabilities'];
 						$lastcalltime=$resource['last_call_time'];
-
 						$newresource=new Resource($resourcename,$capabilities,$lastcalltime);
 						$this->resources[0]=$newresource;
 					}
@@ -259,10 +254,7 @@ class ServerResponse
 					foreach ($resourcelists as $i => $value) {
 						$resource=$result['resource'];
 						$resourcename=$resource['resource_name'];
-						$ser=new XML_Serializer();
-						$ser->serialize($resource['resource_capabilities']);
-						$capabilities=$ser->getSerializedData();
-
+						$capabilities=$resource['resource_capabilities'];
 						$lastcalltime=$resource['last_call_time'];
 
 						$newresource=new Resource($resourcename,$capabilities,$lastcalltime);

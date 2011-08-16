@@ -5,9 +5,6 @@
  * @package default
  */
 
-/**
- *
- */
 require_once 'utilities/dwoo.php';
 require_once 'utilities/sessions.php';
 require_once 'utilities/login_utilities.php';
@@ -20,13 +17,8 @@ authenticateUser();
 $dwoo = new LGIDwoo();
 $data = new Dwoo_Data();
 $output=listResources();
-/*$data->assign('jobId',$output['jobId']);
-$data->assign('jobStatus',$output['jobStatus']);
-$data->assign('application',$output['application']);
-$data->assign('target',$output['target']);
-$data->assign('jobOwner',$output['jobOwner']);
-$data->assign('readAccess',$output['readAccess']);*/
-$data->assign('resources',$output);
+
+$data->assign('resources', $output);
 $dwoo->output('resourcedetails.tpl', $data);
 
 ?>

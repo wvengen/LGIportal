@@ -3,9 +3,8 @@
  * 	The heading, menus, footer are same as base template. Only the content is changed. 
  *****************************************************************************************}
 {extends "home_base.tpl"}
+{block "title"}Submit new job{/block}
 {block "content"}
-			<h2>Welcome to the the LGI portal!</h2>
-			
 				<form action="submit.php" method="post" class="cmxform">				
 				<fieldset>
 				<ol>

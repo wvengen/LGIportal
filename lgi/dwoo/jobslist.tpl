@@ -1,4 +1,5 @@
 {extends "home_base.tpl"}
+{block "title"}Your jobs{/block}
 {block "content"}
 {load_templates "functions.tpl"}
 			<table class="joblist interactive">
@@ -11,7 +12,7 @@
 					<th class="target">Target resources</th>
 					<th class="action"></th>
 				</tr>
-				{loop $jobs}<tr>
+				{loop $jobs}<tr class="{cycle values=array('odd','even')}">
 					<td class="state">
 						<img src="icons/state-{$jobStatus}.{tif $jobState=='running' ? 'gif' : 'png'}" width="16" height="16" alt="{$jobStatus}" title="{$jobStatus}"/>
 					</td>
