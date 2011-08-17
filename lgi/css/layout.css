@@ -121,6 +121,12 @@
 a img {
 	border: none;
 }
+a[href] {
+	color: #333;
+}
+a[href]:active {
+	color: #383;
+}
 form {
 	padding: 0;
 	margin: 0;
