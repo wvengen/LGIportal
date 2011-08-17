@@ -3,7 +3,7 @@
  * Dwoo include, use this instead of including Dwoo directly.
  *
  * Dwoo may have different include directories, multiple are tried.
- * This makes sure that a cache directory is setup automatically when not available.
+ * Also makes sure that a cache directory is setup automatically when not available.
  *
  * @author wvengen
  * @package utilities
@@ -104,6 +104,11 @@ class LGIDwoo extends Dwoo
 		}
 		# lgi root
 		set_dwoo_or_array($data, 'webroot', _LGI_ROOT_);
+		# lgi variables
+		set_dwoo_or_array($data, 'lgi', array(
+			'server'      => _LGI_SERVER_,
+			'project'     => _LGI_PROJECT_,
+		));
 		# add error message, if any
 		set_dwoo_or_array($data, 'errormessage', getErrorMessage(), true);
 		clearErrorMessage();
