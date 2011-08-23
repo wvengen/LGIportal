@@ -62,7 +62,7 @@ class LGIClient extends LGIConnection
 		$ret = $this->postToServer('/interfaces/interface_job_state.php', $args);
 		$ret = $ret['response'];
 		if (!array_key_exists('job', $ret)) $ret['job'] = array();
-		elseif (!is_array($ret['job'])) $ret['job'] = array($ret['job']);
+		elseif (!is_array($ret['job'][0])) $ret['job'] = array($ret['job']);
 		return $ret;
 	}
 
@@ -121,7 +121,7 @@ class LGIClient extends LGIConnection
 		$ret = $this->postToServer('/interfaces/interface_project_resource_list.php', $args);
 		$ret = $ret['response'];
 		if (!array_key_exists('resource', $ret)) $ret['resource'] = array();
-		elseif (!is_array($ret['resource'])) $ret['resource'] = array($ret['resource']);
+		elseif (!is_array($ret['resource'][0])) $ret['resource'] = array(0=>$ret['resource']);
 		return $ret;
 	}
 
@@ -135,7 +135,7 @@ class LGIClient extends LGIConnection
 		$ret = $this->postToServer('/interfaces/interface_project_server_list.php', $args);
 		$ret = $ret['response'];
 		if (!array_key_exists('project_server', $ret)) $ret['project_server'] = array();
-		elseif (!is_array($ret['project_server'])) $ret['project_server'] = array($ret['project_server']);
+		elseif (!is_array($ret['project_server'][0])) $ret['project_server'] = array(0=>$ret['project_server']);
 		return $ret;
 	}
 }

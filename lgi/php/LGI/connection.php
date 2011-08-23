@@ -45,13 +45,13 @@ class LGIConnection
 			throw new LGIException('Server must be an https url');
 		// then initialise
 		$this->curlh = curl_init();
+		$this->setDebug(false);
 		curl_setopt($this->curlh, CURLOPT_SSLCERT, $this->certificate);
 		curl_setopt($this->curlh, CURLOPT_SSLKEY, $this->privatekey);
 		curl_setopt($this->curlh, CURLOPT_CAINFO, $this->ca_chain);
 		curl_setopt($this->curlh, CURLOPT_SSL_VERIFYPEER, true);
 		curl_setopt($this->curlh, CURLOPT_SSL_VERIFYHOST, 2);
 		curl_setopt($this->curlh, CURLOPT_NOSIGNAL, true);
-		curl_setopt($this->curlh, CURLOPT_VERBOSE, true); // by default silent
 		curl_setopt($this->curlh, CURLOPT_NOPROGRESS, true);
 		curl_setopt($this->curlh, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($this->curlh, CURLOPT_RETURNTRANSFER, true);
@@ -109,6 +109,12 @@ class LGIConnection
 			user_error($desc.' found but not readable: '.$file);
 			throw new LGIException($desc.' not readable');
 		}
+	}
+
+	function setDebug($debug)
+	{
+		if (!$this->curlh) return;
+		curl_setopt($this->curlh, CURLOPT_VERBOSE, $debug);
 	}
 }
 
