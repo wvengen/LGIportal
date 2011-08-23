@@ -87,6 +87,10 @@ class LGIConnection
 			throw new LGIConnectionException(sprintf('Server error %d', $httpcode), $httpcode);
 		}
 		$resp = json_decode(json_encode(simplexml_load_string($result)), TRUE);
+		// LGI adds spaces to each and every element *sigh*
+		function strip_whitespace(&$s) { $s = trim($s); }
+		array_walk_recursive($resp, 'strip_whitespace');
+		// handle LGI error response
 		if (in_array('error', $resp['response'])) {
 			$err = $resp['response']['error'];
 			throw new LGIServerException(sprintf('LGI error %d: %s',
