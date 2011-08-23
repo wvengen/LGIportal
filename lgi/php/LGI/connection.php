@@ -69,11 +69,9 @@ class LGIConnection
 	{
 		if (!$this->curlh) $this->connect();
 		// be safe when settings variables
-		function escape_at($s) { return ($s[0]=='@') ? '&#64;'.substr($s,1) : $s; }
-		$variables = array_map('escape_at', $variables);
+		$variables = array_map(create_function('$s', 'return ($s[0]=="@") ? "&#64;".substr($s,1) : $s;'), $variables);
 		// file uploads as special postfields
-		function file_argify($s) { return '@'.$s; }
-		$files = array_map('file_argify', $files);
+		$files = array_map(create_function('$s', 'return "@".$s;'), $files);
 		// perform request
 		curl_setopt($this->curlh, CURLOPT_URL, $this->url . $apipath);
 		curl_setopt($this->curlh, CURLOPT_POST, true);
@@ -88,8 +86,7 @@ class LGIConnection
 		}
 		$resp = json_decode(json_encode(simplexml_load_string($result)), TRUE);
 		// LGI adds spaces to each and every element *sigh*
-		function strip_whitespace(&$s) { $s = trim($s); }
-		array_walk_recursive($resp, 'strip_whitespace');
+		array_walk_recursive($resp, create_function('&$s', '$s=trim($s);'));
 		// handle LGI error response
 		if (in_array('error', $resp['response'])) {
 			$err = $resp['response']['error'];

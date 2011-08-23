@@ -18,9 +18,13 @@ $dwoo = new LGIDwoo();
 $data = new Dwoo_Data();
 $lgi  = new LGIPortalClient();
 
-$result = $lgi->resourceList();
+$resources = $lgi->resourceList();
+$servers   = $lgi->serverList();
 
-$data->assign('resources', $result['resource']);
-$dwoo->output('resourcedetails.tpl', $data);
+$data->assign('resources', $resources['resource']);
+$data->assign('project_master_server', $servers['project_master_server']);
+$data->assign('this_project_server', $servers['this_project_server']);
+$data->assign('servers', $servers['project_server']);
+$dwoo->output('serverinfo.tpl', $data);
 
 ?>

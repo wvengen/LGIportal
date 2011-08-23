@@ -16,10 +16,10 @@
 		<ul>
 			<li><a href="home.php">Home</a></li>
 			<li><a href="listjobs.php">Jobs</a> </li>
-			<li><a href="listresources.php">Resources</a> </li>				
 			<li><a href="submit.php">New job</a></li>
 		</ul>
 		<ul class="user">
+			<li><a href="serverinfo.php">Resources</a> </li>
 			<li><a href="logout.php">Logout {$user}</a></li>
 		</ul>
 {/block}
