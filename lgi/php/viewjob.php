@@ -9,13 +9,12 @@ require_once 'utilities/dwoo.php';
 require_once 'utilities/sessions.php';
 require_once 'utilities/login_utilities.php';
 require_once 'utilities/jobs.php';
-require_once 'utilities/errors.php';
 
 session_start();
 //authenticate User. If user is not logged in, request for log in.
 authenticateUser();
 
-if(!isset($_REQUEST['jobid']))
+if(!isset($_REQUEST['job_id']))
 {
 	// no job id supplied, show form
 	$dwoo = new LGIDwoo();
@@ -24,22 +23,17 @@ if(!isset($_REQUEST['jobid']))
 else
 {
 	// job id supplied, show details
-	$jobid = verifyJobid($_REQUEST['jobid'], 'viewjob.php');
+	$job_id = verifyJobid($_REQUEST['job_id'], 'viewjob.php');
 
 	$dwoo = new LGIDwoo();
 	$data = new Dwoo_Data();
-	$output = viewJob($jobid);
-	
-	//Add more details to $output in viewJob() to get more details. Add them to $data and update jobdetails.tpl	
-	$data->assign('jobId',$output['jobId']);
-	$data->assign('jobStatus',$output['jobStatus']);
-	$data->assign('application',$output['application']);
-	$data->assign('target',$output['target']);
-	$data->assign('jobOwner',$output['jobOwner']);
-	$data->assign('readAccess',$output['readAccess']);
+	$lgi  = new LGIPortalClient();
 
+	$result = $lgi->jobState($job_id);
+
+	$data->assign('job_id', $job_id);
+	$data->assign('job', $result['job']);
 	$data->assign('nonce', generateNonce()); // for abort/delete button
-	
 	$dwoo->output('jobdetails.tpl', $data);
 }
 

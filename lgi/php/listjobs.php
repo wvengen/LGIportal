@@ -16,9 +16,11 @@ authenticateUser();
 
 $dwoo = new LGIDwoo();
 $data = new Dwoo_Data();
-$output=listJobs(); //$output is an array containing details of all jobs
+$lgi  = new LGIPortalClient();
 
-$data->assign('jobs', $output);
+$result = $lgi->jobList();
+
+$data->assign('jobs', $result['job']);
 $data->assign('nonce', generateNonce()); // required for delete buttons
 $dwoo->output('jobslist.tpl', $data);
 

@@ -7,7 +7,7 @@
 {block "content"}
 			<form action="viewjob.php" method="post" class="cmxform">				
 				<fieldset><ol>
-					<li><label for="jobid">Job ID:</label> <input type="text" name="jobid" id="jobid" /></li>
+					<li><label for="job_id">Job ID:</label> <input type="text" name="job_id" id="job_id" /></li>
        				 	<li><input type="submit" value="View Job Details" /> <input type="hidden" value="request" name="submitrequest"/></li>
 				</ol></fieldset>
 			</form>

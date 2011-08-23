@@ -17,7 +17,7 @@
 {template actionbutton action jobid nonce title image width=16 height=16}{*
 *}<form action='{$action}' method='POST'>{*
 		*}<input type='hidden' name='nonce' value='{$nonce}'/>{*
-		*}<input type='hidden' name='jobid' value='{$jobid}'/>{*
+		*}<input type='hidden' name='job_id' value='{$jobid}'/>{*
 		*}<input type='image' name='submit' value='{$title}' title='{$title}' width='{$width}' height='{$height}' src='{$image}'/>{*
 	*}</form>{*
 *}{/template}
@@ -35,7 +35,7 @@
 *}{/template}
 
 {template abortbutton jobid nonce size=16}{*
-	*}{if $size <= 20}{actionbutton 'abort.php' $jobid $nonce 'abort' 'icons/action-abort_16.png' $size $size}{*
+	*}{if $size <= 20}{actionbutton 'delete.php' $jobid $nonce 'abort' 'icons/action-abort_16.png' $size $size}{*
 	*}{else}{actionbutton 'delete.php' $jobid $nonce 'abort' 'icons/action-abort_32.png' $size $size}{/if}{*
 *}{/template}
 

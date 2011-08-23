@@ -16,7 +16,7 @@ session_start();
 authenticateUser();
 
 //if request does not have details about job, display the form . post variable 'submitrequest' is set in the form.
-if(!isset($_POST['jobid']))
+if(!isset($_POST['job_id']))
 {
 	//display form
 	$dwoo = new LGIDwoo();
@@ -29,22 +29,16 @@ if(!isset($_POST['jobid']))
 else
 {
 	// delete job
-	$jobid = verifyJobid($_POST['jobid'], 'viewjob.php');
+	verifyNonce($_POST['nonce']);
+	$job_id = verifyJobid($_POST['job_id']);
 
 	$dwoo = new LGIDwoo();
 	$data = new Dwoo_Data();
 
-	//Verify the nonce from POST fields before deleting the job (Test the following code)
-	if (verifyNonce($_POST['nonce']))
-	{
-		$output = deleteJob();
-		$data->assign('message',$output);
-		$dwoo->output('deletesuccess.tpl', $data);
-	}
-	else
-	{
-		handleError('Suspected cross-site request forgery attack', 'delete.php');
-	}
+	$lgi = new LGIPortalClient();
+	$result = $lgi->jobDelete($job_id);
+	$data->assign('message', 'Job '.$job_id.' deleted');
+	$dwoo->output('deletesuccess.tpl', $data);
 }
 
 ?>

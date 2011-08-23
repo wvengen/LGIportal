@@ -16,9 +16,11 @@ authenticateUser();
 
 $dwoo = new LGIDwoo();
 $data = new Dwoo_Data();
-$output=listResources();
+$lgi  = new LGIPortalClient();
 
-$data->assign('resources', $output);
+$result = $lgi->resourceList();
+
+$data->assign('resources', $result['resource']);
 $dwoo->output('resourcedetails.tpl', $data);
 
 ?>

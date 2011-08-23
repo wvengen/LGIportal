@@ -13,13 +13,13 @@
 					<th class="action"></th>
 				</tr>
 				{loop $jobs}<tr class="{cycle values=array('odd','even')}">
-					<td class="state">{stateimg $jobStatus}</td>
-					<td class="id"><a href="viewjob.php?jobid={$jobId}">{$jobId}</a></td>
-					<td class="app"><a href="viewjob.php?jobid={$jobId}">{$application}</a></td>
-					<td class="name"><a href="viewjob.php?jobid={$jobId}">{tif $jobName ? $jobName : '(untitled)'}</a></td>
-					<td class="owners">{$jobOwner}</td>
-					<td class="target">{$target}</td>
-					<td class="action spacer">{abdelbutton $jobId $jobStatus $_.nonce}</td>
+					<td class="state">{stateimg $state}</td>
+					<td class="id"><a href="viewjob.php?job_id={$job_id}">{$job_id}</a></td>
+					<td class="app"><a href="viewjob.php?job_id={$job_id}">{$application}</a></td>
+					<td class="name"><a href="viewjob.php?job_id={$job_id}">{tif $name ? $name: '(untitled)'}</a></td>
+					<td class="owners">{$owners}</td>
+					<td class="target">{$target_resources}</td>
+					<td class="action spacer">{abdelbutton $job_id $state $_.nonce}</td>
 				</tr>{/loop}
 			</table>
 {/block}
