@@ -179,16 +179,4 @@ function array_attributes_to_values(&$arr)
 	return($arr);
 }
 
-function array_attributes_to_values2(&$arr)
-{
-	if (!is_array($arr)) return;
-	if (array_key_exists('@attributes', $arr)) {
-		$arr = array_merge($arr, $arr['@attributes']);
-		unset($arr['@attributes']);
-	}
-	foreach (array_keys($arr) as $k)
-		$arr[$k] = array_attributes_to_values($arr[$k]);
-	return($arr);
-}
-
 ?>
