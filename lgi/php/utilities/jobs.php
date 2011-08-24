@@ -6,6 +6,7 @@
  * @package utilities
  */
 
+require_once dirname(__FILE__).'/common.php';
 require_once dirname(__FILE__).'/../LGI/client.php';
 require_once dirname(__FILE__).'/../../lgi.config.php';
 require_once 'login_utilities.php';
@@ -16,6 +17,7 @@ require_once 'login_utilities.php';
  *
  * @param string $jobid job id supplied by user
  * @param string $returnto page to return to in case of error
+ * @throws LGIPortalException when job id is not a valid integer
  * @return int jobid on success
  */
 function verifyJobid($jobid, $returnto)

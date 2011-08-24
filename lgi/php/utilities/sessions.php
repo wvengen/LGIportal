@@ -5,6 +5,7 @@
  * @author Deepthi
  * @package utilities
  */
+require_once(dirname(__FILE__).'/common.php');
 
 /**
  * Check whether current session corresponds to an authenticated user. Returns True if session is valid, otherwise returns false.
@@ -62,15 +63,23 @@ function generateNonce()
  * a single nonce can only be used once.
  *
  * @param string $supplied nonce from user request
+ * @param bool $exc whether to throw an exception on mismatch
  * @return boolean whether the nonce was valid or not
+ * @throws LGIPortalException when nonce is invalid
  * @see generateNonce
  */
-function verifyNonce($supplied)
+function verifyNonce($supplied, $exc=true)
 {
-	if (!isset($_SESSION['nonce']))
+	if (!isset($_SESSION['nonce'])) {
+		if ($exc)
+			throw new LGIPortalException('Suspected CSRF attack (no nonce), action aborted.');
 		return false;
-	if (strcmp($supplied, $_SESSION['nonce'])!=0)
+	}
+	if (strcmp($supplied, $_SESSION['nonce'])!=0) {
+		if ($exc)
+			throw new LGIPortalException('Suspected CSRF attack (bad nonce), action aborted.');
 		return false;
+	}
 	# ok, we can delete it as well now
 	unset($_SESSION['nonce']);
 	return true;
