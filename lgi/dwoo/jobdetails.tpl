@@ -30,7 +30,7 @@
 				</tr>
 				<tr class="repo">
 					<th>Repository:</th>
-					<td><tt>{*<a href="repository.php?url={escape $job.job_specifics.repository_url url}">*}{escape $job.job_specifics.repository_url html}{*</a>*}</tt></td>
+					<td><tt>{*<a href="repository.php?url={escape safe($job.job_specifics.repository_url) url}">*}{$job.job_specifics.repository_url}{*</a>*}</tt></td>
 				</tr>
 			</table>
 
@@ -43,10 +43,11 @@
 			</fieldset>
 
 			<fieldset class="collapsible collapsed jobdetails"><legend>Job specifics</legend>
-			<table class="list">{loop $job.job_specifics}
-				<tr>
-					<th>{$_key}</th><td>{$}</td>
+			<table class="list job_specifics">
+				{loop $job.job_specifics}<tr class="job_specifics-{regex_replace $_key '/[^-a-zA-Z0-9_]/' ''}">
+					<th>{$_key}</th>
+					<td>{$}</td>
 				</tr>{/loop}
-         </table>
+			</table>
 			</fieldset>
 {/block}

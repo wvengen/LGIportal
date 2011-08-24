@@ -51,6 +51,9 @@ class LGIDwoo extends Dwoo
 			$_tpl = new Dwoo_Template_File($_tpl);
 		$inc = $_tpl->getIncludePath() ? $_tpl->getIncludePath() : array();
 		$_tpl->setIncludePath($inc + array(_TEMPLATE_DIR_));
+		# default compiler with auto-escaping
+		$cmp = Dwoo_Compiler::compilerFactory();
+		$cmp->setAutoEscape(true);
 		# parse template
 		return parent::get($_tpl, $data, $_compiler, $_output);
 	}
