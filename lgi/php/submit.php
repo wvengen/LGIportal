@@ -43,16 +43,16 @@ else
 	$write_access = $_POST['write_access'];
 	$files = array();
 	foreach ($_FILES as $n=>$f) {
+		$f = trim($f);
 		if (!substr($n,0,13)=='uploaded_file') continue;
+		if (count($f)==0) continue;
 		$files[$f['name']] = $f['tmp_name'];
 	}
 
 	$result = $lgi->jobSubmit($application, $input, 'any', $write_access, $read_access, $files);
 
-	$data->assign('job', $result['job']);
-	$data->assign('job_id', $result['job']['job_id']);
-	$data->assign('nonce', generateNonce()); // for delete/abort button
-	$dwoo->output('jobdetails.tpl', $data);
+	// success! redirect to allow user to reload
+	header('Location: viewjob.php?job_id='.urlencode($result['job']['job_id']));
 }
 
 ?>
