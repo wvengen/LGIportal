@@ -6,7 +6,7 @@
  * @package utilities
  */
 
-require_once dirname(__FILE__).'/../../lgi.config.php';
+require_once(dirname(__FILE__).'/common.php');
 
 /**
  * Sets an error message. This function can be called before it is redirected to error page. getErrorMessage() can be called to see the error message.

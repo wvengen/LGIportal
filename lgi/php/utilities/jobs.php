@@ -6,10 +6,9 @@
  * @package utilities
  */
 
-require_once dirname(__FILE__).'/common.php';
-require_once dirname(__FILE__).'/../LGI/client.php';
-require_once dirname(__FILE__).'/../../lgi.config.php';
-require_once 'login_utilities.php';
+require_once(dirname(__FILE__).'/common.php');
+require_once('utilities/login.php');
+require_once('LGI/client.php');
 
 
 /**

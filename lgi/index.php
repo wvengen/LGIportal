@@ -5,9 +5,9 @@
  * @package pages
  */
 
-require_once 'php/utilities/dwoo.php';
-require_once 'php/utilities/sessions.php';
-require_once 'lgi.config.php';
+require_once(dirname(__FILE__).'/php/utilities/common.php');
+require_once('utilities/dwoo.php');
+require_once('utilities/sessions.php');
 
 session_start();
 if(checkValidSession()) //if already logged in redirect it to home

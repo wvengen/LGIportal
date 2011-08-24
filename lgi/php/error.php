@@ -5,7 +5,8 @@
  * @package default
  */
 
-include 'utilities/errors.php';
+require_once(dirname(__FILE__).'/utilities/common.php');
+require_once('utilities/errors.php');
 
 echo getErrorMessage();
 clearErrorMessage();

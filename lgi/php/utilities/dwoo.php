@@ -9,8 +9,8 @@
  * @package utilities
  */
 
-require_once dirname(__FILE__).'/../../lgi.config.php';
-require_once 'errors.php';
+require_once(dirname(__FILE__).'/common.php');
+require_once('utilities/errors.php');
 
 # try to include from PEAR location or Debian package location
 if (!class_exists('Dwoo'))

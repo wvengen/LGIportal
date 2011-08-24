@@ -5,9 +5,10 @@
  * @package default
  */
 
-require_once 'utilities/login_utilities.php';
-require_once 'utilities/sessions.php';
-require_once 'utilities/errors.php';
+require_once(dirname(__FILE__).'/utilities/common.php');
+require_once('utilities/login.php');
+require_once('utilities/sessions.php');
+require_once('utilities/errors.php');
 
 
 session_start();

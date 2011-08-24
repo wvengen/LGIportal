@@ -6,13 +6,8 @@
  * @package utilities
  */
 
-//include necessary files
-$root=realpath($_SERVER["DOCUMENT_ROOT"]);
-require_once 'sessions.php';
-require_once 'errors.php';
-//include the global configration file. It contains $DB_CONFIG_FILE which is the file that has database access details.
-//require $root.'/lgi/lgi.config.php';
-require_once dirname(__FILE__).'/../../lgi.config.php';
+require_once(dirname(__FILE__).'/common.php');
+require_once('utilities/errors.php');
 
 //$DB_CONFIG_FILE is set by the administrator. Hence check whether the file exists or not. If file doesnot exists we cannot access database. Hence report error!
 if(!file_exists($DB_CONFIG_FILE))
