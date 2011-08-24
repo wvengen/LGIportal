@@ -9,11 +9,10 @@
 				<fieldset>
 				<ol>
 					<li>					
-       						<label for="jobid">Job ID:</label> <input type="text" name="jobid" id="jobid" /> <br/>
+       						<label for="job_id">Job ID:</label> <input type="text" name="job_id" id="job_id" /> <br/>
        				 	</li>
        				 	<li>
        				 		<input type="submit" value="Delete Job" />
-       				 		<input type="hidden" name="submitrequest" value="request" />
        				 		<input type="hidden" name="nonce" value="{$nonce}" />
        			 	</li>
        				</ol>

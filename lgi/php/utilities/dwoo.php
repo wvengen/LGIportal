@@ -11,6 +11,7 @@
 
 require_once(dirname(__FILE__).'/common.php');
 require_once('utilities/errors.php');
+require_once('utilities/dwoo.php');
 
 # try to include from PEAR location or Debian package location
 if (!class_exists('Dwoo'))
@@ -112,6 +113,13 @@ class LGIDwoo extends Dwoo
 		# add error message, if any
 		set_dwoo_or_array($data, 'errormessage', getErrorMessage(), true);
 		clearErrorMessage();
+	}
+
+	/** Outputs a template with data */
+	public static function show($tpl, $data=array())
+	{
+		$dwoo = new LGIDwoo();
+		return $dwoo->output($tpl, $data);
 	}
 }
 
