@@ -41,7 +41,11 @@ else
 	$input = $_POST['input'];
 	$read_access = $_POST['read_access'];
 	$write_access = $_POST['write_access'];
-	$files = array(); # TODO
+	$files = array();
+	foreach ($_FILES as $n=>$f) {
+		if (!substr($n,0,13)=='uploaded_file') continue;
+		$files[$f['name']] = $f['tmp_name'];
+	}
 
 	$result = $lgi->jobSubmit($application, $input, 'any', $write_access, $read_access, $files);
 

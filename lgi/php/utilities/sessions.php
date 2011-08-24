@@ -29,7 +29,7 @@ function setValidSession($user)
 	//$user :- expecting a clean username, where it is processed for preventing cross site scripting.
 	session_unset();
 	session_destroy();
-	INI_Set('session.cookie_secure',true);		
+	//INI_Set('session.cookie_secure',true);		
 	//TODO: check whether https is enabled. Otherwise generate a warning/error
 	session_start();
 	session_regenerate_id(true);
