@@ -23,5 +23,5 @@ $result = $lgi->jobList();
 
 $data->assign('jobs', $result['job']);
 $data->assign('nonce', generateNonce()); // required for delete buttons
-$dwoo->output('jobslist.tpl', $data);
+$dwoo->output('joblist.tpl', $data);
 

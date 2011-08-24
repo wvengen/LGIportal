@@ -26,6 +26,6 @@ $data->assign('resources', $resources['resource']);
 $data->assign('project_master_server', $servers['project_master_server']);
 $data->assign('this_project_server', $servers['this_project_server']);
 $data->assign('servers', $servers['project_server']);
-$dwoo->output('serverinfo.tpl', $data);
+$dwoo->output('resourcelist.tpl', $data);
 
 ?>
