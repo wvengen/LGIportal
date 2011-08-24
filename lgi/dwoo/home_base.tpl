@@ -4,8 +4,19 @@
 
 *}<html>
 <head>
-  <title>LGI Portal - {block "title"}{/block}</title>
-  <link rel="stylesheet" href="{$webroot}/css/layout.css" type="text/css" media="screen" />
+	<title>LGI Portal - {block "title"}{/block}</title>
+	<link rel="stylesheet" href="{$webroot}/css/layout.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="{$webroot}/css/collapse.css" type="text/css" media="screen" />
+	<script src="{$webroot}/js/jquery.js" type="text/javascript"></script>
+	<script src="{$webroot}/js/jquery.collapsible.js" type="text/javascript"></script>
+	<script type="text/javascript">{literal}<!--
+	$(function() {
+		$('fieldset.collapsed').collapse({closed: true});
+		$('fieldset.uncollapsed').collapse({closed: false});
+	});
+	//-->{/literal}</script>
+{block "addhead"}
+{/block}
 </head>
 <body><div id="container">
 	<div id="header">

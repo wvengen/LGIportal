@@ -4,38 +4,37 @@
  *****************************************************************************************}
 {extends "home_base.tpl"}
 {block "title"}Submit new job{/block}
+{block "addhead"}
+	<script src="{$webroot}/js/jquery.MultiFile.js" type="text/javascript"></script>
+{/block}
 {block "content"}
-				<form action="submit.php" method="post" class="cmxform">				
-				<fieldset>
-				<ol>
-					<li>					
-        					<label for="application">Application:</label> <input type="text" name="application" id="applicaton" /> <br/>
-        			 	</li>
-        			 	<li>
-        			 		<label for="readaccess">Extra read access:</label> <input type="text" name="readaccess" id="readaccess" /> <br/>
-        			 	</li>
-        			 	<li>
-        			 		<label for="writeaccess">Extra write access:</label> <input type="text" name="writeaccess" id="writeaccess" /> <br/>
-        			 	</li>
-        			 	<li>
-        			 		<label for="target">Target Resources:</label> <input type="text" name="target" id="target" /> <br/>
-        			 	</li>
-        			 	<li>
-        			 		<label for="jobspecifics">Job Specifics:</label> <input type="text" name="jobspecifics" id="jobspecifics" /> <br/>
-        			 	</li>
-        			 	{*** <li>
-        			 		<label for="file">File Upload</label> <input type="file" name="file" id="file" /> <br/>
-        			 	</li> (temporarily removed) **}
-        			 	
-        			 	<li>
-        			 		<input type="submit" value="Submit Job" />
-        			 		<input type="hidden" value="request" name="submitrequest"/>
-        			 		<input type="hidden" value={$nonce} name="nonce"/>
-        			 	</li>
-        			 </ol>
-				</fieldset>
+				<form id='newjob' action='submit.php' method='post' enctype='multipart/form-data'>
+					<input type='hidden' name='nonce' value='{$nonce}' />
+
+					<div><label for='input'>Input</label></div>
+					<textarea name='input' id='input' wrap='off' cols='80' rows='15'>{$input}</textarea>
+					<p></p>
+
+					<fieldset class='collapsible uncollapsed'><legend>Attach files</legend>
+						<input name='uploaded_file' id='uploaded_file' type='file' class='multi' />
+					</fieldset>
+
+					<fieldset class='collapsible uncollapsed'><legend>Advanced</legend>
+						<div>
+							<label for='application'>Application</label>
+							<select name='application' id='application'>
+								{foreach $applications a}<option value='{$a}'{if $a==$application} selected='selected'{/if}>{$a}</option>{/foreach}
+							</select>
+						</div>
+						<div>Additional
+							<label for='read_access'>read access</label> for
+							<input type='text' name='read_access' id='read_access' value='{$read_access}' />
+							and <label for='write_access'>write access</label> for
+							<input type='text' name='write_access' id='write_access' value='{$write_access}' />.
+						</div>
+					</fieldset>
+
+					<p style="text-align: right"><input type='submit' name='submit' id='submit' value='Submit job' />
 				</form>
-			
-			
 {/block}
 

@@ -15,45 +15,40 @@ session_start();
 //authenticate User. If user is not logged in, request for log in.
 authenticateUser();
 
-if(!isset($_POST['submitrequest']))
+if(!isset($_POST['submit']))
 {
 	//display form
 	$dwoo = new LGIDwoo();
 	$data = new Dwoo_Data();
-	//To prevent cross site request forgery
-	$nonce=uniqid(rand(), true);
-	$data->assign("nonce",$nonce);
-	$_SESSION["submitnonce"]=$nonce;
+
+	// set nonce to avoid cross-site request forgery (see generateNonce)
+	$data->assign('nonce', generateNonce());
+	$data->assign('applications', array(_LGI_APPLICATION_));
 	$dwoo->output('submit.tpl', $data);
 }
-else //request for submit job.
+else
 {
+	// submit new job
+	verifyNonce($_POST['nonce']);
+
 	$dwoo = new LGIDwoo();
 	$data = new Dwoo_Data();
+	$lgi  = new LGIPortalClient();
 
-	//To prever cross site request forgery
-	$nonce=$_POST["nonce"];
-	if(strcmp($_SESSION["submitnonce"],$nonce)==0)
-	{
-		unset($_SESSION["submitnonce"]);
-		$output=submitJob();
-			
-		//To display details, pass it to the dwoo template
-		$data->assign('jobId',$output['jobId']);
-		$data->assign('jobStatus',$output['jobStatus']);
-		$data->assign('application',$output['application']);
-		$data->assign('target',$output['target']);
-		$data->assign('jobOwner',$output['jobOwner']);
-		$data->assign('readAccess',$output['readAccess']);
+	$application = $_POST['application'];
+	if (defined('_LGI_APPLICATION_') && $application!=_LGI_APPLICATION_)
+		throw new LGIPortalException('Application not allowed: '.htmlentities($application));
+	$input = $_POST['input'];
+	$read_access = $_POST['read_access'];
+	$write_access = $_POST['write_access'];
+	$files = array(); # TODO
 
-		$dwoo->output('submitsuccess.tpl', $data);
-	}
-	else
-	{
-		header("Location: submit.php");
-	}
+	$result = $lgi->jobSubmit($application, $input, 'any', $write_access, $read_access, $files);
 
+	$data->assign('job', $result['job']);
+	$data->assign('job_id', $result['job']['job_id']);
+	$data->assign('nonce', generateNonce()); // for delete/abort button
+	$dwoo->output('jobdetails.tpl', $data);
 }
-
 
 ?>
