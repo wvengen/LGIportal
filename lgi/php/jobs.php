@@ -20,6 +20,8 @@ $data = new Dwoo_Data();
 $lgi  = new LGIPortalClient();
 
 $result = $lgi->jobList();
+// sort by job id
+uasort($result['job'], create_function('$a,$b', 'return(((int)$b["job_id"]) - ((int)$a["job_id"]));'));
 
 $data->assign('jobs', $result['job']);
 $data->assign('nonce', generateNonce()); // required for delete buttons
