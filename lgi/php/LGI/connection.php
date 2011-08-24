@@ -65,32 +65,26 @@ class LGIConnection
 		$this->curlh = null;
 	}
 
-	protected function postToServer($apipath, $variables=array(), $files=array(), $path=null)
+	protected function postToServer($url, $variables=array(), $files=array(), $path=null)
 	{
 		if (!$this->curlh) $this->connect();
+		// non-absolute urls relative to base url
+		if (strtolower(substr($url,0,6))!='https:') $url = $this->url.$url;
 		// be safe when settings variables
 		$variables = array_map(create_function('$s', 'return ($s&&$s[0]=="@") ? "&#64;".substr($s,1) : $s;'), $variables);
 		// file uploads as special postfields
 		$files = array_map(create_function('$s', 'return is_array($s) ? "@".$s[0].";filename=".$s[1] : "@".$s;'), $files);
 		// perform request
-		curl_setopt($this->curlh, CURLOPT_URL, $this->url . $apipath);
 		curl_setopt($this->curlh, CURLOPT_POST, true);
 		curl_setopt($this->curlh, CURLOPT_POSTFIELDS, array_merge($variables, $files));
-		$result = curl_exec($this->curlh);
-		if (curl_errno($this->curlh) > 0) {
-			throw new LGIConnectionException(sprintf('cURL error %d: %s',
-				curl_errno($this->curlh), curl_error($this->curlh)), curl_errno($this->curlh));
-		}
-		if (($httpcode=curl_getinfo($this->curlh, CURLINFO_HTTP_CODE)) >= 400) {
-			throw new LGIConnectionException(sprintf('Server error %d', $httpcode), $httpcode);
-		}
-		$resp = json_decode(json_encode(simplexml_load_string($result)), TRUE);
+		$resp = $this->curl_exec($url);
+		$resp = json_decode(json_encode(simplexml_load_string($resp)), TRUE);
 		// LGI adds spaces to each and every element *sigh*
 		array_walk_recursive($resp, create_function('&$s', '$s=trim($s);'));
 		// move @attributes to 'normal' members for easy access (ok for LGI)
 		$resp = array_attributes_to_values($resp);
 		// handle LGI error response
-		if (array_key_exists('error', $resp['response'])) {
+		if (array_key_exists('response', $resp) && array_key_exists('error', $resp['response'])) {
 			$err = $resp['response']['error'];
 			throw new LGIServerException(sprintf('LGI error %d: %s',
 				$err['number'], $err['message']), $err['number']);
@@ -115,6 +109,51 @@ class LGIConnection
 		if (!$this->curlh) return;
 		curl_setopt($this->curlh, CURLOPT_VERBOSE, $debug);
 	}
+
+	function fileDownload($url)
+	{
+		if (!$this->curlh) $this->connect();
+		curl_setopt($this->curlh, CURLOPT_POST, false);
+
+		return $this->curl_exec($url);
+	}
+
+	function filePassthru($url)
+	{
+		if (!$this->curlh) $this->connect();
+		curl_setopt($this->curlh, CURLOPT_POST, false);
+		curl_setopt($this->curlh, CURLOPT_HEADERFUNCTION, create_function('$c,$s','header($s);return strlen($s);'));
+		curl_setopt($this->curlh, CURLOPT_WRITEFUNCTION, create_function('$c,$s','print($s);return strlen($s);'));
+		$this->curl_exec($url, false);
+	}
+
+	function fileList($url)
+	{
+		if (!$this->curlh) $this->connect();
+
+		$slashpos = strrpos($url,'/');
+		$repourl = substr($url,0,$slashpos+1).'..';
+		$repoid = substr($url,$slashpos+1);
+		
+		$result = $this->postToServer($repourl.'/repository_content.php', array('repository'=>$repoid));
+		if (!array_key_exists('file', $result)) $result['file'] = array();
+		elseif (!is_array($result['file'][0])) $result['file'] = array(0=>$result['file']);
+		return $result;
+	}
+
+	private function curl_exec($url, $checkreturn=true)
+	{
+		curl_setopt($this->curlh, CURLOPT_URL, $url);
+		$result = curl_exec($this->curlh);
+		if (curl_errno($this->curlh) > 0) {
+			throw new LGIConnectionException(sprintf('cURL error %d: %s',
+				curl_errno($this->curlh), curl_error($this->curlh)), curl_errno($this->curlh));
+		}
+		if ($checkreturn && ($httpcode=curl_getinfo($this->curlh, CURLINFO_HTTP_CODE)) >= 400) {
+			throw new LGIConnectionException(sprintf('Server error %d', $httpcode), $httpcode);
+		}
+		return $result;
+	}
 }
 
 /**
@@ -137,6 +176,18 @@ function array_attributes_to_values(&$arr)
 		}
 		$arr[$k] = array_attributes_to_values($arr[$k]);
 	}
+	return($arr);
+}
+
+function array_attributes_to_values2(&$arr)
+{
+	if (!is_array($arr)) return;
+	if (array_key_exists('@attributes', $arr)) {
+		$arr = array_merge($arr, $arr['@attributes']);
+		unset($arr['@attributes']);
+	}
+	foreach (array_keys($arr) as $k)
+		$arr[$k] = array_attributes_to_values($arr[$k]);
 	return($arr);
 }
 

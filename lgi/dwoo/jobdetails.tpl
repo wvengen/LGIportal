@@ -30,7 +30,7 @@
 				</tr>
 				<tr class="repo">
 					<th>Repository:</th>
-					<td><tt>{*<a href="repository.php?url={escape safe($job.job_specifics.repository_url) url}">*}{$job.job_specifics.repository_url}{*</a>*}</tt></td>
+					<td><tt><a href="repository.php?url={escape safe($job.job_specifics.repository_url) url}">{$job.job_specifics.repository_url}</a></tt></td>
 				</tr>
 			</table>
 
