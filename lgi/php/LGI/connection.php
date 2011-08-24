@@ -69,9 +69,9 @@ class LGIConnection
 	{
 		if (!$this->curlh) $this->connect();
 		// be safe when settings variables
-		$variables = array_map(create_function('$s', 'return ($s[0]=="@") ? "&#64;".substr($s,1) : $s;'), $variables);
+		$variables = array_map(create_function('$s', 'return ($s&&$s[0]=="@") ? "&#64;".substr($s,1) : $s;'), $variables);
 		// file uploads as special postfields
-		$files = array_map(create_function('$s', 'return "@".$s;'), $files);
+		$files = array_map(create_function('$s', 'return is_array($s) ? "@".$s[0].";filename=".$s[1] : "@".$s;'), $files);
 		// perform request
 		curl_setopt($this->curlh, CURLOPT_URL, $this->url . $apipath);
 		curl_setopt($this->curlh, CURLOPT_POST, true);

@@ -109,7 +109,10 @@ class LGIClient extends LGIConnection
 		if ($read_access!==null) $args['read_access'] = $read_access;
 		if ($input!==null) $args['input'] = implode(unpack('H*', $input));
 		$fileargs = array();
-		foreach ($files as $f) $fileargs['uploaded_file_'.(count($fileargs)+1)] = $f;
+		foreach ($files as $n=>$f) {
+			if (is_string($n)) $f = array($f, $n);
+			$fileargs['uploaded_file_'.(count($fileargs)+1)] = $f;
+		}
 		$ret = $this->postToServer('/interfaces/interface_submit_job.php', $args, $fileargs);
 		$ret = $ret['response'];
 		# hex decode input and output
