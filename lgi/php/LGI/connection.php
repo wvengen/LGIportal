@@ -87,8 +87,10 @@ class LGIConnection
 		$resp = json_decode(json_encode(simplexml_load_string($result)), TRUE);
 		// LGI adds spaces to each and every element *sigh*
 		array_walk_recursive($resp, create_function('&$s', '$s=trim($s);'));
+		// move @attributes to 'normal' members for easy access (ok for LGI)
+		$resp = array_attributes_to_values($resp);
 		// handle LGI error response
-		if (in_array('error', $resp['response'])) {
+		if (array_key_exists('error', $resp['response'])) {
 			$err = $resp['response']['error'];
 			throw new LGIServerException(sprintf('LGI error %d: %s',
 				$err['number'], $err['message']), $err['number']);
@@ -113,6 +115,29 @@ class LGIConnection
 		if (!$this->curlh) return;
 		curl_setopt($this->curlh, CURLOPT_VERBOSE, $debug);
 	}
+}
+
+/**
+ * Recursively move all @attributes children to its parent. This
+ * is useful for an array from xml to move attributes to element
+ * positions.
+ *
+ * @param array $arr array from xml structure to modify
+ * @return the modified array
+ * @access private
+ */
+function array_attributes_to_values(&$arr)
+{
+	foreach (array_keys($arr) as $k)
+	{
+		if (!is_array($arr[$k])) continue;
+		if (array_key_exists('@attributes', $arr[$k])) {
+			$arr[$k] = array_merge($arr[$k], $arr[$k]['@attributes']);
+			unset($arr[$k]['@attributes']);
+		}
+		$arr[$k] = array_attributes_to_values($arr[$k]);
+	}
+	return($arr);
 }
 
 ?>

@@ -30,9 +30,23 @@
 				</tr>
 				<tr class="repo">
 					<th>Repository:</th>
-					<td><em>TODO</em></td>
+					<td><tt>{*<a href="repository.php?url={escape $job.job_specifics.repository_url url}">*}{escape $job.job_specifics.repository_url html}{*</a>*}</tt></td>
 				</tr>
 			</table>
 
-			<p><em>TODO: input, output and job specifics</em></p>
+			<fieldset class="collapsible uncollapsed jobdetails"><legend>Input</legend>
+			<pre>{$job.input}</pre>
+			</fieldset>
+
+			<fieldset class="collapsible uncollapsed jobdetails"><legend>Output</legend>
+			<pre>{$job.output}</pre>
+			</fieldset>
+
+			<fieldset class="collapsible collapsed jobdetails"><legend>Job specifics</legend>
+			<table class="list">{loop $job.job_specifics}
+				<tr>
+					<th>{$_key}</th><td>{$}</td>
+				</tr>{/loop}
+         </table>
+			</fieldset>
 {/block}

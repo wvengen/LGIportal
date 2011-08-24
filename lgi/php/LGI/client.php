@@ -77,6 +77,9 @@ class LGIClient extends LGIConnection
 		$ret = $this->postToServer('/interfaces/interface_job_state.php', $args);
 		$ret = $ret['response'];
 		if (!array_key_exists('job', $ret)) $ret['job'] = array();
+		# hex decode input and output
+		if (array_key_exists('input', $ret['job'])) $ret['job']['input'] = pack('H*', $ret['job']['input']);
+		if (array_key_exists('output', $ret['job'])) $ret['job']['output'] = pack('H*', $ret['job']['output']);
 		return $ret;
 	}
 
@@ -104,7 +107,7 @@ class LGIClient extends LGIConnection
 		if ($target_resources!==null) $args['target_resources'] = $target_resources;
 		if ($write_access!==null) $args['write_access'] = $write_access;
 		if ($read_access!==null) $args['read_access'] = $read_access;
-		if ($input!==null) $args['input'] = bin2hex($input);
+		if ($input!==null) $args['input'] = unpack('H*', $input);
 		$fileargs = array();
 		foreach ($files as $f) $fileargs['uploaded_file_'.(count($fileargs)+1)] = $f;
 		$ret = $this->postToServer('/interfaces/interface_submit_job.php', $args, $fileargs);
