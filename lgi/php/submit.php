@@ -23,7 +23,7 @@ if(!isset($_POST['submit']))
 
 	// set nonce to avoid cross-site request forgery (see generateNonce)
 	$data->assign('nonce', generateNonce());
-	$data->assign('applications', array(_LGI_APPLICATION_));
+	$data->assign('applications', preg_split('/;\s*/', _LGI_APPLICATION_));
 	$dwoo->output('submit.tpl', $data);
 }
 else
@@ -31,12 +31,10 @@ else
 	// submit new job
 	verifyNonce($_POST['nonce']);
 
-	$dwoo = new LGIDwoo();
-	$data = new Dwoo_Data();
 	$lgi  = new LGIPortalClient();
 
 	$application = $_POST['application'];
-	if (defined('_LGI_APPLICATION_') && $application!=_LGI_APPLICATION_)
+	if (_LGI_APPLICATION_ && !in_array($application, preg_split('/;\s*/', _LGI_APPLICATION_)))
 		throw new LGIPortalException('Application not allowed: '.htmlentities($application));
 	$input = $_POST['input'];
 	$read_access = $_POST['read_access'];

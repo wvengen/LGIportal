@@ -22,9 +22,9 @@
 					<fieldset class='collapsible uncollapsed'><legend>Advanced</legend>
 						<div>
 							<label for='application'>Application</label>
-							<select name='application' id='application'>
+							{if $applications}<select name='application' id='application'>
 								{foreach $applications a}<option value='{$a}'{if $a==$application} selected='selected'{/if}>{$a}</option>{/foreach}
-							</select>
+							</select>{else}<input type='text' name='application' id='application' value='{$application}' />{/if}
 						</div>
 						<div>Additional
 							<label for='read_access'>read access</label> for

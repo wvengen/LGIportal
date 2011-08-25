@@ -19,8 +19,8 @@ define('_LGI_ROOT_',"/lgi");
  *
  * Ideally LGIportal would implement the following behaviour:
  * - when a single value is present, this is enforced
- * - when the value is an array, the user can select one from this list
- * - when the key is not present, the user may input any value
+ * - when the value is an semicolon-separated list, the user can select one from this list
+ * - when the value is empty, the user may input any value
  * This is not yet fully implemented though.
  */
 define('_LGI_SERVER_', 'https://example.com/LGI/');
@@ -31,11 +31,11 @@ define('_LGI_SERVER_', 'https://example.com/LGI/');
  */
 define('_LGI_PROJECT_', 'helloworld');
 
-/** LGI application to use
+/** LGI applications that can be used; first is default
  *
  * (note at _LGI_SERVER_ applies here as well)
  */
-define('_LGI_APPLICATION_', 'helloworld');
+define('_LGI_APPLICATION_', 'R; helloworld');
 
 
 /*
