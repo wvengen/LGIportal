@@ -103,6 +103,54 @@ function setUserPassword($user, $password)
 }
 
 /**
+ * Inserts a new user into the database
+ *
+ * @param string $user username
+ * @param string $password initial password
+ * @param string $certificate full path to his certificate
+ * @param string $privatekey full path to his private key
+ */
+function createUser($user, $password, $certificate, $privatekey)
+{
+	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
+	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or die(mysql_error());
+	if(!mysql_select_db($mysql_dbname, $connection))
+	{
+		error_log("Error:".mysql_error());
+		//Set an error message and redirect to an error page. This message is seen by user.
+		setErrorMessage("Server Error. Please contact web administrator");
+		showErrorPage();
+	}
+
+	$salt=substr(md5(uniqid(rand(), true)),0,19);
+	$hash=mysql_real_escape_string(hashPassword($password,$salt));
+	$user=mysql_real_escape_string($user);
+
+	$query="INSERT INTO users (passwordHash, salt, userId) VALUES ('$hash', '$salt', '$user')";
+	$result=mysql_query($query);
+	if (!$result) {
+		error_log("Error:".mysql_error());
+		//Set an error message and redirect to an error page. This message is seen by user.
+		setErrorMessage("Server Error. Please contact web administrator.");
+		showErrorPage();
+	}
+
+	$certificate=mysql_real_escape_string($certificate);
+	$password=mysql_real_escape_string($password);
+
+	$query="INSERT INTO usercertificates (userId, certificate, userkey) VALUES ('$user', '$certificate', '$privatekey')";
+	$result=mysql_query($query);
+	if (!$result) {
+		error_log("Error:".mysql_error());
+		//Set an error message and redirect to an error page. This message is seen by user.
+		setErrorMessage("Server Error. Please contact web administrator.");
+		showErrorPage();
+	}
+
+	mysql_close($connection);
+}
+
+/**
  * Find the hash of concatenated string of two parameters passed. Returns the resulting hash. Used for password hashing with salt.
  * @param string $password
  * @param string $salt
