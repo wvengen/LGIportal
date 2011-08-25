@@ -112,7 +112,10 @@ class LGIDwoo extends Dwoo
 		set_dwoo_or_array($data, 'lgi', array(
 			'server'      => _LGI_SERVER_,
 			'project'     => _LGI_PROJECT_,
+			'user'        => $_SESSION['user'],
 		));
+		# if browser is running on windows or not
+		set_dwoo_or_array($data, 'ua_windows', preg_match('/windows|win32/i', $_SERVER['HTTP_USER_AGENT']));
 		# add error message, if any
 		set_dwoo_or_array($data, 'errormessage', getErrorMessage(), true);
 		clearErrorMessage();

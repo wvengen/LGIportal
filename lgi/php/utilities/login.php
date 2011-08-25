@@ -69,6 +69,40 @@ function verifyUserPassword($user,$password)	//input plain text username and pas
 }
 
 /**
+ * Set user password in database
+ *
+ * @param string $user username to set password of
+ * @param string $password new password to set
+ */
+function setUserPassword($user, $password)
+{
+	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
+	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or die(mysql_error());
+	if(!mysql_select_db($mysql_dbname, $connection))
+	{
+		error_log("Error:".mysql_error());
+		//Set an error message and redirect to an error page. This message is seen by user.
+		setErrorMessage("Server Error. Please contact web administrator");
+		showErrorPage();
+	}
+
+	$salt=substr(md5(uniqid(rand(), true)),0,19);
+	$hash=mysql_real_escape_string(hashPassword($password,$salt));
+	$user=mysql_real_escape_string($user);
+
+	$query="UPDATE users SET passwordHash='$hash', salt='$salt' WHERE userId='$user'";
+	$result=mysql_query($query);
+	if (!$result) {
+		error_log("Error:".mysql_error());
+		//Set an error message and redirect to an error page. This message is seen by user.
+		setErrorMessage("Server Error. Please contact web administrator.");
+		showErrorPage();
+	}
+
+	mysql_close($connection);
+}
+
+/**
  * Find the hash of concatenated string of two parameters passed. Returns the resulting hash. Used for password hashing with salt.
  * @param string $password
  * @param string $salt
@@ -108,45 +142,42 @@ function authenticateUser()
  * @param string $user
  * @return string
  */
-function getCertificateFile($user)
+function getCertificateFile($user=null)
 {
-	if(strcmp($_SESSION['user'],$user)==0)
+	if ($user===null) $user=$_SESSION['user'];
+
+	if(isset($_SESSION['certificate']))          //if reference to certificate is set in session, no need to query database
 	{
-		if(isset($_SESSION['certificate']))          //if reference to certificate is set in session, no need to query database
-		{
-			return $_SESSION['certificate'];
-		}
-			
-		global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
-		$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or die(mysql_error());
-		if(!mysql_select_db($mysql_dbname, $connection))
-		{
-			error_log("Error:".mysql_error());
-			//Set an error message and redirect to an error page. This message is seen by user.
-			setErrorMessage("Server Error.");
-			showErrorPage();
-		}
-		$username=mysql_real_escape_string($user); //$user will already be escaped. But this is for extra safety
-		$query="SELECT certificate FROM usercertificates WHERE userId='".$username."'";
-		$result=mysql_query($query);
-		if (!$result) {
-			error_log("Error:".mysql_error());
-			//Set an error message and redirect to an error page. This message is seen by user.
-			setErrorMessage("Server Error.");
-			showErrorPage();
-		}
-			
-		$row= mysql_fetch_row($result);
-		mysql_close($connection);
-		//if there is a record in the database for the user
-		if($row)
-		{
-			$_SESSION['certificate']=$row[0];       //save the reference certificate in session. so next time you dont have to query database again.
-			return $row[0];
-		}
-		else return NULL;
+		return $_SESSION['certificate'];
 	}
-	else
+		
+	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
+	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or die(mysql_error());
+	if(!mysql_select_db($mysql_dbname, $connection))
+	{
+		error_log("Error:".mysql_error());
+		//Set an error message and redirect to an error page. This message is seen by user.
+		setErrorMessage("Server Error.");
+		showErrorPage();
+	}
+	$username=mysql_real_escape_string($user); //$user will already be escaped. But this is for extra safety
+	$query="SELECT certificate FROM usercertificates WHERE userId='".$username."'";
+	$result=mysql_query($query);
+	if (!$result) {
+		error_log("Error:".mysql_error());
+		//Set an error message and redirect to an error page. This message is seen by user.
+		setErrorMessage("Server Error.");
+		showErrorPage();
+	}
+		
+	$row= mysql_fetch_row($result);
+	mysql_close($connection);
+	//if there is a record in the database for the user
+	if($row)
+	{
+		$_SESSION['certificate']=$row[0];       //save the reference certificate in session. so next time you dont have to query database again.
+		return $row[0];
+	}
 	return NULL;
 }
 
@@ -155,43 +186,42 @@ function getCertificateFile($user)
  * @param string $user
  * @return string
  */
-function getKeyFile($user)
+function getKeyFile($user=null)
 {
-	if(strcmp($_SESSION['user'],$user)==0)
+	if ($user===null) $user=$_SESSION['user'];
+
+	if(isset($_SESSION['key']))          //if reference to key is set in session, no need to query database
 	{
-		if(isset($_SESSION['key']))          //if reference to key is set in session, no need to query database
-		{
-			return $_SESSION['key'];
-		}
-		global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
-		$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or die(mysql_error());
-		if(!mysql_select_db($mysql_dbname, $connection))
-		{
-			error_log("Error:".mysql_error());
-			//Set an error message and redirect to an error page. This message is seen by user.
-			setErrorMessage("Server Error.");
-			showErrorPage();
-		}
-		$username=mysql_real_escape_string($user); //$user will already be escaped. But this is for extra safety
-		$query="SELECT userkey FROM usercertificates WHERE userId='".$username."'";
-		$result=mysql_query($query);
-		if (!$result) {
-			error_log("Error:".mysql_error());
-			//Set an error message and redirect to an error page. This message is seen by user.
-			setErrorMessage("Server Error.");
-			showErrorPage();
-		}
-			
-		$row= mysql_fetch_row($result);
-		mysql_close($connection);
-		//if there is a record in the database for the user
-		if($row)
-		{
-			$_SESSION['key']=$row[0];       //save the reference key in session. so next time you dont have to query database again.
-			return $row[0];
-		}
+		return $_SESSION['key'];
 	}
-	else
+	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
+	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or die(mysql_error());
+	if(!mysql_select_db($mysql_dbname, $connection))
+	{
+		error_log("Error:".mysql_error());
+		//Set an error message and redirect to an error page. This message is seen by user.
+		setErrorMessage("Server Error.");
+		showErrorPage();
+	}
+	$username=mysql_real_escape_string($user); //$user will already be escaped. But this is for extra safety
+	$query="SELECT userkey FROM usercertificates WHERE userId='".$username."'";
+	$result=mysql_query($query);
+	if (!$result) {
+		error_log("Error:".mysql_error());
+		//Set an error message and redirect to an error page. This message is seen by user.
+		setErrorMessage("Server Error.");
+		showErrorPage();
+	}
+		
+	$row= mysql_fetch_row($result);
+	mysql_close($connection);
+	//if there is a record in the database for the user
+	if($row)
+	{
+		$_SESSION['key']=$row[0];       //save the reference key in session. so next time you dont have to query database again.
+		return $row[0];
+	}
+
 	return NULL;
 }
 

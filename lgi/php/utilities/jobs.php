@@ -41,6 +41,8 @@ class LGIPortalClient extends LGIClient
 	 * @param string $groups groups to submit jobs with, or null to use same as user
 	 * @param string $server LGI project server url to connect with, or null to use {@link _LGI_SERVER_ _LGI_SERVER_} when defined
 	 * @param string $project LGI project to connect to, or null to use {@link _LGI_PROJECT_ _LGI_PROJECT_} when defined
+	 *
+	 * @todo allow multiple entries in _LGI_SERVER_ and _LGI_PROJECT_
 	 */
 	function __construct($user=null, $groups=null, $server=null, $project=null)
 	{

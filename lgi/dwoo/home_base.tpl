@@ -31,6 +31,7 @@
 		</ul>
 		<ul class="user">
 			<li><a href="resources.php">Resources</a> </li>
+			<li><a href="user.php">Settings</a> </li>
 			<li><a href="logout.php">Logout {$user}</a></li>
 		</ul>
 {/block}
@@ -38,6 +39,7 @@
 	<div id="content-container">
 		<div id="content">
 		{if $errormessage}<div id="error">{$errormessage}</div>{/if}
+		{if $infomessage}<div id="info">{$infomessage}</div>{/if}
 {block "content"}
 			<h2>Welcome {$user}! </h2>
 			<p>You are now logged into the LGI portal.</p>

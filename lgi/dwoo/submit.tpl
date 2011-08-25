@@ -8,6 +8,7 @@
 	<script src="{$webroot}/js/jquery.MultiFile.js" type="text/javascript"></script>
 {/block}
 {block "content"}
+{load_templates "functions.tpl"}
 				<form id='newjob' action='submit.php' method='post' enctype='multipart/form-data'>
 					<input type='hidden' name='nonce' value='{$nonce}' />
 
@@ -22,9 +23,7 @@
 					<fieldset class='collapsible uncollapsed'><legend>Advanced</legend>
 						<div>
 							<label for='application'>Application</label>
-							{if $applications}<select name='application' id='application'>
-								{foreach $applications a}<option value='{$a}'{if $a==$application} selected='selected'{/if}>{$a}</option>{/foreach}
-							</select>{else}<input type='text' name='application' id='application' value='{$application}' />{/if}
+							{inputselect 'application' $applications $application}
 						</div>
 						<div>Additional
 							<label for='read_access'>read access</label> for

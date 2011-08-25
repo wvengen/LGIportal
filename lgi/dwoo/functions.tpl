@@ -64,3 +64,21 @@
 	*}<img src="icons/state-{$jobstatus}_16.{tif $jobstatus=='running' ? 'gif' : 'png'}" width="{$size}" height="{$size}" alt="{$jobstatus}" title="{$jobstatus}"/>{*
 *}{/template}
 
+
+{*
+
+  inputselect
+
+  Either an html select or a text input element, depending on if values are given or not.
+*}
+{template inputselect id values currentvalue}{*
+	*}{if $values}<select name='{$id}' id='{$id}'>{*
+		*}{foreach $values a}{*
+			*}<option value='{$a}'{if $a==$currentvalue} selected='selected'{/if}>{$a}</option>{*
+		*}{/foreach}{*
+		*}</select>{*
+	*}{else}{*
+		*}<input type='text' name='{$id}' id='{$id}' value='{$currentvalue}' />{*
+	*}{/if}{*
+*}{/template}
+
