@@ -15,7 +15,7 @@ session_start();
 //if user has already logged in redirect to home page.
 if(checkValidSession())
 {
-	header("Location: home.php");
+	header("Location: jobs.php");
 
 }
 else   //authenticate user
@@ -44,7 +44,7 @@ else   //authenticate user
 	if($valid)
 	{
 		//user has logged in. Go to home
-		header("Location: home.php");
+		header("Location: jobs.php");
 	}
 	else
 	{

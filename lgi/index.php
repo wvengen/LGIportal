@@ -12,7 +12,7 @@ require_once('utilities/sessions.php');
 session_start();
 if(checkValidSession()) //if already logged in redirect it to home
 {	
-	header("Location: php/home.php");
+	header("Location: php/jobs.php");
 }
 else
 {

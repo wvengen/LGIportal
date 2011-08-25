@@ -25,7 +25,6 @@
 	<div id="navigation">
 {block "menu"}
 		<ul>
-			<li><a href="home.php">Home</a></li>
 			<li><a href="jobs.php">Jobs</a> </li>
 			<li><a href="submit.php">New job</a></li>
 		</ul>
