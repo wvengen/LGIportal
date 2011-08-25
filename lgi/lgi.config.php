@@ -6,12 +6,6 @@
 /** CA certificate file to be used when requesting to project server */
 $CA_FILE=dirname(__FILE__)."/lgi-ca.crt";
 
-/** Authentication mechanism to use. Currently two methods are possible.
- *  1. Form based - username and password stored in database
- *  2. HTTP digest authentication
- */
-define('_AUTH_MECHANISM_',"DATABASE");  //Possible "DATABASE","DIGEST"
-
 /** Web location where this application is deployed, relative to web root. */
 define('_LGI_ROOT_',"/lgi");
 

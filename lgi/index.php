@@ -16,17 +16,8 @@ if(checkValidSession()) //if already logged in redirect it to home
 }
 else
 {
-         //check which authentication mechanism
-          if(strcmp(_AUTH_MECHANISM_,"DATABASE")==0)
-          {
-               $dwoo = new LGIDwoo();
-               $dwoo->output('login.tpl');
-          }
-          else if(strcmp(_AUTH_MECHANISM_,"DIGEST")==0)
-          {
-               //authenticateDigest()
-               header("Location: php/login.php");
-          }
+	$dwoo = new LGIDwoo();
+	$dwoo->output('login.tpl');
 }
 	
 ?>

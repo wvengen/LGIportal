@@ -21,28 +21,12 @@ if(checkValidSession())
 else   //authenticate user
 {
 	$valid=false;
-	if(strcmp(_AUTH_MECHANISM_,"DATABASE")==0)
-	{
-		$user=strip_tags($_POST['name']); //HTML tags are stripped for preventing cross site scripting. $user is later stored in session.
-		$paswd=$_POST['password'];
-		$valid=verifyUserPassword($user,$paswd);
-		if($valid)
-			setValidSession($user);
 
-	}
-	else if(strcmp(_AUTH_MECHANISM_,"DIGEST")==0)
-	{
-		$valid=authenticateDigest();
-	}
-	else
-	{
-		error_log("Configuration Error: Invalid Authentication Mechanism in lgi.config.php");
-		pushErrorMessage("Server Configuration Error. Please contact server administrator");
-		showErrorPage();
-	}
+	$user=strip_tags($_POST['name']); //HTML tags are stripped for preventing cross site scripting. $user is later stored in session.
 
-	if($valid)
+	if(verifyUserPassword($user,$_POST['password']))
 	{
+		setValidSession($user);
 		//user has logged in. Go to home
 		header("Location: jobs.php");
 	}
