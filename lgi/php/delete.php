@@ -33,13 +33,14 @@ else
 	verifyNonce($_POST['nonce']);
 	$job_id = verifyJobid($_POST['job_id']);
 
-	$dwoo = new LGIDwoo();
-	$data = new Dwoo_Data();
-
 	$lgi = new LGIPortalClient();
 	$result = $lgi->jobDelete($job_id);
-	$data->assign('message', 'Job '.$job_id.' deleted');
-	$dwoo->output('deletesuccess.tpl', $data);
+
+	if (!in_array($result['job']['state'], array('deleted', 'aborting', 'aborted')))
+		throw new LGIPortalException('Failed to delete job '.$job_id);
+
+	// success! redirect to allow user to reload
+	header('Location: jobs.php');
 }
 
 ?>
