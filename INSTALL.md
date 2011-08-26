@@ -1,8 +1,8 @@
 How to deploy the LGI portal
 ============================
 
-0. Requirements
----------------
+Requirements
+------------
 
 0. An [LGI] deployment, ready to use
 1. [Apache][] webserver
@@ -14,8 +14,8 @@ How to deploy the LGI portal
 4. [MySQL][] server
 
 
-1. Setting up the database
----------------------------
+Setting up the database
+-----------------------
 
 1. Create a MySQL database and create a user with full permissions on that database.
 
@@ -26,8 +26,8 @@ How to deploy the LGI portal
      document root), configure the new path in lgi.config.php
 
 
-2. Configuring the portal
--------------------------
+Configuring the portal
+----------------------
 
 1. Copy the lgi/ folder to the webroot.
 
@@ -43,11 +43,12 @@ How to deploy the LGI portal
      and stability.
 
 
-3. Setting up users
--------------------
+Setting up users
+----------------
 
 You need a valid LGI certificate and private key. Then Use the script
 createuser.php, for example like this:
+
     cd /var/www/lgi/
     php createuser.php john s3cretpw /home/lgi/cert/john.crt /home/lgi/cert/john.key
 
@@ -59,4 +60,3 @@ createuser.php, for example like this:
 [PHP-Curl]: http://php.net/manual/en/book.curl.php
 [MySQL]: http://www.mysql.org/
 [Dwoo]: http://dwoo.org/                
-
