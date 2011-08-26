@@ -5,21 +5,21 @@ LGIportal source code overview
   * **lgi.config.php** - main configuration file
   * **css** - stylesheets and dependant images
   * **js** - javascript
-  * **dwoo** - [Dwoo][] templates for the portal's pages
-  * **php**
-    * **icons** - icons used in portal
-    * **LGI** - code for accessing the [LGI][] project server
-    * **\*.php** - pages to be accessed using the web browser when logged in
-    * **utilities** 
-      * **common.php** - general stuff, included in most files
-      * **dwoo.php** - template functionality, wraps Dwoo
-      * **errors.php** - error handling
-      * **jobs.php** - for communication with LGI project server, wraps LGIClient
-      * **login.php** - user account functions
-      * **sessions.php** - session handling
-    * **includes**
-      * **db.inc.php** - default database configuration file, referenced by
-        lgi.config.php
+  * **dwoo** - [Dwoo][] templates for the portals pages
+  * **php** 
+     * **icons** - icons used in portal
+     * **LGI** - code for accessing the [LGI][] project server
+     * **\*.php** - pages to be accessed using the web browser when logged in
+     * **utilities** 
+         * **common.php** - general stuff, included in most files
+         * **dwoo.php** - template functionality, wraps Dwoo
+         * **errors.php** - error handling
+         * **jobs.php** - for communication with LGI project server, wraps LGIClient
+         * **login.php** - user account functions
+         * **sessions.php** - session handling
+     * **includes**
+        * **db.inc.php** - default database configuration file, referenced by
+           lgi.config.php
 
 
 Authentication
