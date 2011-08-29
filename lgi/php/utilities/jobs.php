@@ -65,21 +65,21 @@ class LGIPortalClient extends LGIClient
 	function filePassthru($url)
 	{
 		$this->check_repository($url);
-		parent::filePassthru($url);
+		return parent::filePassthru($url);
 	}
 
 	/** {@inheritDoc} */
 	function fileDownload($url)
 	{
 		$this->check_repository($url);
-		parent::fileDownload($url);
+		return parent::fileDownload($url);
 	}
 
 	/** {@inheritDoc} */
 	function fileList($url)
 	{
 		$this->check_repository($url);
-		parent::fileList($url);
+		return parent::fileList($url);
 	}
 
 	/** Checks if a repository url is allowed.
