@@ -73,15 +73,29 @@ class LGIConnection
 		$this->curlh = null;
 	}
 
-	protected function postToServer($url, $variables=array(), $files=array(), $path=null)
+	/** Do request at LGI project server
+	 *
+	 * Files can be uploaded with the request. The filename can be a string
+	 * or array. In the latter case, the first value of the array is the
+	 * actual filename, and the second value the destination filename on
+	 * the server.
+	 *
+	 * @param string $url path to call, relative to this object's url
+	 * @param array(string) $variables key=>value arguments
+	 * @param array(string) $files key=>filename to upload with request
+	 * @throws LGIConnectionException when there is a connection or server problem
+	 * @throws LGIServerException when the project server returns an error response
+	 * @return array with parsed response
+	 */
+	protected function postToServer($url, $variables=array(), $files=array())
 	{
 		if (!$this->curlh) $this->connect();
-		// non-absolute urls relative to base url
-		if (strtolower(substr($url,0,6))!='https:') $url = $this->url.$url;
+		// relative to base url
+		$url = $this->url.$url;
 		// be safe when settings variables
 		$variables = array_map(create_function('$s', 'return ($s&&$s[0]=="@") ? "&#64;".substr($s,1) : $s;'), $variables);
 		// file uploads as special postfields
-		$files = array_map(create_function('$s', 'return is_array($s) ? "@".$s[0].";filename=".$s[1] : "@".$s;'), $files);
+		$files = $this->postPrepareUpload($files);
 		// perform request
 		curl_setopt($this->curlh, CURLOPT_POST, true);
 		curl_setopt($this->curlh, CURLOPT_POSTFIELDS, array_merge($variables, $files));
@@ -98,6 +112,24 @@ class LGIConnection
 				$err['number'], $err['message']), $err['number']);
 		}
 		return $resp;
+	}
+
+	/** Prepares files for curl file upload
+	 *
+	 * Implements a workaround for PHP bug #48962, where the uploaded file
+	 * receives the same filename as the local file has here.
+	 *
+	 * @param array(string) $files
+	 * @return array suitable to pass to {@link curl_setopt curl_setopt}'s {@link CURLOPT_POSTFIELDS CURLOPT_POSTFIELDS}
+	 */
+	protected function postPrepareUpload($files)
+	{
+		if (count($files)===0) return $files;
+		// The bug was fixed at some point
+		if (version_compare(PHP_VERSION, '5.3.1') >= 0)
+			return array_map(create_function('$s', 'return is_array($s) ? "@".$s[0].";filename=".$s[1] : "@".$s;'), $files);
+		// but for earlier versions we need to rename the files
+		throw new LGIConnectionException('Currently need PHP 5.3.1 or higher to do file uploads with submit.');
 	}
 
 	protected function check_file($file, $desc)
