@@ -80,7 +80,8 @@ class LGIConnection
 	 * actual filename, and the second value the destination filename on
 	 * the server.
 	 *
-	 * @param string $url path to call, relative to this object's url
+	 * @param string $url path to call, relative to this object's url or absolute
+	 *        when starting with 'https:'
 	 * @param array(string) $variables key=>value arguments
 	 * @param array(string) $files key=>filename to upload with request
 	 * @throws LGIConnectionException when there is a connection or server problem
@@ -91,7 +92,7 @@ class LGIConnection
 	{
 		if (!$this->curlh) $this->connect();
 		// relative to base url
-		$url = $this->url.$url;
+		if (strtolower(substr($url,0,6))!='https:') $url = $this->url.$url;
 		// be safe when settings variables
 		$variables = array_map(create_function('$s', 'return ($s&&$s[0]=="@") ? "&#64;".substr($s,1) : $s;'), $variables);
 		// file uploads as special postfields
