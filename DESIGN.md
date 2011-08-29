@@ -32,6 +32,7 @@ compared against the data in database for authenticating a user. When a user is
 authenticated, a new session is created for that user. Further activities of
 user uses this session. Application expects an SSL connection between server
 and client.
+
 While there has been an option for http-digest authentication in LGIportal,
 this has been removed from the current version because of maintenance issues.
 

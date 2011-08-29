@@ -46,11 +46,31 @@ Configuring the portal
 Setting up users
 ----------------
 
-You need a valid LGI certificate and private key. Then Use the script
+You need a valid LGI certificate and private key. Then use the script
 createuser.php, for example like this:
 
     cd /var/www/lgi/
     php createuser.php john s3cretpw /home/lgi/cert/john.crt /home/lgi/cert/john.key
+
+This creates a user 'john' with password 's3cretpw' that has a key and certificate in
+the directory /home/lgi/cert/.
+
+
+Putting LGIportal on the LGI project server
+-------------------------------------------
+
+For small setups it may be useful to put LGIportal on the same web server and virtual
+host as the LGI project server. The latter requires HTTPS, and it is highly
+recommended to use it as well for LGIportal.
+
+This does require one to set [SSLVerifyClient][] to optional: the LGI project server
+requires certificates to interact, while LGIportal relies on username/password
+authentication. Since this can not be set on a directory-basis but applies to the
+virtual host, access with and without certificates should be allowed.
+
+Please note that not all browsers will be able to use optional client certificates,
+like some versions of Internet Explorer and Safari on the Mac.
+
 
 
 [LGI]: http://gliteui.wks.gorlaeus.net/LGI/
@@ -60,3 +80,4 @@ createuser.php, for example like this:
 [PHP-Curl]: http://php.net/manual/en/book.curl.php
 [MySQL]: http://www.mysql.org/
 [Dwoo]: http://dwoo.org/                
+[SSLVerifyClient]: http://httpd.apache.org/docs/current/mod/mod_ssl.html#sslverifyclient
