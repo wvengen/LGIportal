@@ -42,9 +42,8 @@ else
 	$write_access = $_POST['write_access'];
 	$files = array();
 	foreach ($_FILES as $n=>$f) {
-		$f = trim($f);
 		if (!substr($n,0,13)=='uploaded_file') continue;
-		if (count($f)==0) continue;
+		if (strlen($f['name'])==0) continue;
 		$files[$f['name']] = $f['tmp_name'];
 	}
 
