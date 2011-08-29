@@ -30,6 +30,12 @@ function verifyJobid($jobid, $returnto)
 /**
  * LGIClient that integrates with the portal
  *
+ * By default the LGI project server details are used from the LGIportal
+ * configuration, and the key and certificate are retrieved from the
+ * database.
+ *
+ * Also repository access is checked against LGI_REPOSITORY configuration.
+ *
  * @todo add job name to job info (joblist/jobinfo/submit)
  */
 class LGIPortalClient extends LGIClient
@@ -54,6 +60,47 @@ class LGIPortalClient extends LGIClient
 		$ca = config('LGI_CA_FILE');
 		parent::__construct($server, $project, $user, $groups, getCertificateFile($user), getKeyFile($user), $ca);
 	}
+
+	/** {@inheritDoc} */
+	function filePassthru($url)
+	{
+		$this->check_repository($url);
+		parent::filePassthru($url);
+	}
+
+	/** {@inheritDoc} */
+	function fileDownload($url)
+	{
+		$this->check_repository($url);
+		parent::fileDownload($url);
+	}
+
+	/** {@inheritDoc} */
+	function fileList($url)
+	{
+		$this->check_repository($url);
+		parent::fileList($url);
+	}
+
+	/** Checks if a repository url is allowed.
+	 *
+ 	 * If the repository url given is not allowed by the portal configuration
+	 * an LGIPortalException is thrown.
+	 *
+	 * @param string $url repository or file location to check
+	 * @throws LGIPortalException when location is not allowed
+	 */
+	protected function check_repository($url)
+	{
+		$allowed_repos = config_array('LGI_REPOSITORY');
+		foreach ($allowed_repos as $repo)
+		{
+			if (substr($url, 0, strlen($repo))==$repo)
+				return true;
+		}
+		throw new LGIPortalException('Repository not allowed');
+	}
+
 }
 
 ?>

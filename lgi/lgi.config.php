@@ -31,6 +31,17 @@ $LGI_PROJECT='helloworld';
  */
 $LGI_APPLICATION=array('R', 'helloworld');
 
+/** LGI repositories to allow
+ *
+ * Each repository location accessed through the portal must begin
+ * with one of these. Since LGIportal serves as a proxy when accessing
+ * repositories, this is an important security measure.
+ *
+ * Defaults to {@link $LGI_SERVER $LGI_SERVER}, since in the default LGI
+ * setup repositories are located on the project server.
+ */
+$LGI_REPOSITORY=$LGI_SERVER;
+
 
 /*
  * You probably won't need to change the following settings.
