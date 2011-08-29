@@ -56,6 +56,6 @@ function clearErrorMessage()
 
 function showErrorPage()
 {
-     header("Location: "._LGI_ROOT_."/php/error.php");
+     header("Location: ".config('LGI_ROOT')."/php/error.php");
 }
 ?>

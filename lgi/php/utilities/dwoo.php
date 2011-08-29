@@ -50,7 +50,7 @@ class LGIDwoo extends Dwoo
 		if (is_string($_tpl))
 			$_tpl = new Dwoo_Template_File($_tpl);
 		$inc = $_tpl->getIncludePath() ? $_tpl->getIncludePath() : array();
-		$_tpl->setIncludePath($inc + array(_TEMPLATE_DIR_));
+		$_tpl->setIncludePath($inc + array(config('TEMPLATE_DIR')));
 		# default compiler with auto-escaping
 		$cmp = Dwoo_Compiler::compilerFactory();
 		$cmp->setAutoEscape(true);
@@ -107,11 +107,11 @@ class LGIDwoo extends Dwoo
 			set_dwoo_or_array($data, $var, $_SESSION[$var]);
 		}
 		# lgi root
-		set_dwoo_or_array($data, 'webroot', _LGI_ROOT_);
+		set_dwoo_or_array($data, 'webroot', config('LGI_ROOT'));
 		# lgi variables
 		set_dwoo_or_array($data, 'lgi', array(
-			'server'      => _LGI_SERVER_,
-			'project'     => _LGI_PROJECT_,
+			'server'      => config('LGI_SERVER'),
+			'project'     => config('LGI_PROJECT'),
 			'user'        => $_SESSION['user'],
 		));
 		# if browser is running on windows or not

@@ -22,10 +22,10 @@ $data = new Dwoo_Data();
 
 // download config when submitted via dlcred
 if (isset($_POST['dlcred']) && $_POST['dlcred']) {
-	$applications = preg_split('/;\s*/', _LGI_APPLICATION_);
+	$applications = config_array('LGI_APPLICATION');
 	$data->assign('certificate', trim(file_get_contents(getCertificateFile())));
 	$data->assign('privatekey', trim(file_get_contents(getKeyFile())));
-	$data->assign('ca_chain', trim(file_get_contents($CA_FILE)));
+	$data->assign('ca_chain', trim(file_get_contents(config('LGI_CA_FILE'))));
 	$data->assign('groups', $_SESSION['user']);
 	$data->assign('application', $applications[0]);
 	$cfgtxt = $dwoo->get('LGI.cfg.tpl', $data);
@@ -57,7 +57,7 @@ if (isset($_POST['submit'])) {
 
 // no form, just show form
 $data->assign('nonce', generateNonce());
-$data->assign('servers', preg_split('/;\s*/', _LGI_SERVER_));
-$data->assign('projects', preg_split('/;\s*/', _LGI_PROJECT_));
+$data->assign('servers', config_array('LGI_SERVER'));
+$data->assign('projects', config_array('LGI_PROJECT'));
 $dwoo->output('user.tpl', $data);
 

@@ -10,17 +10,18 @@ require_once(dirname(__FILE__).'/common.php');
 require_once('utilities/errors.php');
 
 //$DB_CONFIG_FILE is set by the administrator. Hence check whether the file exists or not. If file doesnot exists we cannot access database. Hence report error!
-if(!file_exists($DB_CONFIG_FILE))
+$dbcfg = config('DB_CONFIG_FILE');
+if(!file_exists($dbcfg))
 {
 	//given path to the DB_configuration file is invalid. Generate an error.
-	error_log("Error: in lgi.config.php: File not found ".$DB_CONFIG_FILE);
+	error_log("Error: in lgi.config.php: File not found ".$dbcfg);
 	//Redirect to an error page. Set an error message. This message is seen by user.
 	setErrorMessage("Server Configuration Error. Please report to web-administrator.");
 	showErrorPage();
 
 }
 //include the file having database access details
-require $DB_CONFIG_FILE;
+require $dbcfg;
 
 /**
  * Checks whether username and passwords corresponds to a valid user. Returns True if credentials are valid otherwise returns false.
@@ -167,7 +168,7 @@ function hashPassword($password,$salt)
  */
 function relogin()
 {
-	header("Location: "._LGI_ROOT_."/index.php");
+	header("Location: ".config('LGI_ROOT')."/index.php");
 }
 
 /**

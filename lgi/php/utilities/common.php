@@ -48,4 +48,42 @@ function lgi_portal_exception_handler($exception)
 }
 set_exception_handler('lgi_portal_exception_handler');
 
+/** Get configuration value.
+ *
+ * This is used instead of defines or globals so that settings could be
+ * retrieved from a database, for example. Or to have a hierarchical
+ * idea of configuration where multiple portals share a single 
+ * codebase. All of this is not implemented right now, but it should
+ * be possible by changing this function.
+ *
+ * @param string $key configuration value to get
+ * @param mixed $default value to return when key was not present
+ * @return mixed
+ */
+function config($key, $default=null)
+{
+	if (isset($GLOBALS[$key]))
+		return $GLOBALS[$key];
+	else
+		return $default;
+}
+
+/** Get configuration, return as array.
+ *
+ * If value is no array, it wraps it into one. This is for configuration
+ * items that have either a value or an array of values, so that the
+ * calling code can always iterate over it.
+ *
+ * @param string $key configuration value to get
+ * @param mixed $default value to return when key was not present
+ * @return mixed
+ */
+function config_array($key, $default=array())
+{
+	$r = config($key, null);
+	if (is_null($r))
+		return $default;
+	return is_array($r) ? $r : array($r);
+}
+
 ?>

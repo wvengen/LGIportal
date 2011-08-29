@@ -23,7 +23,7 @@ if(!isset($_POST['submit']))
 
 	// set nonce to avoid cross-site request forgery (see generateNonce)
 	$data->assign('nonce', generateNonce());
-	$data->assign('applications', preg_split('/;\s*/', _LGI_APPLICATION_));
+	$data->assign('applications', config_array('LGI_APPLICATION', null));
 	$dwoo->output('submit.tpl', $data);
 }
 else
@@ -34,7 +34,8 @@ else
 	$lgi  = new LGIPortalClient();
 
 	$application = $_POST['application'];
-	if (_LGI_APPLICATION_ && !in_array($application, preg_split('/;\s*/', _LGI_APPLICATION_)))
+	$allowed_apps = config_array('LGI_APPLICATION', null);
+	if (!is_null($allowed_apps) && !in_array($application, $allowed_apps))
 		throw new LGIPortalException('Application not allowed: '.htmlentities($application));
 	$input = $_POST['input'];
 	$read_access = $_POST['read_access'];
