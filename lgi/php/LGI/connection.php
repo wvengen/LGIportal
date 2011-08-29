@@ -7,6 +7,14 @@
  * @package lgijob
  */
 
+// need json module
+if (!function_exists('json_decode')) {
+  $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
+  dl($prefix . 'json.' . PHP_SHLIB_SUFFIX);
+  if (!function_exists('json_decode'))
+    die('Server error: need PHP 5.2.0 or higher, or the JSON module');
+}
+
 /** Base LGI exception */
 class LGIException extends Exception { }
 /** Exception in LGI connection */

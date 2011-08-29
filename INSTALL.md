@@ -6,7 +6,9 @@ Requirements
 
 0. An [LGI] deployment, ready to use
 1. [Apache][] webserver
-2. [PHP] 5+ with [MySQL][PHP-MySQL] and [Curl][PHP-Curl] support
+2. [PHP] 5+ with [MySQL][PHP-MySQL], [Curl][PHP-Curl] and [JSON][PHP-JSON] support.
+     PHP 5.2.0 has the JSON module built-in, otherwise you may need to install it
+     from PECL: `pecl install json`.
 3. [Dwoo][] templating library.
     An installed system or PEAR package is sufficient (LGIportal tries
     to load both Dwoo/dwooAutoload.php or dwoo/dwooAutoload.php,
