@@ -57,7 +57,7 @@ class LGIConnection
 		curl_setopt($this->curlh, CURLOPT_SSLCERT, $this->certificate);
 		curl_setopt($this->curlh, CURLOPT_SSLKEY, $this->privatekey);
 		curl_setopt($this->curlh, CURLOPT_CAINFO, $this->ca_chain);
-		curl_setopt($this->curlh, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($this->curlh, CURLOPT_SSL_VERIFYPEER, true);
 		curl_setopt($this->curlh, CURLOPT_SSL_VERIFYHOST, 2);
 		curl_setopt($this->curlh, CURLOPT_NOSIGNAL, true);
 		curl_setopt($this->curlh, CURLOPT_NOPROGRESS, true);
