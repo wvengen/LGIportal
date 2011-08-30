@@ -1,0 +1,11 @@
+2011-08-30 LGIportal-0.3 wvengen
+* small layout changes
+* make file upload during submit work with PHP versions below 5.3.1
+* restrict repository access
+* refactored configuration system; configuration file needs to be updated
+
+2011-08-25 LGIportal-0.2 wvengen
+* completed and rewrote many parts
+
+2011-08-02 LGIportal-0.1 deepthi
+* initial version
