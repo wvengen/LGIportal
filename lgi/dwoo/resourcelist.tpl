@@ -18,19 +18,19 @@
 			<h2>Project servers</h2>
 			<table class="serverlist list">
 				<tr>
-					<th>Server url</th>
+					<th class="url">Server url</th>
 					<th class="flag">Master</th>
 					<th class="flag">Selected</th>
 				</tr>
 				<tr>
-					<td>{$project_master_server}</td>
-					<td class="flag">x</td>
-					<td class="flag">{if $project_master_server==$this_project_server}x{/if}</td>
+					<td class="url">{$project_master_server}</td>
+					<td class="flag">&#x2713;</td>
+					<td class="flag">{if $project_master_server==$this_project_server}&#x2713;{/if}</td>
 				</tr>
 				{foreach $servers s}<tr class="{cycle values=array('odd','even')}">
-					<td>{$s}</td>
+					<td class="url">{$s}</td>
 					<td class="flag"></td>
-					<td class="flag">{if $s==$this_project_server}x{/if}</td>
+					<td class="flag">{if $s==$this_project_server}&#x2713;{/if}</td>
 				</tr>{/foreach}
 			</table>
 

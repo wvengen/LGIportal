@@ -2,7 +2,7 @@
 {block "title"}Repository {$repo_id}{/block}
 {block "content"}
 {load_templates "functions.tpl"}
-			{if $files}<table class="list interactive">
+			{if $files}<table class="list filelist interactive">
 				<tr>
 					<th class="filename">Filename</th>
 					<th class="filesize">Size</th>

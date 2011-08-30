@@ -224,6 +224,7 @@ table.list td, table.list th
 {
 	padding-left: 0.4em;
 	padding-right: 0.2em;
+	text-align: left;
 }
 table.list td {
 	border: 1px solid #eee;
@@ -240,22 +241,31 @@ table.desc th {
 
 
 /*
- * Job list & details
+ * Job, file and resource list & details
  */
 table.joblist .name { width: 10em; text-align: left; }
 table.joblist .id   { width:  2em; text-align: right; }
 table.joblist .app  { min-width: 5em; }
 
 /* make table cells clicklable, not just links */
-table.joblist td.id, table.joblist td.name, table.joblist td.app {
+table.joblist td.id, table.joblist td.name, table.joblist td.app,
+table.filelist td.filename {
   display: table-cell;
   padding-left: 0;
   padding-right: 0;
 }
-table.joblist td.id a, table.joblist td.name a, table.joblist td.app a {
+table.joblist td.id a, table.joblist td.name a, table.joblist td.app a,
+table.filelist td.filename a {
   display: block;
   padding-left: 0.4em;
   padding-right: 0.2em;
 }
 table.joblist .owners a { text-decoration: none; color: #333; }
+
+table.list td.flag, table.list th.flag {
+  text-align: center;
+}
+table.serverlist td.url {
+  font-family: monospace;
+}
 
