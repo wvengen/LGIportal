@@ -1,19 +1,68 @@
 <?php
-
 /**
  * LGI client
  *
  * @author wvengen
- * @package lgijob
+ * @package LGI
  */
+/** */
 require_once(dirname(__FILE__).'/connection.php');
 
+
+/** Exception in LGI client
+ * @package LGI */
 class LGIClientException extends LGIException { }
 
 /** LGI client
+ *
+ * This is a thin layer to the LGI project server's 'application interface'
+ * as described in the "Leiden Grid Infrastructure" design document. The
+ * API calls return a nested array based on the XML response. Only the
+ * contents of the 'response' tag is returned. Binhex-ed fields are decoded
+ * first.
+ *
+ * Configuration is either supplied to the constructor, or read from the
+ * user's default configuration in ~/.LGI otherwise.
+ *
+ * An example that lists the id and status of all jobs:
+ * <code>
+ * require_once('LGI/client.php');
+ * $client = new LGIClient();
+ * $response = $client->jobList();
+ * foreach ($response['job']  as $job) {
+ *   print "job #$job[job_id]: status $job[state]\n";
+ * }
+ * </code>
+ *
+ * @package LGI
  */
 class LGIClient extends LGIConnection
 {
+	/** LGI project name to work with
+	 * @var string */
+	protected $project;
+	/** LGI username
+	 * @var string */
+	protected $user;
+	/** LGI groups, used when submitting new jobs
+	 * @var string */
+	protected $groups;
+
+	/** Create new client
+	 *
+	 * All parameters are optional. When they are either null or not
+	 * supplied, defaults are read from the standard LGI user configuration
+	 * files in ~/.LGI (or %USERPROFILE%/.LGI on Windows).
+	 *
+	 * @param string $url LGI project server url
+	 * @param string $project LGI project on server
+	 * @param string $user LGI username
+	 * @param string $groups LGI groups
+	 * @param string $certificate user certificate filename
+	 * @param string $privatekey user private key filename
+	 * @param string $ca_chain LGI CA chain filename to validate project server with
+	 * @throws LGIException when there is a configuration error
+	 */
 	function __construct($url=null, $project=null, $user=null, $groups=null, $certificate=null, $privatekey=null, $ca_chain=null)
 	{
 		// defaults from configuration in ~/.LGI
@@ -48,6 +97,16 @@ class LGIClient extends LGIConnection
 		parent::__construct($url, $certificate, $privatekey, $ca_chain);
 	}
 
+	/** Return list of jobs
+	 *
+	 * @param string $application filter application
+	 * @param string $state filter job state
+	 * @param int $start start listing at index
+	 * @param int $limit limit number of jobs returned
+	 * @return array job information
+	 * @throws LGIConnectionException when there is a connection or server problem
+	 * @throws LGIServerException when the project server returns an error response
+	 */
 	function jobList($application=null, $state=null, $start=null, $limit=null)
 	{
 		$args = array(
@@ -66,6 +125,13 @@ class LGIClient extends LGIConnection
 		return $ret;
 	}
 
+	/** Return job state
+	 *
+	 * @param int $job_id job number to query
+	 * @return array job information
+	 * @throws LGIConnectionException when there is a connection or server problem
+	 * @throws LGIServerException when the project server returns an error response
+	 */
 	function jobState($job_id)
 	{
 		$args = array(
@@ -83,6 +149,13 @@ class LGIClient extends LGIConnection
 		return $ret;
 	}
 
+	/** Abort or delete job
+	 *
+	 * @param int $job_id job id to delete
+	 * @return array job information
+	 * @throws LGIConnectionException when there is a connection or server problem
+	 * @throws LGIServerException when the project server returns an error response
+	 */
 	function jobDelete($job_id)
 	{
 		$args = array(
@@ -95,6 +168,20 @@ class LGIClient extends LGIConnection
 		return $ret['response'];
 	}
 
+	/** Submit new job
+	 *
+	 * @param string $application application name to submit to
+	 * @param string $target_resources valid resources, or 'any'
+	 * @param string $write_access comma-separated list of users/groups
+	 *          to give additional write access to
+	 * @param string $read_access comma-separated list of users/groups
+	 *          to give additional read access to
+	 * @param string $files files to upload, with keys as destination filenames
+	 *          and values as absolute paths on local filesystem.
+	 * @return array job information
+	 * @throws LGIConnectionException when there is a connection or server problem
+	 * @throws LGIServerException when the project server returns an error response
+	 */
 	function jobSubmit($application, $input=null, $target_resources='any', $write_access=null, $read_access=null, $files=array())
 	{
 		$args = array(
@@ -121,6 +208,12 @@ class LGIClient extends LGIConnection
 		return $ret;
 	}
 
+	/** Return list of known resources
+	 *
+	 * @return array known resources
+	 * @throws LGIConnectionException when there is a connection or server problem
+	 * @throws LGIServerException when the project server returns an error response
+	 */
 	function resourceList()
 	{
 		$args = array(
@@ -135,6 +228,12 @@ class LGIClient extends LGIConnection
 		return $ret;
 	}
 
+	/** Return list of known project servers
+	 *
+	 * @return array known project servers
+	 * @throws LGIConnectionException when there is a connection or server problem
+	 * @throws LGIServerException when the project server returns an error response
+	 */
 	function serverList()
 	{
 		$args = array(

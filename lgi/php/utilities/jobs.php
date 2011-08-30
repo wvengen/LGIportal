@@ -5,7 +5,7 @@
  * @author wvengen
  * @package utilities
  */
-
+/** */
 require_once(dirname(__FILE__).'/common.php');
 require_once('utilities/login.php');
 require_once('LGI/client.php');
@@ -37,6 +37,7 @@ function verifyJobid($jobid, $returnto)
  * Also repository access is checked against LGI_REPOSITORY configuration.
  *
  * @todo add job name to job info (joblist/jobinfo/submit)
+ * @package utilities
  */
 class LGIPortalClient extends LGIClient
 {
@@ -61,21 +62,21 @@ class LGIPortalClient extends LGIClient
 		parent::__construct($server, $project, $user, $groups, getCertificateFile($user), getKeyFile($user), $ca);
 	}
 
-	/** {@inheritDoc} */
+	/** {@inheritdoc} */
 	function filePassthru($url)
 	{
 		$this->check_repository($url);
 		return parent::filePassthru($url);
 	}
 
-	/** {@inheritDoc} */
+	/** {@inheritdoc} */
 	function fileDownload($url)
 	{
 		$this->check_repository($url);
 		return parent::fileDownload($url);
 	}
 
-	/** {@inheritDoc} */
+	/** {@inheritdoc} */
 	function fileList($url)
 	{
 		$this->check_repository($url);

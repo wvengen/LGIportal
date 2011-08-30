@@ -1,6 +1,8 @@
 <?php
 /**
  * This file stores the user specified configurations to use this application
+ *
+ * @package default
  */
 
 /** CA certificate file to be used when requesting to project server */

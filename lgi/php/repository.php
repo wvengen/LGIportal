@@ -4,7 +4,7 @@
  * @author wvengen
  * @package default
  */
-
+/** */
 require_once(dirname(__FILE__).'/utilities/common.php');
 require_once('utilities/dwoo.php');
 require_once('utilities/sessions.php');

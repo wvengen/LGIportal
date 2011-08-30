@@ -1,11 +1,11 @@
 <?php
-
 /**
  * Base LGI connection
  *
  * @author wvengen
- * @package lgijob
+ * @package LGI
  */
+/** */
 
 // need json module
 if (!function_exists('json_decode')) {
@@ -15,23 +15,47 @@ if (!function_exists('json_decode')) {
     die('Server error: need PHP 5.2.0 or higher, or the JSON module');
 }
 
-/** Base LGI exception */
+/** Base LGI exception
+ * @package LGI */
 class LGIException extends Exception { }
-/** Exception in LGI connection */
+/** Exception in LGI connection
+ * @package LGI */
 class LGIConnectionException extends LGIException { }
-/** Exception for LGI server error */
+/** Exception for LGI server error
+ * @package LGI */
 class LGIServerException extends LGIConnectionException { }
 
 /** Base class for communicating with an LGI server.
  *
  * This takes care of authentication, posting, xml parsing and basic error handling.
+ *
+ * @package LGI
  */
 class LGIConnection
 {
+	/** Curl handle, or null if no connection made
+	 * @var object */
 	private $curlh;
-
+	/** LGI project server url to work with
+	 * @var string */
 	protected $url;
+	/** LGI CA chain for validating the project server's certificate
+	 * @var string */
+	protected $ca_chain;
+	/** User certificate filename
+	 * @var string */
+	protected $certificate;
+	/** User private key filename
+	 * @var string */
+	protected $privatekey;
 
+	/** Create new connection object
+	 *
+	 * @param string $url LGI project server url
+	 * @param string $certificate location of user certificate file
+	 * @param string $privatekey location of user key file
+	 * @param string $ca_chain location of CA certificates file
+	 */
 	function __construct($url, $certificate, $privatekey, $ca_chain)
 	{
 		$this->curlh = null;
@@ -41,6 +65,10 @@ class LGIConnection
 		$this->ca_chain = $ca_chain;
 	}
 
+	/** Check configuration and open connection to project server
+	 *
+	 * @throws LGIException when there is a configuration error
+	 */
 	function connect()
 	{
 		// some checks first
@@ -67,6 +95,7 @@ class LGIConnection
 		curl_setopt($this->curlh, CURLOPT_FAILONERROR, false);
 	}
 
+	/** Close any open connections */
 	function close()
 	{
 		curl_close($this->curlh);
@@ -133,6 +162,12 @@ class LGIConnection
 		throw new LGIConnectionException('Currently need PHP 5.3.1 or higher to do file uploads with submit.');
 	}
 
+	/** Checks if file is readable
+	 *
+	 * @param string $file filename to check
+	 * @param string $desc description of filename, for error message
+	 * @throws LGIException when file could not be read
+	 */
 	protected function check_file($file, $desc)
 	{
 		if (!file_exists($file)) {
@@ -145,12 +180,22 @@ class LGIConnection
 		}
 	}
 
+	/** Set curl debug flag
+	 *
+	 * @param bool $debug debug flag
+	 */
 	function setDebug($debug)
 	{
 		if (!$this->curlh) return;
 		curl_setopt($this->curlh, CURLOPT_VERBOSE, $debug);
 	}
 
+	/** Download file from repository
+	 *
+	 * @param string $url url of the file to download
+	 * @return string contents of the file
+	 * @throws LGIConnectionException when there is a connection or server problem
+	 */
 	function fileDownload($url)
 	{
 		if (!$this->curlh) $this->connect();
@@ -159,6 +204,11 @@ class LGIConnection
 		return $this->curl_exec($url);
 	}
 
+	/** Download file from repository, print to stdout
+	 *
+	 * @param string $url url of the file to download
+	 * @throws LGIConnectionException when there is a connection or server problem
+	 */
 	function filePassthru($url)
 	{
 		if (!$this->curlh) $this->connect();
@@ -168,6 +218,13 @@ class LGIConnection
 		$this->curl_exec($url, false);
 	}
 
+	/** List files in repository
+	 *
+	 * @param string $url repository url
+	 * @return array file information from server response
+	 * @throws LGIConnectionException when there is a connection or server problem
+	 * @throws LGIServerException when the project server returns an error response
+	 */
 	function fileList($url)
 	{
 		if (!$this->curlh) $this->connect();
@@ -182,6 +239,13 @@ class LGIConnection
 		return $result;
 	}
 
+	/** Curl call
+	 *
+	 * @param string $url url to work with
+	 * @param bool $checkreturn whether throw an exception if the HTTP response code >= 400
+	 * @return string contents of the url
+	 * @throws LGIConnectionException when there is a connection or server problem
+	 */
 	private function curl_exec($url, $checkreturn=true)
 	{
 		curl_setopt($this->curlh, CURLOPT_URL, $url);

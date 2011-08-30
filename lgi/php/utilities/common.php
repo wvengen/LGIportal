@@ -12,12 +12,14 @@
  * @author wvengen
  * @package utilities
  */
-
+/** */
 require_once(dirname(__FILE__).'/../../lgi.config.php');
 set_include_path(dirname(__FILE__).'/..'.PATH_SEPARATOR.get_include_path());
 require_once('utilities/errors.php');
 
-/** Exception in LGI portal code */
+
+/** Exception in LGI portal code
+ * @package utilities */
 class LGIPortalException extends Exception {
 	public $returnto = null;
 

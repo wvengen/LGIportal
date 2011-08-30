@@ -5,9 +5,10 @@
  * @author wvengen
  * @package contrib
  */
-
+/** */
 require_once(dirname(__FILE__).'/php/utilities/common.php');
 require('utilities/login.php');
+
 
 // only to be called from command-line
 if (@$_SERVER['REQUEST_URI']) exit(0);

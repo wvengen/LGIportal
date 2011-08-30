@@ -5,9 +5,10 @@
  * @author Deepthi
  * @package utilities
  */
-
+/** */
 require_once(dirname(__FILE__).'/common.php');
 require_once('utilities/errors.php');
+
 
 //$DB_CONFIG_FILE is set by the administrator. Hence check whether the file exists or not. If file doesnot exists we cannot access database. Hence report error!
 $dbcfg = config('DB_CONFIG_FILE');

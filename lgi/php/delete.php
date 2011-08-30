@@ -4,7 +4,7 @@
  * @author Deepthi
  * @package default
  */
-
+/** */
 require_once(dirname(__FILE__).'/utilities/common.php');
 require_once('utilities/dwoo.php');
 require_once('utilities/sessions.php');
@@ -12,8 +12,8 @@ require_once('utilities/login.php');
 require_once('utilities/jobs.php');
 require_once('utilities/errors.php');
 
+
 session_start();
-//authenticate User. If user is not logged in, request for log in.
 authenticateUser();
 
 //if request does not have details about job, display the form . post variable 'submitrequest' is set in the form.

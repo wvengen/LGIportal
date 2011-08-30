@@ -5,8 +5,9 @@
  * @author Deepthi
  * @package utilities
  */
-
+/** */
 require_once(dirname(__FILE__).'/common.php');
+
 
 /**
  * Check whether current session corresponds to an authenticated user. Returns True if session is valid, otherwise returns false.
