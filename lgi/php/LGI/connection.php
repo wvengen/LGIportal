@@ -149,8 +149,10 @@ class LGIConnection
 	 * Implements a workaround for PHP bug #48962, where the uploaded file
 	 * receives the same filename as the local file has here.
 	 *
-	 * @param array(string) $files
+	 * @param array(mixed) $files list of files to upload, or each element
+	 *        can be an array(local_file_path, destination_file_name)
 	 * @return array suitable to pass to {@link curl_setopt curl_setopt}'s {@link CURLOPT_POSTFIELDS CURLOPT_POSTFIELDS}
+	 * @link http://bugs.php.net/48962
 	 */
 	protected function postPrepareUpload($files)
 	{
@@ -159,7 +161,24 @@ class LGIConnection
 		if (version_compare(PHP_VERSION, '5.3.1') >= 0)
 			return array_map(create_function('$s', 'return is_array($s) ? "@".$s[0].";filename=".$s[1] : "@".$s;'), $files);
 		// but for earlier versions we need to rename the files
-		throw new LGIConnectionException('Currently need PHP 5.3.1 or higher to do file uploads with submit.');
+		$newfiles = array();
+		$tmpdir = lgiconnection_mktempdir(null, 'LGIportal');
+		register_shutdown_function('lgiconnection_delete_tempdir', $tmpdir);
+		foreach ($files as $key=>$file){
+			if (!is_array($file)) {
+				// no different filename, just upload as is
+				$newfiles[$key]='@'.$file;
+			} else {
+				// move or copy file to tempdir with new name
+				$newfilename = $tmpdir.'/'.$file[1];
+				if (is_uploaded_file($file[0]))
+					move_uploaded_file($file[0], $newfilename);
+				else
+					copy($file[0], $newfilename);
+				$newfiles[$key]='@'.$newfilename;
+			}
+		}
+		return $newfiles;
 	}
 
 	/** Checks if file is readable
@@ -282,6 +301,59 @@ function array_attributes_to_values(&$arr)
 		$arr[$k] = array_attributes_to_values($arr[$k]);
 	}
 	return($arr);
+}
+
+/** Create temporary directory
+ *
+ * @param string $dir directory to create temporary directory in, or null
+ *        for default temporary directory
+ * @param string $prefix prefix for directory name
+ * @param int $mode permissions to create directory with
+ * @return string name of temporary directory
+ * @access private
+ */
+function lgiconnection_mktempdir($dir=null, $prefix='', $mode=0700)
+{
+	if (is_null($dir)) {
+		if ( !function_exists('sys_get_temp_dir')) {
+			function sys_get_temp_dir() {
+				if( $temp=getenv('TMP') ) return $temp;
+				if( $temp=getenv('TEMP') ) return $temp;
+				if( $temp=getenv('TMPDIR') ) return $temp;
+				$temp=tempnam(__FILE__,'');
+				if (file_exists($temp)) {
+					unlink($temp);
+					return dirname($temp);
+				}
+				return null;
+			}
+		}
+		if (is_null($dir)) $dir = sys_get_temp_dir();
+	}
+
+	if (substr($dir, -1)!='/') $dir .= '/';
+
+	do {
+		$path = $dir.$prefix.mt_rand(0, 9999999);
+	} while (!mkdir($path, $mode));
+
+	return $path;
+} 
+
+/** Delete directory and files in it (not recursively)
+ *
+ * @param string $dir directory to delete
+ * @access private
+ */
+function lgiconnection_delete_tempdir($dir)
+{
+	if (!($dh=opendir($dir))) return;
+	while (($f=readdir($dh))!==false) {
+		if ($f=='.' | $f=='..') continue;
+		unlink($dir.'/'.$f);
+	}
+	closedir($dh);
+	rmdir($dir);
 }
 
 ?>
