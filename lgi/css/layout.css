@@ -269,3 +269,6 @@ table.serverlist td.url {
   font-family: monospace;
 }
 
+table.resourcelist .old {
+  color: #999;
+}

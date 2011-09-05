@@ -23,6 +23,9 @@ $lgi  = new LGIPortalClient();
 $resources = $lgi->resourceList();
 $servers   = $lgi->serverList();
 
+// sort resources by last seen
+uasort($resources['resource'], create_function('$a,$b', 'return(((int)$b["last_call_time"]) - ((int)$a["last_call_time"]));'));
+
 $data->assign('resources', $resources['resource']);
 $data->assign('project_master_server', $servers['project_master_server']);
 $data->assign('this_project_server', $servers['this_project_server']);
