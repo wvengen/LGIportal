@@ -7,6 +7,8 @@
  */
 /** */
 
+// @todo skip json conversion to array, the object should be fair enough
+
 // need json module
 if (!function_exists('json_decode')) {
   $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
@@ -237,6 +239,35 @@ class LGIConnection
 		$this->curl_exec($url, false);
 	}
 
+	/** Delete file from repository
+	 *
+	 * @param string $url url of the file to delete
+	 * @throws LGIConnectionException when there is a connection or server problem
+	 */
+	function fileDelete($url)
+	{
+		if (!$this->curlh) $this->connect();
+		curl_setopt($this->curlh, CURLOPT_CUSTOMREQUEST, "DELETE");
+
+		return $this->curl_exec($url);
+	}
+
+	/** Upload a file to the repository
+	 *
+	 * @param string $url url of the file to upload
+	 * @param string $data file contents
+	 * @throws LGIConnectionException when there is a connection or server problem
+	 */
+	function fileUpload($url, $data)
+	{
+		if (!$this->curlh) $this->connect();
+		curl_setopt($this->curlh, CURLOPT_CUSTOMREQUEST, "PUT");
+		curl_setopt($this->curlh, CURLOPT_HTTPHEADER, array('Content-Length: '.strlen($data)));
+		curl_setopt($this->curlh, CURLOPT_POSTFIELDS, $data);
+
+		return $this->curl_exec($url);
+	}
+
 	/** List files in repository
 	 *
 	 * @param string $url repository url
@@ -269,6 +300,12 @@ class LGIConnection
 	{
 		curl_setopt($this->curlh, CURLOPT_URL, $url);
 		$result = curl_exec($this->curlh);
+		// prepare some fields for next call so we start clean
+		curl_setopt($this->curlh, CURLOPT_CUSTOMREQUEST, "GET");
+		curl_setopt($this->curlh, CURLOPT_POSTFIELDS, null);
+		curl_setopt($this->curlh, CURLOPT_POST, false);
+		curl_setopt($this->curlh, CURLOPT_HTTPHEADER, array());
+
 		if (curl_errno($this->curlh) > 0) {
 			throw new LGIConnectionException(sprintf('cURL error %d: %s',
 				curl_errno($this->curlh), curl_error($this->curlh)), curl_errno($this->curlh));
