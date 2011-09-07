@@ -1,24 +1,44 @@
 <?php
 /**
- * Entry page, redirecting to either login or home
- * @author Deepthi 
+ * The PHP file that serves all page requests.
+ *
+ * The requested page is loaded from 
+ *
+ * @author wvengen
  * @package default
  */
 /** */
-require_once(dirname(__FILE__).'/php/utilities/common.php');
-require_once('utilities/dwoo.php');
-require_once('utilities/sessions.php');
+require_once(dirname(__FILE__).'/inc/common.php');
+require_once('inc/sessions.php');
 
-
+// require a login for everything
+$page = null;
 session_start();
-if(checkValidSession()) //if already logged in redirect it to home
-{	
-	header("Location: php/jobs.php");
+if(checkValidSession())
+{
+	// path info: appended to script: index.php/foo will return foo
+	if (isset($_SERVER['PATH_INFO']))
+		$page = $_SERVER['PATH_INFO'];
+	// fallback to jobs overview
+	if ($page=='')
+		$page='jobs';
 }
 else
 {
-	$dwoo = new LGIDwoo();
-	$dwoo->output('login.tpl');
+	// login page
+	http_status(401, 'Please login first');
+	$page = 'login';
 }
-	
+
+// validate page
+$argv = explode('/', $page);
+$page = $argv[0];
+
+if ( !preg_match('/^[a-zA-Z0-9]+$/', $page) ||
+     !file_exists(dirname(__FILE__)."/page/$page.php") )
+	throw new LGIPortalException('Page not found');
+
+// arguments are in argv
+define('LGI_PORTAL', 1);
+include(dirname(__FILE__)."/page/$page.php");
 ?>

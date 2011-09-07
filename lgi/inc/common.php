@@ -13,9 +13,9 @@
  * @package utilities
  */
 /** */
-require_once(dirname(__FILE__).'/../../lgi.config.php');
 set_include_path(dirname(__FILE__).'/..'.PATH_SEPARATOR.get_include_path());
-require_once('utilities/errors.php');
+require_once('lgi.config.php');
+require_once('inc/errors.php');
 
 
 /** Exception in LGI portal code
@@ -44,6 +44,7 @@ class LGIPortalException extends Exception {
  */
 function lgi_portal_exception_handler($exception)
 {
+	require_once('inc/dwoo.php');
 	pushErrorMessage($exception->getMessage());
 	LGIDwoo::show('error.tpl');
 	exit(0);
@@ -86,6 +87,19 @@ function config_array($key, $default=array())
 	if (is_null($r))
 		return $default;
 	return is_array($r) ? $r : array($r);
+}
+
+/** Send http status code.
+ *
+ * Besides an HTTP it also sends a Status header for FastCGI.
+ *
+ * @param int $code status code
+ * @param string $msg message
+ */
+function http_status($code, $msg)
+{
+	header("HTTP/1.1 $code $msg", false);
+	header("Status: $code $msg", false);
 }
 
 ?>

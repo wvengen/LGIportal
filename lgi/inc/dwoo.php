@@ -10,8 +10,8 @@
  */
 /** */
 require_once(dirname(__FILE__).'/common.php');
-require_once('utilities/errors.php');
-require_once('utilities/dwoo.php');
+require_once('inc/errors.php');
+require_once('inc/dwoo.php');
 
 
 # try to include from PEAR location or Debian package location
@@ -90,11 +90,11 @@ class LGIDwoo extends Dwoo
 		if ($this->tryCompileDir($localdir))
 			return parent::getCompileDir();
 		# see if we can, create/use a local compile dir
-		$localdir = join(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', '..', 'dwoo_c'));
+		$localdir = join(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', '..', 'template_c'));
 		if ($this->tryCompileDir($localdir))
 			return parent::getCompileDir();
 		# use temporary directory if all else fails
-		$localdir = join(DIRECTORY_SEPARATOR, array(sys_get_temp_dir(), 'LGIportal_dwoo_c'));
+		$localdir = join(DIRECTORY_SEPARATOR, array(sys_get_temp_dir(), 'LGIportal_template_c'));
 		$this->tryCompileDir($localdir);
 		return parent::getCompileDir();
 	}
