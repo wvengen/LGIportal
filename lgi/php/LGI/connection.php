@@ -121,7 +121,6 @@ class LGIConnection
 	 */
 	protected function postToServer($url, $variables=array(), $files=array())
 	{
-		if (!$this->curlh) $this->connect();
 		// relative to base url
 		if (strtolower(substr($url,0,6))!='https:') $url = $this->url.$url;
 		// be safe when settings variables
@@ -129,9 +128,10 @@ class LGIConnection
 		// file uploads as special postfields
 		$files = $this->postPrepareUpload($files);
 		// perform request
-		curl_setopt($this->curlh, CURLOPT_POST, true);
-		curl_setopt($this->curlh, CURLOPT_POSTFIELDS, array_merge($variables, $files));
-		$resp = $this->curl_exec($url);
+		$resp = $this->curl_exec($url, array(
+				CURLOPT_POST => true,
+				CURLOPT_POSTFIELDS => array_merge($variables, $files)
+			));
 		$resp = json_decode(json_encode(simplexml_load_string($resp)), TRUE);
 		// LGI adds spaces to each and every element *sigh*
 		array_walk_recursive($resp, create_function('&$s', '$s=trim($s);'));
@@ -219,9 +219,6 @@ class LGIConnection
 	 */
 	function fileDownload($url)
 	{
-		if (!$this->curlh) $this->connect();
-		curl_setopt($this->curlh, CURLOPT_POST, false);
-
 		return $this->curl_exec($url);
 	}
 
@@ -232,11 +229,10 @@ class LGIConnection
 	 */
 	function filePassthru($url)
 	{
-		if (!$this->curlh) $this->connect();
-		curl_setopt($this->curlh, CURLOPT_POST, false);
-		curl_setopt($this->curlh, CURLOPT_HEADERFUNCTION, create_function('$c,$s','header($s);return strlen($s);'));
-		curl_setopt($this->curlh, CURLOPT_WRITEFUNCTION, create_function('$c,$s','print($s);return strlen($s);'));
-		$this->curl_exec($url, false);
+		$this->curl_exec($url, array(
+				CURLOPT_HEADERFUNCTION => create_function('$c,$s','header($s);return strlen($s);'),
+				CURLOPT_WRITEFUNCTION => create_function('$c,$s','print($s);return strlen($s);')
+			), false);
 	}
 
 	/** Delete file from repository
@@ -246,10 +242,7 @@ class LGIConnection
 	 */
 	function fileDelete($url)
 	{
-		if (!$this->curlh) $this->connect();
-		curl_setopt($this->curlh, CURLOPT_CUSTOMREQUEST, "DELETE");
-
-		return $this->curl_exec($url);
+		return $this->curl_exec($url, array(CURLOPT_CUSTOMREQUEST => "DELETE"));
 	}
 
 	/** Upload a file to the repository
@@ -260,12 +253,12 @@ class LGIConnection
 	 */
 	function fileUpload($url, $data)
 	{
-		if (!$this->curlh) $this->connect();
-		curl_setopt($this->curlh, CURLOPT_CUSTOMREQUEST, "PUT");
-		curl_setopt($this->curlh, CURLOPT_HTTPHEADER, array('Content-Length: '.strlen($data)));
-		curl_setopt($this->curlh, CURLOPT_POSTFIELDS, $data);
-
-		return $this->curl_exec($url);
+		return $this->curl_exec($url, array(
+				CURLOPT_POST => true,
+				CURLOPT_CUSTOMREQUEST => "PUT",
+				CURLOPT_HTTPHEADER => array('Content-Length: '.strlen($data)),
+				CURLOPT_POSTFIELDS => $data
+			));
 	}
 
 	/** List files in repository
@@ -277,8 +270,6 @@ class LGIConnection
 	 */
 	function fileList($url)
 	{
-		if (!$this->curlh) $this->connect();
-
 		$slashpos = strrpos($url,'/');
 		$repourl = substr($url,0,$slashpos+1).'..';
 		$repoid = substr($url,$slashpos+1);
@@ -291,20 +282,57 @@ class LGIConnection
 
 	/** Curl call
 	 *
+	 * Resets curl options to sensible values so that one can re-use
+	 * connections without having to worry what happened before. This
+	 * is not too easy because of php bug #54022; if you start to use
+	 * this function and set other curl options as well, make sure to
+	 * add code to reset it here when not specified.
+	 *
 	 * @param string $url url to work with
+	 * @param array(mixed) $curlopts curl options to use
 	 * @param bool $checkreturn whether throw an exception if the HTTP response code >= 400
 	 * @return string contents of the url
 	 * @throws LGIConnectionException when there is a connection or server problem
+	 * @see http://bugs.php.net/bug.php?id=54022
 	 */
-	private function curl_exec($url, $checkreturn=true)
+	private function curl_exec($url, $curlopts=array(), $checkreturn=true)
 	{
-		curl_setopt($this->curlh, CURLOPT_URL, $url);
+		if (!$this->curlh) $this->connect();
+		// some defaults that may need to be reset
+		//   lacking curl options reset (php bug #54022)
+		//   all settings that may be changes need to be reset here :(
+		if (!array_key_exists(CURLOPT_POST, $curlopts) &&
+		    !array_key_exists(CURLOPT_NOBODY, $curlopts))
+			$curlopts[CURLOPT_HTTPGET] = true;
+		if (!array_key_exists(CURLOPT_CUSTOMREQUEST, $curlopts))
+			$curlopts[CURLOPT_CUSTOMREQUEST] = 
+				 (@$curlopts[CURLOPT_POST])   ? 'POST' :
+				((@$curlopts[CURLOPT_NOBODY]) ? 'HEAD' : 'GET' );
+		if (!array_key_exists(CURLOPT_HTTPHEADER, $curlopts))
+			$curlopts[CURLOPT_HTTPHEADER] = array();
+		$curlopts[CURLOPT_URL] = $url;
+
+		/*
+		// the order may be important for request-related options
+		// when you have problems, try to enable this code fragment
+		$rfields = array(CURLOPT_POST, CURLOPT_HTTPGET, CURLOPT_POSTFIELDS, CURLOPT_CUSTOMREQUEST);
+		foreach (array_reverse($rfields) as $f) {
+			if (array_key_exists($f, $curlopts)) {
+				$v = $curlopts[$f];
+				unset($curlopts[$f]);
+				$curlopts = array($f=>$v) + $curlopts;
+			}
+		}
+		*/
+
+		// set options; PHP=<5.3.1 needs to do it one by one
+		if (function_exists('curl_setopt_array')) {
+			curl_setopt_array($this->curlh, $curlopts);
+		} else {
+			foreach ($curlopts as $o => $v)
+				curl_setopt($this->curlh, $o, $v);
+		}
 		$result = curl_exec($this->curlh);
-		// prepare some fields for next call so we start clean
-		curl_setopt($this->curlh, CURLOPT_CUSTOMREQUEST, "GET");
-		curl_setopt($this->curlh, CURLOPT_POSTFIELDS, null);
-		curl_setopt($this->curlh, CURLOPT_POST, false);
-		curl_setopt($this->curlh, CURLOPT_HTTPHEADER, array());
 
 		if (curl_errno($this->curlh) > 0) {
 			throw new LGIConnectionException(sprintf('cURL error %d: %s',
