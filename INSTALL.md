@@ -34,10 +34,10 @@ Configuring the portal
 1. Copy the lgi/ folder to the webroot.
 
 2. Modify configuration in lgi.config.php
-   a. make sure _LGI_ROOT_ matches the subdirectory where the website is installed
-   b. set the LGI project server, project and application(s) to the your LGI setup you're using
-   c. get the LGI project server's CA certificate and make $CA_FILE point to that
-   d. shortly review the other options
+   1. make sure _LGI_ROOT_ matches the subdirectory where the website is installed
+   2. set the LGI project server, project and application(s) to the your LGI setup you're using
+   3. get the LGI project server's CA certificate and make $CA_FILE point to that
+   4. shortly review the other options
 
 3. *(optional)* create a directory dwoo_c and give the PHP user full permissions.
      This can be skipped, then a directory will be created in the system's
@@ -71,7 +71,8 @@ authentication. Since this can not be set on a directory-basis but applies to th
 virtual host, access with and without certificates should be allowed.
 
 Please note that not all browsers will be able to use optional client certificates,
-like some versions of Internet Explorer and Safari on the Mac.
+like some versions of Internet Explorer and Safari on the Mac. These browsers will
+then only be able to use the LGIportal, not the basic_interface.
 
 
 
@@ -80,6 +81,7 @@ like some versions of Internet Explorer and Safari on the Mac.
 [PHP]: http://php.net/
 [PHP-MySQL]: http://php.net/manual/en/book.mysql.php
 [PHP-Curl]: http://php.net/manual/en/book.curl.php
+[PHP-JSON]: http://php.net/manual/en/book.json.php
 [MySQL]: http://www.mysql.org/
 [Dwoo]: http://dwoo.org/                
 [SSLVerifyClient]: http://httpd.apache.org/docs/current/mod/mod_ssl.html#sslverifyclient
