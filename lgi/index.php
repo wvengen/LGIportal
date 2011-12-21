@@ -17,11 +17,8 @@ session_start();
 if(checkValidSession())
 {
 	// path info: appended to script: index.php/foo will return foo
-	if (isset($_SERVER['PATH_INFO']))
-		$page = $_SERVER['PATH_INFO'];
-	// fallback to jobs overview
-	if ($page=='')
-		$page='jobs';
+        $page = trim(@$_SERVER['PATH_INFO']);
+        if (count($page)>0 && $page[0]=='/') $page = substr($page, 1);
 }
 else
 {
@@ -32,16 +29,27 @@ else
 // validate page
 $argv = explode('/', $page);
 $page = $argv[0];
-$pagepath = dirname(__FILE__)."/page/$page.php";
-
-if ( !preg_match('/^[a-zA-Z0-9]+$/', $page) ||
-     !file_exists($pagepath) ) {
-        http_status(404, 'Page not found');
-        throw new LGIPortalException('Page not found');
-}
 
 // arguments are in argv
 define('LGI_PORTAL', 1);
-include($pagepath);
+portal_page($page);
+
+
+/**
+* Open the named page in the portal.
+* 
+* If an empty or no page name is specified, the default is opened.
+* 
+* @param str $page Page name to open, php file in page/<$page>.php must exist.
+*/
+function portal_page($page=NULL) {
+  if ($page==NULL) $page = 'jobs';
+  $pagepath = dirname(__FILE__)."/page/$page.php";
+  if ( !preg_match('/^[a-zA-Z0-9]+$/', $page) || !file_exists($pagepath) ) {
+      http_status(404, 'Page not found');
+      throw new LGIPortalException('Page not found: '.$page);
+  }
+  require($pagepath);
+}
 
 ?>

@@ -19,8 +19,11 @@ if(!file_exists($dbcfg))
 	throw new LGIPortalException("Server Configuration Error. Please report to web-administrator.");
 
 }
-//include the file having database access details
-require $dbcfg;
+// include the file having database access details
+//   Before inclusion make sure in this namespace, which could have been included from a
+//   function, the relevant variables are declared global.
+global $mysql_server, $mysql_user, $mysql_password, $mysql_dbname;
+require($dbcfg);
 
 /**
  * Checks whether username and passwords corresponds to a valid user. Returns True if credentials are valid otherwise returns false.

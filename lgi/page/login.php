@@ -1,7 +1,7 @@
 <?php
 /**
  * User login page
- * @author Deepthi
+ * @author wvengen
  * @package default
  */
 /** */
@@ -14,24 +14,25 @@ require_once('inc/errors.php');
 
 // this is the only page that does not need portal_require_session() :)
 
-$user=strip_tags(@$_POST['name']); //HTML tags are stripped for preventing cross site scripting. $user is later stored in session.
+$user=strip_tags(@$_REQUEST['name']); //HTML tags are stripped for preventing cross site scripting. $user is later stored in session.
 $password=@$_POST['password'];
 
 if (is_null($password))
 {
-        LGIDwoo::show('login.tpl', array('user'=>$user));
+        LGIDwoo::show('login.tpl', array('name'=>$user));
 }
 elseif(verifyUserPassword($user, $password))
 {
 	setValidSession($user);
-	//user has logged in. Go to home
-	portal_page('jobs');
+	// user has logged in, go to default page
+	portal_page();
 }
 else
 {
-	//Username or password does not match a valid user. So request for relogin.
+	// Username or password does not match a valid user. Try again.
+	// TODO prevent brute force attacks
 	pushErrorMessage("Invalid username or password. Try Again.");
-	LGIDwoo::show('login.tpl', array('user'=>$user));
+	LGIDwoo::show('login.tpl', array('name'=>$user));
 }
 
 ?>
