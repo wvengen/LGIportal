@@ -5,15 +5,13 @@
  * @package default
  */
 /** */
-require_once(dirname(__FILE__).'/utilities/common.php');
-require_once('utilities/dwoo.php');
-require_once('utilities/sessions.php');
-require_once('utilities/login.php');
-require_once('utilities/jobs.php');
+if (!defined('LGI_PORTAL')) throw new Exception('Page requested outside of portal');
 
+require_once('inc/dwoo.php');
+require_once('inc/sessions.php');
+require_once('inc/login.php');
+require_once('inc/jobs.php');
 
-session_start();
-authenticateUser();
 
 if(!isset($_POST['submit']))
 {
@@ -31,7 +29,7 @@ else
 	// submit new job
 	verifyNonce($_POST['nonce']);
 
-	$lgi  = new LGIPortalClient();
+	$lgi = new LGIPortalClient();
 
 	$application = $_POST['application'];
 	$allowed_apps = config_array('LGI_APPLICATION', null);
@@ -50,7 +48,7 @@ else
 	$result = $lgi->jobSubmit($application, $input, 'any', $write_access, $read_access, $files);
 
 	// success! redirect to allow user to reload
-	header('Location: viewjob.php?job_id='.urlencode($result['job']['job_id']));
+	http_redirect(config('LGI_APPROOT').'/job/'.urlencode($result['job']['job_id']));
 }
 
 ?>

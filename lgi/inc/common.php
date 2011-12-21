@@ -102,4 +102,14 @@ function http_status($code, $msg)
 	header("Status: $code $msg", false);
 }
 
+/**
+ * HTTP redirect
+ * 
+ * @param string $url url to redirect to
+ */
+function http_redirect($url)
+{
+        header('Location: '.$url);
+}
+
 ?>

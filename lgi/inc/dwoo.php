@@ -141,7 +141,7 @@ class LGIDwoo extends Dwoo
 		}
 		# lgi root
 		set_dwoo_or_array($data, 'webroot', config('LGI_ROOT'));
-		set_dwoo_or_array($data, 'approot', config('LGI_ROOT').'/index.php');
+		set_dwoo_or_array($data, 'approot', config('LGI_APPROOT'));
 		# lgi variables
 		$user = isset($_SESSION['user']) ? $_SESSION['user'] : '';
 		set_dwoo_or_array($data, 'lgi', array(
