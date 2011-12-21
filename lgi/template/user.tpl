@@ -2,7 +2,7 @@
 {block "title"}Your profile{/block}
 {block "content"}
 {load_templates "functions.tpl"}
-		<form action='user.php' method='POST'>
+		<form action='{$approot}/user' method='POST'>
 			<input type='hidden' name='nonce' value='{$nonce}' />
 
 			<fieldset class="collapsible uncollapsed"><legend>Password</legend>

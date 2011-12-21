@@ -25,13 +25,13 @@
 	<div id="navigation">
 {block "menu"}
 		<ul>
-			<li><a href="jobs.php">Jobs</a> </li>
-			<li><a href="submit.php">New job</a></li>
+			<li><a href="{$approot}/jobs">Jobs</a> </li>
+			<li><a href="{$approot}/submit">New job</a></li>
 		</ul>
 		<ul class="user">
-			<li><a href="resources.php">Resources</a> </li>
-			<li><a href="user.php">Settings</a> </li>
-			<li><a href="logout.php">Logout {$user}</a></li>
+			<li><a href="{$approot}/resources">Resources</a> </li>
+			<li><a href="{$approot}/user">Settings</a> </li>
+			<li><a href="{$approot}/logout">Logout {$user}</a></li>
 		</ul>
 {/block}
 	</div>
@@ -45,7 +45,7 @@
 {/block}		
 		</div>
 		<div id="aside">{block "aside"}{/block}</div>
-		<div id="footer">Copyright 2011 <a href="http://www.biggrid.nl/">BiG Grid</a></div>
+		<div id="footer">&copy;2011 <a href="http://www.biggrid.nl/">BiG Grid</a></div>
 	</div>
 </div></body>
 </html> 
