@@ -26,7 +26,6 @@ if(checkValidSession())
 else
 {
 	// login page
-	http_status(401, 'Please login first');
 	$page = 'login';
 }
 
