@@ -45,7 +45,7 @@ class LGIPortalException extends Exception {
 function lgi_portal_exception_handler($exception)
 {
 	require_once('inc/dwoo.php');
-	pushErrorMessage($exception->getMessage());
+	pushErrorMessage($exception);
 	LGIDwoo::show('error.tpl');
 	exit(0);
 }

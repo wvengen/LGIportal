@@ -25,3 +25,4 @@ $data->assign('jobs', $result['job']);
 $data->assign('nonce', generateNonce()); // required for delete buttons
 $dwoo->output('joblist.tpl', $data);
 
+?>

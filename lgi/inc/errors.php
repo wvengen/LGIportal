@@ -16,7 +16,6 @@ require_once(dirname(__FILE__).'/common.php');
 function setErrorMessage($msg)
 {
 	user_error($msg);
-	session_start();
 	$_SESSION["ErrorMessage"]=$msg;
 }
 
@@ -26,10 +25,28 @@ function setErrorMessage($msg)
  */
 function pushErrorMessage($msg)
 {
-	user_error($msg);
-	session_start();
+        if ($msg instanceof Exception) {
+            $efile = $msg->getFile();
+            $eline = $msg->getLine();
+            $emsg = $msg->getMessage();
+            $etrace = explode("\n", $msg->getTraceAsString());
+        } else {
+            $_trace = debug_backtrace();
+            $efile = $_trace[0]['file'];
+            $eline = $_trace[0]['line'];
+            $emsg = $msg;
+            $etrace = NULL; // TODO backtrace array to string
+        }
+        // log
+        error_log("LGI error: $emsg in $efile on $eline");
+        if ($etrace) {
+            error_log('LGI Stack trace:');
+            foreach ($etrace as $line)
+                error_log('LGI   '.$line);
+        }
+        // and add to list for output to user
 	if(!isset($_SESSION["ErrorMessage"]))
-	    $_SESSION["ErrorMessage"]="Error: ".$msg;
+	    $_SESSION["ErrorMessage"]="Error: ".$emsg;
 	else
 	    $_SESSION["ErrorMessage"]=$_SESSION["ErrorMessage"]."<br/>".$msg;
 }
@@ -40,7 +57,6 @@ function pushErrorMessage($msg)
  */
 function getErrorMessage()
 {
-	session_start();
 	if(isset($_SESSION["ErrorMessage"]))
 		return $_SESSION["ErrorMessage"];
 	else
@@ -51,7 +67,6 @@ function getErrorMessage()
  */
 function clearErrorMessage()
 {
-	session_start();
 	unset($_SESSION["ErrorMessage"]);
 }
 

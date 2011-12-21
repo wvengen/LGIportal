@@ -127,13 +127,12 @@ class LGIDwoo extends Dwoo
 	/**
 	 * Assigns default variables.
 	 *
-	 * This includes the user variable, so session_start() is called as well.
+	 * Assumes session_start() has been called.
 	 *
 	 * @param mixed $data data to complete, either an array or Dwoo_Data object
 	 */
 	public function completeData(&$data)
 	{
-		session_start();
 		# expose some session variables
 		foreach ($this->session_expose as $var)
 		{
@@ -143,10 +142,11 @@ class LGIDwoo extends Dwoo
 		# lgi root
 		set_dwoo_or_array($data, 'webroot', config('LGI_ROOT'));
 		# lgi variables
+		$user = isset($_SESSION['user']) ? $_SESSION['user'] : '';
 		set_dwoo_or_array($data, 'lgi', array(
 			'server'      => config('LGI_SERVER'),
 			'project'     => config('LGI_PROJECT'),
-			'user'        => $_SESSION['user'],
+			'user'        => $user,
 		));
 		# if browser is running on windows or not
 		set_dwoo_or_array($data, 'ua_windows', preg_match('/windows|win32/i', $_SERVER['HTTP_USER_AGENT']));

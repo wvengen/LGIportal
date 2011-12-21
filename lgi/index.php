@@ -33,12 +33,16 @@ else
 // validate page
 $argv = explode('/', $page);
 $page = $argv[0];
+$pagepath = dirname(__FILE__)."/page/$page.php";
 
 if ( !preg_match('/^[a-zA-Z0-9]+$/', $page) ||
-     !file_exists(dirname(__FILE__)."/page/$page.php") )
-	throw new LGIPortalException('Page not found');
+     !file_exists($pagepath) ) {
+        http_status(404, 'Page not found');
+        throw new LGIPortalException('Page not found');
+}
 
 // arguments are in argv
 define('LGI_PORTAL', 1);
-include(dirname(__FILE__)."/page/$page.php");
+include($pagepath);
+
 ?>

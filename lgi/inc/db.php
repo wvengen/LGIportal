@@ -1,6 +1,6 @@
 <?php
 /**
- * This file stores the Database access details. This file should be have
+ * This file stores the Database access details. This file should have
  * restricted access using .htaccess or should be stored outside webroot. The
  * absolute path to this file should be specified in lgi.config.php. 
  *

@@ -19,19 +19,19 @@ $LGI_ROOT="/lgi";
  * - when the value is empty, the user may input any value
  * This is not yet fully implemented though.
  */
-$LGI_SERVER='https://example.com/LGI/';
+$LGI_SERVER='https://brokkenpiloot.nikhef.nl/LGI/';
 
 /** LGI project on server to work on
  *
  * (note at _LGI_SERVER_ applies here as well)
  */
-$LGI_PROJECT='helloworld';
+$LGI_PROJECT='BigGridLGIPortal';
 
 /** LGI applications that can be used; first is default
  *
  * (note at _LGI_SERVER_ applies here as well)
  */
-$LGI_APPLICATION=array('R', 'helloworld');
+$LGI_APPLICATION=array('R-2.11', 'R-2.12', 'helloworld');
 
 /** LGI repositories to allow
  *
@@ -50,7 +50,7 @@ $LGI_REPOSITORY=$LGI_SERVER;
  */
 
 /** Absolute path to file where database access details are specified. Expecting a php file. */
-$DB_CONFIG_FILE=dirname(__FILE__).'/inc/db.php';
+$DB_CONFIG_FILE=dirname(__FILE__).'/../db.inc.php';
 
 /** File system location where this application is installed. */
 $LGI_PREFIX=dirname(__FILE__);

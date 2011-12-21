@@ -13,7 +13,6 @@ require_once('utilities/jobs.php');
 require_once('utilities/errors.php');
 
 
-session_start();
 authenticateUser();
 
 //if request does not have details about job, display the form . post variable 'submitrequest' is set in the form.
