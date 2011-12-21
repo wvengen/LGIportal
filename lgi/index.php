@@ -18,16 +18,17 @@ if(checkValidSession())
 {
 	// path info: appended to script: index.php/foo will return foo
         $page = trim(@$_SERVER['PATH_INFO']);
-        if (count($page)>0 && $page[0]=='/') $page = substr($page, 1);
 }
 else
 {
 	// login page
-	$page = 'login';
+	$page = '/login';
 }
 
 // validate page
 $argv = explode('/', $page);
+if ($argv[0]!='') throw new LGIPortalException("Internal error: path_info does not start with /.");
+array_shift($argv);
 $page = $argv[0];
 
 // arguments are in argv
@@ -49,6 +50,8 @@ function portal_page($page=NULL) {
       http_status(404, 'Page not found');
       throw new LGIPortalException('Page not found: '.$page);
   }
+  // include page, but first bring important globals in scope
+  global $argv;
   require($pagepath);
 }
 

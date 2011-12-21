@@ -12,7 +12,6 @@ require_once('inc/login.php');
 require_once('inc/sessions.php');
 require_once('inc/errors.php');
 
-// this is the only page that does not need portal_require_session() :)
 
 $user=strip_tags(@$_REQUEST['name']); //HTML tags are stripped for preventing cross site scripting. $user is later stored in session.
 $password=@$_POST['password'];
