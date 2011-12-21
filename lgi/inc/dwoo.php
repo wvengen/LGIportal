@@ -11,7 +11,6 @@
 /** */
 require_once(dirname(__FILE__).'/common.php');
 require_once('inc/errors.php');
-require_once('inc/dwoo.php');
 
 
 # try to include from PEAR location or Debian package location

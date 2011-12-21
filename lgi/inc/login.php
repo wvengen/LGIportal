@@ -10,15 +10,13 @@ require_once(dirname(__FILE__).'/common.php');
 require_once('inc/errors.php');
 
 
-//$DB_CONFIG_FILE is set by the administrator. Hence check whether the file exists or not. If file doesnot exists we cannot access database. Hence report error!
+//$DB_CONFIG_FILE is set by the administrator. Hence check whether the file exists or not. If file does not exists we cannot access database. Hence report error!
 $dbcfg = config('DB_CONFIG_FILE');
 if(!file_exists($dbcfg))
 {
 	//given path to the DB_configuration file is invalid. Generate an error.
 	error_log("Error: in lgi.config.php: File not found ".$dbcfg);
-	//Redirect to an error page. Set an error message. This message is seen by user.
-	setErrorMessage("Server Configuration Error. Please report to web-administrator.");
-	showErrorPage();
+	throw new LGIPortalException("Server Configuration Error. Please report to web-administrator.");
 
 }
 //include the file having database access details
@@ -33,27 +31,15 @@ require $dbcfg;
 function verifyUserPassword($user,$password)	//input plain text username and password
 {
 	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
-	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or die(mysql_error());
-	if(!mysql_select_db($mysql_dbname, $connection))
-	{
-		error_log("Error:".mysql_error());
-		//Set an error message and redirect to an error page. This message is seen by user.
-		setErrorMessage("Server Error. Please contact web administrator");
-		showErrorPage();
-	}
+	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or showDBError();
+	mysql_select_db($mysql_dbname, $connection) or showDBError();
 
 	//validate username and password for preventing SQL injection
 	$username=mysql_real_escape_string($user);
 	$pswd=mysql_real_escape_string($password);
 
 	$query="SELECT passwordHash,salt FROM users WHERE userId='".$username."'";
-	$result=mysql_query($query);
-	if (!$result) {
-		error_log("Error:".mysql_error());
-		//Set an error message and redirect to an error page. This message is seen by user.
-		setErrorMessage("Server Error. Please contact web administrator.");
-		showErrorPage();
-	}
+	$result=mysql_query($query) or showDBError();
 
 	$row= mysql_fetch_row($result);
 	mysql_close($connection);
@@ -79,27 +65,15 @@ function verifyUserPassword($user,$password)	//input plain text username and pas
 function setUserPassword($user, $password)
 {
 	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
-	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or die(mysql_error());
-	if(!mysql_select_db($mysql_dbname, $connection))
-	{
-		error_log("Error:".mysql_error());
-		//Set an error message and redirect to an error page. This message is seen by user.
-		setErrorMessage("Server Error. Please contact web administrator");
-		showErrorPage();
-	}
+	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or showDBError();
+	mysql_select_db($mysql_dbname, $connection) or showDBError();
 
 	$salt=substr(md5(uniqid(rand(), true)),0,19);
 	$hash=mysql_real_escape_string(hashPassword($password,$salt));
 	$user=mysql_real_escape_string($user);
 
 	$query="UPDATE users SET passwordHash='$hash', salt='$salt' WHERE userId='$user'";
-	$result=mysql_query($query);
-	if (!$result) {
-		error_log("Error:".mysql_error());
-		//Set an error message and redirect to an error page. This message is seen by user.
-		setErrorMessage("Server Error. Please contact web administrator.");
-		showErrorPage();
-	}
+	$result=mysql_query($query) or showDBError();
 
 	mysql_close($connection);
 }
@@ -115,39 +89,21 @@ function setUserPassword($user, $password)
 function createUser($user, $password, $certificate, $privatekey)
 {
 	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
-	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or die(mysql_error());
-	if(!mysql_select_db($mysql_dbname, $connection))
-	{
-		error_log("Error:".mysql_error());
-		//Set an error message and redirect to an error page. This message is seen by user.
-		setErrorMessage("Server Error. Please contact web administrator");
-		showErrorPage();
-	}
+	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or showDBError();
+	mysql_select_db($mysql_dbname, $connection) or showDBError();
 
 	$salt=substr(md5(uniqid(rand(), true)),0,19);
 	$hash=mysql_real_escape_string(hashPassword($password,$salt));
 	$user=mysql_real_escape_string($user);
 
 	$query="INSERT INTO users (passwordHash, salt, userId) VALUES ('$hash', '$salt', '$user')";
-	$result=mysql_query($query);
-	if (!$result) {
-		error_log("Error:".mysql_error());
-		//Set an error message and redirect to an error page. This message is seen by user.
-		setErrorMessage("Server Error. Please contact web administrator.");
-		showErrorPage();
-	}
+	$result=mysql_query($query) or showDBERror();
 
 	$certificate=mysql_real_escape_string($certificate);
 	$password=mysql_real_escape_string($password);
 
 	$query="INSERT INTO usercertificates (userId, certificate, userkey) VALUES ('$user', '$certificate', '$privatekey')";
-	$result=mysql_query($query);
-	if (!$result) {
-		error_log("Error:".mysql_error());
-		//Set an error message and redirect to an error page. This message is seen by user.
-		setErrorMessage("Server Error. Please contact web administrator.");
-		showErrorPage();
-	}
+	$result=mysql_query($query) or showDBError();
 
 	mysql_close($connection);
 }
@@ -202,24 +158,12 @@ function getCertificateFile($user=null)
 	}
 		
 	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
-	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or die(mysql_error());
-	if(!mysql_select_db($mysql_dbname, $connection))
-	{
-		error_log("Error:".mysql_error());
-		//Set an error message and redirect to an error page. This message is seen by user.
-		setErrorMessage("Server Error.");
-		showErrorPage();
-	}
+	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or showDBError();
+	mysql_select_db($mysql_dbname, $connection) or showDBError();
 	$username=mysql_real_escape_string($user); //$user will already be escaped. But this is for extra safety
 	$query="SELECT certificate FROM usercertificates WHERE userId='".$username."'";
-	$result=mysql_query($query);
-	if (!$result) {
-		error_log("Error:".mysql_error());
-		//Set an error message and redirect to an error page. This message is seen by user.
-		setErrorMessage("Server Error.");
-		showErrorPage();
-	}
-		
+	$result=mysql_query($query) or showDBError();
+	
 	$row= mysql_fetch_row($result);
 	mysql_close($connection);
 	//if there is a record in the database for the user
@@ -245,23 +189,11 @@ function getKeyFile($user=null)
 		return $_SESSION['key'];
 	}
 	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
-	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or die(mysql_error());
-	if(!mysql_select_db($mysql_dbname, $connection))
-	{
-		error_log("Error:".mysql_error());
-		//Set an error message and redirect to an error page. This message is seen by user.
-		setErrorMessage("Server Error.");
-		showErrorPage();
-	}
+	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or showDBError();
+	mysql_select_db($mysql_dbname, $connection) or showDBError();
 	$username=mysql_real_escape_string($user); //$user will already be escaped. But this is for extra safety
 	$query="SELECT userkey FROM usercertificates WHERE userId='".$username."'";
-	$result=mysql_query($query);
-	if (!$result) {
-		error_log("Error:".mysql_error());
-		//Set an error message and redirect to an error page. This message is seen by user.
-		setErrorMessage("Server Error.");
-		showErrorPage();
-	}
+	$result=mysql_query($query) or showDBError();
 		
 	$row= mysql_fetch_row($result);
 	mysql_close($connection);
@@ -273,6 +205,14 @@ function getKeyFile($user=null)
 	}
 
 	return NULL;
+}
+
+/**
+ * Throw and log MySQL database error.
+ */
+function showDBError() { 
+        error_log("MySQL error: ".mysql_error());
+        throw new LGIPortalException("Server Error. Please contact web administrator.");
 }
 
 ?>

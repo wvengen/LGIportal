@@ -55,8 +55,4 @@ function clearErrorMessage()
 	unset($_SESSION["ErrorMessage"]);
 }
 
-function showErrorPage()
-{
-     header("Location: ".config('LGI_ROOT')."/php/error.php");
-}
 ?>
