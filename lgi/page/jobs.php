@@ -5,15 +5,12 @@
  * @package default
  */
 /** */
-require_once(dirname(__FILE__).'/utilities/common.php');
-require_once('utilities/dwoo.php');
-require_once('utilities/sessions.php');
-require_once('utilities/login.php');
-require_once('utilities/jobs.php');
+if (!defined('LGI_PORTAL')) throw new Exception('Page requested outside of portal');
 
+require_once('inc/sessions.php');
+require_once('inc/dwoo.php');
+require_once('inc/jobs.php');
 
-session_start();
-authenticateUser();
 
 $dwoo = new LGIDwoo();
 $data = new Dwoo_Data();
@@ -27,3 +24,4 @@ $data->assign('jobs', $result['job']);
 $data->assign('nonce', generateNonce()); // required for delete buttons
 $dwoo->output('joblist.tpl', $data);
 
+?>

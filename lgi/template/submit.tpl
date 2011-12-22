@@ -9,7 +9,7 @@
 {/block}
 {block "content"}
 {load_templates "functions.tpl"}
-				<form id='newjob' action='submit.php' method='post' enctype='multipart/form-data'>
+				<form id='newjob' action='{$approot}/submit' method='post' enctype='multipart/form-data'>
 					<input type='hidden' name='nonce' value='{$nonce}' />
 
 					<div><label for='input'>Input</label></div>

@@ -5,7 +5,7 @@
 {extends "home_base.tpl"}
 {block "title"}Delete job{/block}
 {block "content"}
-			<form action="delete.php" method="post" class="cmxform">				
+			<form action="{$approot}/delete" method="post" class="cmxform">				
 				<fieldset>
 				<ol>
 					<li>					

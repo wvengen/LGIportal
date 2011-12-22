@@ -144,8 +144,16 @@ class LGIClient extends LGIConnection
 		$ret = $ret['response'];
 		if (!array_key_exists('job', $ret)) $ret['job'] = array();
 		# hex decode input and output
-		if (array_key_exists('input', $ret['job'])) $ret['job']['input'] = pack('H*', $ret['job']['input']);
-		if (array_key_exists('output', $ret['job'])) $ret['job']['output'] = pack('H*', $ret['job']['output']);
+		if (array_key_exists('input', $ret['job'])) {
+		  // would higher php versions produce array instead of string when single value?
+		  // at some point $ret['job']['(in|out)put'] started to be an array instead of a string 
+		  if (is_array($ret['job']['input'])) $ret['job']['input'] = implode(' ',$ret['job']['input']);
+		  $ret['job']['input'] = pack('H*', $ret['job']['input']);
+		}
+		if (array_key_exists('output', $ret['job'])) {
+		  if (is_array($ret['job']['output'])) $ret['job']['output'] = implode(' ',$ret['job']['output']);
+		  $ret['job']['output'] = pack('H*', $ret['job']['output']);
+		}
 		return $ret;
 	}
 

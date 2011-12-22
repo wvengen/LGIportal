@@ -7,15 +7,13 @@
  * @todo in config download, use user-selected application instead of first one
  */
 /** */
-require_once(dirname(__FILE__).'/utilities/common.php');
-require_once('utilities/dwoo.php');
-require_once('utilities/sessions.php');
-require_once('utilities/login.php');
-require_once('utilities/jobs.php');
+if (!defined('LGI_PORTAL')) throw new Exception('Page requested outside of portal');
 
+require_once('inc/dwoo.php');
+require_once('inc/sessions.php');
+require_once('inc/login.php');
+require_once('inc/jobs.php');
 
-session_start();
-authenticateUser();
 
 $dwoo = new LGIDwoo();
 $data = new Dwoo_Data();
@@ -40,7 +38,7 @@ if (isset($_POST['dlcred']) && $_POST['dlcred']) {
 // form submitted
 if (isset($_POST['submit'])) {
 	// change password
-	if ($_POST['pwdold'] || $_POST['pwd1'] || $_POST['pwd2']) {
+	if ($_POST['pwd_old'] || $_POST['pwd1'] || $_POST['pwd2']) {
 		if ($_POST['pwd1'] != $_POST['pwd2']) {
 			pushErrorMessage('New passwords do not match.');
 		} elseif (strlen($_POST['pwd1']) < 3) {
@@ -61,3 +59,4 @@ $data->assign('servers', config_array('LGI_SERVER'));
 $data->assign('projects', config_array('LGI_PROJECT'));
 $dwoo->output('user.tpl', $data);
 
+?>

@@ -50,12 +50,18 @@ $LGI_REPOSITORY=$LGI_SERVER;
  */
 
 /** Absolute path to file where database access details are specified. Expecting a php file. */
-$DB_CONFIG_FILE=dirname(__FILE__)."/php/includes/db.inc.php";
+$DB_CONFIG_FILE=dirname(__FILE__).'/inc/db.php';
 
 /** File system location where this application is installed. */
 $LGI_PREFIX=dirname(__FILE__);
 
 /** File system location of template directory */
-$TEMPLATE_DIR=$LGI_PREFIX.'/dwoo';
+$TEMPLATE_DIR=$LGI_PREFIX.'/template';
+
+/** Web location of index.php. You could customize this for use with mod_rewrite. */
+$LGI_APPROOT=$LGI_ROOT.'/index.php';
+
+/** Default page to show after login */
+$LGI_DEFAULTPAGE='jobs';
 
 ?>

@@ -10,8 +10,7 @@
  */
 /** */
 require_once(dirname(__FILE__).'/common.php');
-require_once('utilities/errors.php');
-require_once('utilities/dwoo.php');
+require_once('inc/errors.php');
 
 
 # try to include from PEAR location or Debian package location
@@ -90,11 +89,11 @@ class LGIDwoo extends Dwoo
 		if ($this->tryCompileDir($localdir))
 			return parent::getCompileDir();
 		# see if we can, create/use a local compile dir
-		$localdir = join(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', '..', 'dwoo_c'));
+		$localdir = join(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', '..', 'template_c'));
 		if ($this->tryCompileDir($localdir))
 			return parent::getCompileDir();
 		# use temporary directory if all else fails
-		$localdir = join(DIRECTORY_SEPARATOR, array(sys_get_temp_dir(), 'LGIportal_dwoo_c'));
+		$localdir = join(DIRECTORY_SEPARATOR, array(sys_get_temp_dir(), 'LGIportal_template_c'));
 		$this->tryCompileDir($localdir);
 		return parent::getCompileDir();
 	}
@@ -128,13 +127,12 @@ class LGIDwoo extends Dwoo
 	/**
 	 * Assigns default variables.
 	 *
-	 * This includes the user variable, so session_start() is called as well.
+	 * Assumes session_start() has been called.
 	 *
 	 * @param mixed $data data to complete, either an array or Dwoo_Data object
 	 */
 	public function completeData(&$data)
 	{
-		session_start();
 		# expose some session variables
 		foreach ($this->session_expose as $var)
 		{
@@ -143,11 +141,13 @@ class LGIDwoo extends Dwoo
 		}
 		# lgi root
 		set_dwoo_or_array($data, 'webroot', config('LGI_ROOT'));
+		set_dwoo_or_array($data, 'approot', config('LGI_APPROOT'));
 		# lgi variables
+		$user = isset($_SESSION['user']) ? $_SESSION['user'] : '';
 		set_dwoo_or_array($data, 'lgi', array(
 			'server'      => config('LGI_SERVER'),
 			'project'     => config('LGI_PROJECT'),
-			'user'        => $_SESSION['user'],
+			'user'        => $user,
 		));
 		# if browser is running on windows or not
 		set_dwoo_or_array($data, 'ua_windows', preg_match('/windows|win32/i', $_SERVER['HTTP_USER_AGENT']));

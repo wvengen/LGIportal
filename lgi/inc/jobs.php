@@ -7,8 +7,8 @@
  */
 /** */
 require_once(dirname(__FILE__).'/common.php');
-require_once('utilities/login.php');
-require_once('LGI/client.php');
+require_once('inc/login.php');
+require_once('inc/LGI/client.php');
 
 
 /**

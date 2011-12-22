@@ -30,13 +30,13 @@
 
 *}
 {template deletebutton jobid nonce size=16}{*
-	*}{if $size <= 20}{actionbutton 'delete.php' $jobid $nonce 'delete' 'icons/action-delete_16.png' $size $size}{*
-	*}{else}{actionbutton 'delete.php' $jobid $nonce 'delete' 'icons/action-delete_32.png' $size $size}{/if}{*
+	*}{if $size <= 20}{actionbutton cat($__.approot,'/delete') $jobid $nonce 'delete' cat($__.webroot,'/icons/action-delete_16.png') $size $size}{*
+	*}{else}{actionbutton cat($__.approot,'/delete') $jobid $nonce 'delete' cat($__.webroot,'/icons/action-delete_32.png') $size $size}{/if}{*
 *}{/template}
 
 {template abortbutton jobid nonce size=16}{*
-	*}{if $size <= 20}{actionbutton 'delete.php' $jobid $nonce 'abort' 'icons/action-abort_16.png' $size $size}{*
-	*}{else}{actionbutton 'delete.php' $jobid $nonce 'abort' 'icons/action-abort_32.png' $size $size}{/if}{*
+	*}{if $size <= 20}{actionbutton cat($__.approot,'/delete') $jobid $nonce 'abort' cat($__.webroot,'/icons/action-abort_16.png') $size $size}{*
+	*}{else}{actionbutton cat($__.approot,'/delete') $jobid $nonce 'abort' cat($__.webroot,'/icons/action-abort_32.png') $size $size}{/if}{*
 *}{/template}
 
 {*
@@ -61,7 +61,7 @@
   Job state image
 *}
 {template stateimg jobstatus size=16}{*
-	*}<img src="icons/state-{$jobstatus}_16.{tif $jobstatus=='running' ? 'gif' : 'png'}" width="{$size}" height="{$size}" alt="{$jobstatus}" title="{$jobstatus}"/>{*
+	*}<img src="{$__.webroot}/icons/state-{$jobstatus}_16.{tif $jobstatus=='running' ? 'gif' : 'png'}" width="{$size}" height="{$size}" alt="{$jobstatus}" title="{$jobstatus}"/>{*
 *}{/template}
 
 
