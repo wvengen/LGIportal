@@ -39,12 +39,13 @@ portal_page($page);
 /**
 * Open the named page in the portal.
 * 
-* If an empty or no page name is specified, the default is opened.
+* If an empty or no page name is specified, the default is opened as specified
+* in the configuration entry LGI_DEFAULTPAGE.
 * 
 * @param str $page Page name to open, php file in page/<$page>.php must exist.
 */
 function portal_page($page=NULL) {
-  if ($page==NULL) $page = 'jobs';
+  if ($page==NULL) $page=config('LGI_DEFAULTPAGE');
   $pagepath = dirname(__FILE__)."/page/$page.php";
   if ( !preg_match('/^[a-zA-Z0-9]+$/', $page) || !file_exists($pagepath) ) {
       http_status(404, 'Page not found');

@@ -61,4 +61,7 @@ $TEMPLATE_DIR=$LGI_PREFIX.'/template';
 /** Web location of index.php. You could customize this for use with mod_rewrite. */
 $LGI_APPROOT=$LGI_ROOT.'/index.php';
 
+/** Default page to show after login */
+$LGI_DEFAULTPAGE='jobs';
+
 ?>
