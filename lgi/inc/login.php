@@ -1,221 +1,135 @@
 <?php
 /**
- * Utility functions for user authentication
- *
- * @author Deepthi
+ * User management and authentication
+ * 
+ * @author wvengen
  * @package utilities
  */
 /** */
 require_once(dirname(__FILE__).'/common.php');
-require_once('inc/errors.php');
 
-
-//$DB_CONFIG_FILE is set by the administrator. Hence check whether the file exists or not. If file does not exists we cannot access database. Hence report error!
-$dbcfg = config('DB_CONFIG_FILE');
-if(!file_exists($dbcfg))
-{
-	//given path to the DB_configuration file is invalid. Generate an error.
-	error_log("Error: in lgi.config.php: File not found ".$dbcfg);
-	throw new LGIPortalException("Server Configuration Error. Please report to web-administrator.");
-
-}
-// include the file having database access details
-//   Before inclusion make sure in this namespace, which could have been included from a
-//   function, the relevant variables are declared global.
-global $mysql_server, $mysql_user, $mysql_password, $mysql_dbname;
-require($dbcfg);
+require_once('inc/db.php');
 
 /**
- * Checks whether username and passwords corresponds to a valid user. Returns True if credentials are valid otherwise returns false.
- * @param string $user	plaintext username to be checked
- * @param string $password	plaintext password
- * @return boolean
- */
-function verifyUserPassword($user,$password)	//input plain text username and password
-{
-	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
-	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or showDBError();
-	mysql_select_db($mysql_dbname, $connection) or showDBError();
-
-	//validate username and password for preventing SQL injection
-	$username=mysql_real_escape_string($user);
-	$pswd=mysql_real_escape_string($password);
-
-	$query="SELECT passwordHash,salt FROM users WHERE userId='".$username."'";
-	$result=mysql_query($query) or showDBError();
-
-	$row= mysql_fetch_row($result);
-	mysql_close($connection);
-	if($row)	//if there is a record in the database for the user
-	{
-		$password_hash=$row[0];
-		$salt=$row[1];
-		return(strcmp(hashPassword($password,$salt),$password_hash)==0);	//check whether passwords match
-
-	}
-	else	//if there is no record in the database for the user
-	{
-		return false;
-	}
+* Create a password hash.
+*
+* Currently uses SHA-512, but this may change.
+*
+* @see http://stackoverflow.com/questions/1581610/how-can-i-store-my-users-passwords-safely
+* @see http://stackoverflow.com/questions/401656/secure-hash-and-salt-for-php-passwords
+* @see http://net.tutsplus.com/tutorials/php/understanding-hash-functions-and-keeping-passwords-safe/
+* @see http://packages.python.org/passlib/modular_crypt_format.html
+*
+* @param string $password password to hash
+* @param string $salt hex salt to use, or omit to generate random 64-bit number
+* @return string password hash in modular crypt format
+*/
+function hash_password($password, $salt=NULL) {
+	if ($salt==NULL) {
+		// no salt given, generate random
+		$salt = substr(sha1(mt_rand()),0,16);
+	} elseif ($salt[0]=='$') {
+		// salt is password hash, extract salt
+		$salt = explode('$',$salt);
+		$salt = $salt[2];
+	} // otherwise use salt as-is
+	return '$6$'.$salt.'$'.hash('sha512', $salt.':'.$password);
 }
 
-/**
- * Set user password in database
- *
- * @param string $user username to set password of
- * @param string $password new password to set
+
+/** A user of the LGI portal.
+ * 
+ * 
+ * 
+ * @author wvengen
  */
-function setUserPassword($user, $password)
-{
-	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
-	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or showDBError();
-	mysql_select_db($mysql_dbname, $connection) or showDBError();
+class LGIUser {
 
-	$salt=substr(md5(uniqid(rand(), true)),0,19);
-	$hash=mysql_real_escape_string(hashPassword($password,$salt));
-	$user=mysql_real_escape_string($user);
-
-	$query="UPDATE users SET passwordHash='$hash', salt='$salt' WHERE userId='$user'";
-	$result=mysql_query($query) or showDBError();
-
-	mysql_close($connection);
-}
-
-/**
- * Inserts a new user into the database
- *
- * @param string $user username
- * @param string $password initial password
- * @param string $certificate full path to his certificate
- * @param string $privatekey full path to his private key
- */
-function createUser($user, $password, $certificate, $privatekey)
-{
-	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
-	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or showDBError();
-	mysql_select_db($mysql_dbname, $connection) or showDBError();
-
-	$salt=substr(md5(uniqid(rand(), true)),0,19);
-	$hash=mysql_real_escape_string(hashPassword($password,$salt));
-	$user=mysql_real_escape_string($user);
-
-	$query="INSERT INTO users (passwordHash, salt, userId) VALUES ('$hash', '$salt', '$user')";
-	$result=mysql_query($query) or showDBERror();
-
-	$certificate=mysql_real_escape_string($certificate);
-	$password=mysql_real_escape_string($password);
-
-	$query="INSERT INTO usercertificates (userId, certificate, userkey) VALUES ('$user', '$certificate', '$privatekey')";
-	$result=mysql_query($query) or showDBError();
-
-	mysql_close($connection);
-}
-
-/**
- * Find the hash of concatenated string of two parameters passed. Returns the resulting hash. Used for password hashing with salt.
- * @param string $password
- * @param string $salt
- * @return string
- */
-function hashPassword($password,$salt)
-{
-	//return md5($password.$salt);
-	return hash("sha512",$password.$salt);
-}
-
-/**
- * Request user for relogin
- */
-function relogin()
-{
-	header("Location: ".config('LGI_ROOT')."/index.php");
-}
-
-/**
- * Check whether current session belongs to an authenticated user. If not request for log in. To be called before doing any function where user authentication is required.
- */
-function authenticateUser()
-{
-	if(checkValidSession())
-	{
-		return true;
-	}
-	else
-	{
-		relogin();
-	}
-}
-
-/**
- * Retrieve the reference to certificate of the user
- * @param string $user
- * @return string
- */
-function getCertificateFile($user=null)
-{
-	if ($user===null) $user=$_SESSION['user'];
-
-	if(isset($_SESSION['certificate']))          //if reference to certificate is set in session, no need to query database
-	{
-		return $_SESSION['certificate'];
-	}
-		
-	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
-	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or showDBError();
-	mysql_select_db($mysql_dbname, $connection) or showDBError();
-	$username=mysql_real_escape_string($user); //$user will already be escaped. But this is for extra safety
-	$query="SELECT certificate FROM usercertificates WHERE userId='".$username."'";
-	$result=mysql_query($query) or showDBError();
+	/** Userid of this user. */
+	protected $userid;
 	
-	$row= mysql_fetch_row($result);
-	mysql_close($connection);
-	//if there is a record in the database for the user
-	if($row)
-	{
-		$_SESSION['certificate']=$row[0];       //save the reference certificate in session. so next time you dont have to query database again.
-		return $row[0];
+	/** Creates new LGI user from username in database */
+	function LGIUser($userid) {
+		$this->userid = $userid;
 	}
-	return NULL;
-}
-
-/**
- * Retreive the reference to key of the user stored in database
- * @param string $user
- * @return string
- */
-function getKeyFile($user=null)
-{
-	if ($user===null) $user=$_SESSION['user'];
-
-	if(isset($_SESSION['key']))          //if reference to key is set in session, no need to query database
-	{
-		return $_SESSION['key'];
+	
+	/** Return whether supplied password is correct or no. */
+	function password_check($password) {
+		$result = lgi_mysql_query("SELECT password_hash FROM %t(users) WHERE userid='%%'", $this->userid);
+		if (!($row=mysql_fetch_row($result))) return false;
+		$hash = $row[0];
+		return hash_password($password, $hash) === $hash;
 	}
-	global $mysql_server,$mysql_user,$mysql_password,$mysql_dbname;
-	$connection = mysql_connect($mysql_server, $mysql_user, $mysql_password) or showDBError();
-	mysql_select_db($mysql_dbname, $connection) or showDBError();
-	$username=mysql_real_escape_string($user); //$user will already be escaped. But this is for extra safety
-	$query="SELECT userkey FROM usercertificates WHERE userId='".$username."'";
-	$result=mysql_query($query) or showDBError();
+	
+	/** Update password in the database */
+	function password_update($password) {
+		$hash = hash_password($password);
+		lgi_mysql_query("UPDATE %t(users) SET password_hash='%%' WHERE userid='%%'",$hash, $this->userid);
+	}
+	
+	/** Create a new user in the database.
+	 * 
+	 * If $cert and $key are both omitted or NULL, no LGI credentials are setup for the user.
+	 * 
+	 * @param string $userid Userid of the user to create
+	 * @param string $password password of the new user
+	 * @param string $cert LGI credential certificate file location
+	 * @param string $key LGI credential private key file location
+	 * @return unknown
+	 */
+	static function create($userid, $password, $cert=NULL, $key=NULL) {
+		$hash = hash_password($password);
+		lgi_mysql_query("INSERT INTO %t(users) SET name='%%', passwd_hash='%%'", $userid, $hash);
+		$o = LGIUser($userid);
+		if ($cert && $key) $o->set_certkey($cert, $key);
+		return $o;
+	}
+	
+	/** Set private key and certificate for user.
+	 * 
+	 * While the database model supports multiple certificates/keys for a single user,
+	 * this web application supports only one.
+	 * 
+	 * The certificate is parsed first, so that user and group information can be put
+	 * into the database as well.
+	 * 
+	 * @param string $cert path to certificate file
+	 * @param string $key path to private key file
+	 */
+	function set_certkey($cert, $key) {
+		// get user and groups from certificate
 		
-	$row= mysql_fetch_row($result);
-	mysql_close($connection);
-	//if there is a record in the database for the user
-	if($row)
-	{
-		$_SESSION['key']=$row[0];       //save the reference key in session. so next time you dont have to query database again.
-		return $row[0];
+		// update or insert row
+		$query = "%t(usercerts) SET cert='%%', key='%%', username='%%', fixedgroups='%%' WHERE userid='%%'";
+		lgi_mysql_query("UPDATE $query",  $cert, $key, $certuser, $certgroups, $this->userid);
+		if (mysql_num_rows()==0)
+			lgi_mysql_query("INSERT INTO $query",  $cert, $key, $certuser, $certgroups, $this->userid);
 	}
-
-	return NULL;
-}
-
-/**
- * Throw and log MySQL database error.
- */
-function showDBError() { 
-        error_log("MySQL error: ".mysql_error());
-        throw new LGIPortalException("Server Error. Please contact web administrator.");
+	
+	/** Returns the certificate file location.
+	 *
+	 * This is cached in the session.
+	 */
+	function get_cert() {
+		if (!isset($_SESSION['user_cert'])) {
+			// not in session, get from db
+			$result = lgi_mysql_query("SELECT cert,key FROM %t(usercerts) WHERE userid='%%'", $this->userid);
+			$row = mysql_fetch_row($result);		
+			$_SESSION['user_cert'] = $row[0];
+			$_SESSION['user_key'] = $row[1];
+		} 
+		return $_SESSION['user_cert'];
+	}
+	
+	/** Returns the private key file location.
+	 * 
+	 * This is cached in the session.
+	 */
+	function get_key() {
+		// get_cert() also fetches key
+		if (!isset($_SESSION['user_key'])) get_cert();
+		return $_SESSION['user_key'];
+	}
 }
 
 ?>
