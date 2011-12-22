@@ -9,7 +9,7 @@
 					<th class="filetime">Time</th>
 				</tr>{/if}
 				{loop $files}<tr class="{cycle values=array('odd','even')}">
-					<td class="filename"><a href="{$approot}/repository?url={escape $_.url url}&amp;file={escape $name url}">{$name}</a></td>
+					<td class="filename"><a href="{$__.approot}/repository?url={escape $_.url url}&amp;file={escape $name url}">{$name}</a></td>
 					<td class="filesize">{$size}</td>
 					<td class="time">{date_format $date '%c'}</td>
 				</tr>
