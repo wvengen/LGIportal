@@ -27,7 +27,7 @@ else
 {
 	// delete job
 	verifyNonce($_POST['nonce']);
-	$job_id = verifyJobid($_POST['job_id']);
+	$job_id = verifyJobid($_POST['job_id'], 'jobs');
 
 	$lgi = new LGIPortalClient();
 	$result = $lgi->jobDelete($job_id);
