@@ -24,7 +24,7 @@ elseif(verifyUserPassword($user, $password))
 {
 	setValidSession($user);
 	// user has logged in, go to default page
-	portal_page();
+	http_redirect(config('LGI_APPROOT').'/jobs');
 }
 else
 {

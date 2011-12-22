@@ -5,15 +5,12 @@
  * @package default
  */
 /** */
-require_once(dirname(__FILE__).'/utilities/common.php');
-require_once('utilities/dwoo.php');
-require_once('utilities/sessions.php');
-require_once('utilities/login.php');
-require_once('utilities/jobs.php');
-require_once('utilities/errors.php');
+if (!defined('LGI_PORTAL')) throw new Exception('Page requested outside of portal');
 
+require_once('inc/sessions.php');
+require_once('inc/dwoo.php');
+require_once('inc/jobs.php');
 
-authenticateUser();
 
 //if request does not have details about job, display the form . post variable 'submitrequest' is set in the form.
 if(!isset($_POST['job_id']))
@@ -39,7 +36,7 @@ else
 		throw new LGIPortalException('Failed to delete job '.$job_id);
 
 	// success! redirect to allow user to reload
-	header('Location: jobs.php');
+	http_redirect(config('LGI_APPROOT').'/jobs');
 }
 
 ?>

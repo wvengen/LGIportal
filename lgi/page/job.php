@@ -7,10 +7,10 @@
 /** */
 if (!defined('LGI_PORTAL')) throw new Exception('Page requested outside of portal');
 
-require_once('inc/dwoo.php');
 require_once('inc/sessions.php');
-require_once('inc/login.php');
+require_once('inc/dwoo.php');
 require_once('inc/jobs.php');
+
 
 if (count($argv)!=2)
     throw new LGIPortalException("No job id specified.");
