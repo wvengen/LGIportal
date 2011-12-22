@@ -23,8 +23,8 @@ Setting up the database
 
 2. Create initial tables from db.sql
        
-2. Configure database access details in php/includes/db.inc.php
-     If you want to put db.inc.php in a more secure place (like outside Apache's
+2. Configure database access details in inc/db.php
+     If you want to put db.php in a more secure place (like outside Apache's
      document root), configure the new path in lgi.config.php
 
 
