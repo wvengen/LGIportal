@@ -7,6 +7,7 @@
 /** */
 if (!defined('LGI_PORTAL')) throw new Exception('Page requested outside of portal');
 
+require_once('inc/sessions.php');
 require_once('inc/dwoo.php');
 require_once('inc/jobs.php');
 
@@ -20,6 +21,12 @@ if(!isset($_POST['submit']))
 	// set nonce to avoid cross-site request forgery (see generateNonce)
 	$data->assign('nonce', generateNonce());
 	$data->assign('applications', config_array('LGI_APPLICATION', null));
+	$data->assign(array(
+	    'input' => @$_REQUEST['input'],
+	    'application' => @$_REQUEST['application'],
+	    'read_access' => @$_REQUEST['read_access'],
+	    'write_access' => @$_REQUEST['write_access'],
+	));
 	$dwoo->output('submit.tpl', $data);
 }
 else
