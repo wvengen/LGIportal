@@ -38,7 +38,7 @@ if (isset($_POST['dlcred']) && $_POST['dlcred']) {
 // form submitted
 if (isset($_POST['submit'])) {
 	// change password
-	if ($_POST['pwdold'] || $_POST['pwd1'] || $_POST['pwd2']) {
+	if ($_POST['pwd_old'] || $_POST['pwd1'] || $_POST['pwd2']) {
 		if ($_POST['pwd1'] != $_POST['pwd2']) {
 			pushErrorMessage('New passwords do not match.');
 		} elseif (strlen($_POST['pwd1']) < 3) {
