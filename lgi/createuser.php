@@ -6,8 +6,8 @@
  * @package contrib
  */
 /** */
-require_once(dirname(__FILE__).'/php/utilities/common.php');
-require('utilities/login.php');
+require_once(dirname(__FILE__).'/inc/common.php');
+require_once('inc/login.php');
 
 
 // only to be called from command-line
@@ -19,6 +19,6 @@ if ($argc!=5 || in_array('-h', $argv) || in_array('--help', $argv)) {
 	exit(1);
 }
 
-createUser($argv[1], $argv[2], $argv[3], $argv[4]);
+LGIUser::create($argv[1], $argv[2], $argv[3], $argv[4]);
  
 ?>

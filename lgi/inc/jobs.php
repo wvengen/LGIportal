@@ -51,15 +51,13 @@ class LGIPortalClient extends LGIClient
 	 */
 	function __construct($user=null, $groups=null, $server=null, $project=null)
 	{
-		if ($user===null) {
-			authenticateUser();
-			$user = $_SESSION['user'];
-		}
-		if ($groups===null) $groups = $user;
+		$user = new LGIUser($user);
+		$username = $user->get_name();
+		if ($groups===null) $groups = $username;
 		if ($server===null) $server = config('LGI_SERVER');
 		if ($project===null) $project = config('LGI_PROJECT');
 		$ca = config('LGI_CA_FILE');
-		parent::__construct($server, $project, $user, $groups, getCertificateFile($user), getKeyFile($user), $ca);
+		parent::__construct($server, $project, $username, $groups, $user->get_cert(), $user->get_key(), $ca);
 	}
 
 	/** {@inheritdoc} */

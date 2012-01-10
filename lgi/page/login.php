@@ -22,7 +22,7 @@ if (is_null($password) || is_null($username))
 }
 elseif(LGIUser::password_check_user($username, $password))
 {
-	setValidSession($user);
+	setValidSession($username);
 	// user has logged in, go to default page
 	http_redirect(config('LGI_APPROOT').'/'.config('LGI_DEFAULTPAGE'));
 }

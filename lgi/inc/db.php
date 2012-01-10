@@ -23,7 +23,7 @@ function lgi_mysql_connect() {
 
 /** Perform a query on the LGI database with proper escaping; sprintf-style function.
  *
- * Each '%t(<tblname>)' is replaced by the table name with table prefix.
+ * Each '%t(<tblname>)' is replaced by the table name with table prefix (backtick quoted).
  * Each '%%' in the query is replaced by the next argument, properly escaped.
  * If no MySQL connection is present, a connection is made first.
  * 
@@ -34,7 +34,7 @@ function lgi_mysql_query() {
 	lgi_mysql_connect();
 	$args = func_get_args();
 	$fmt = array_shift($args);
-	$fmt = preg_replace('/%t\((.*)\)/', config('MYSQL_TBLPREFIX','').'$1', $fmt);
+	$fmt = preg_replace('/%t\((.*)\)/', '`'.config('MYSQL_TBLPREFIX','').'$1`', $fmt);
 	$fmt = preg_replace('/%%/', '%s', $fmt);
 	array_walk($args, create_function('&$v', '$v=mysql_real_escape_string($v);'));
 	$result = mysql_query(vsprintf($fmt, $args));
