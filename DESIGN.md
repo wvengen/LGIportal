@@ -44,33 +44,7 @@ this has been removed from the current version because of maintenance issues.
 Database
 ========
 
-Two tables are currently used:
-
-1. For user account details: **users**
-
-        +--------------+--------------+------+-----+---------+-------+
-        | Field        | Type         | Null | Key | Default | Extra |
-        +--------------+--------------+------+-----+---------+-------+
-        | userId       | varchar(20)  | NO   | PRI | NULL    |       | 
-        | passwordHash | varchar(150) | YES  |     | NULL    |       | 
-        | salt         | varchar(50)  | YES  |     | NULL    |       | 
-        +--------------+--------------+------+-----+---------+-------+
-   Passwords are hashed with a salt using the SHA512 algorithm.
-     
-
-2. For user certificates and keys: **usercertificates**
-
-        +-------------+--------------+------+-----+---------+-------+
-        | Field       | Type         | Null | Key | Default | Extra |
-        +-------------+--------------+------+-----+---------+-------+
-        | userId      | varchar(20)  | NO   | PRI | NULL    |       | 
-        | certificate | varchar(100) | YES  |     | NULL    |       | 
-        | userkey     | varchar(100) | YES  |     | NULL    |       | 
-        +-------------+--------------+------+-----+---------+-------+
-   Certificate and userkey are currently full paths to a user's LGI
-   certificate and private key. In the future this may change to be
-   the key and certificate itself.
-
+(TODO)
 
 [Dwoo]: http://www.dwoo.org/
 [MySQL]: http://www.mysql.org/

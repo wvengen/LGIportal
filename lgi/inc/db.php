@@ -14,7 +14,7 @@ require_once(dirname(__FILE__).'/common.php');
  * Can be called more than one time, will only open a connection when none exists.
  */
 function lgi_mysql_connect() {
-	
+	global $lgi_mysql_connection;
 	// setup
 	if ($lgi_mysql_connection==NULL)
 		$lgi_mysql_connection = mysql_connect(config('MYSQL_SERVER'), config('MYSQL_USER'), config('MYSQL_PASSWORD')) or showDBError();
@@ -25,18 +25,21 @@ function lgi_mysql_connect() {
  *
  * Each '%t(<tblname>)' is replaced by the table name with table prefix.
  * Each '%%' in the query is replaced by the next argument, properly escaped.
- * If not MySQL connection is present, a connection is made first.
+ * If no MySQL connection is present, a connection is made first.
  * 
  * @param string $query query
+ * @see mysql_query()
  */
 function lgi_mysql_query() {
 	lgi_mysql_connect();
 	$args = func_get_args();
 	$fmt = array_shift($args);
-	$fmt = preg_replace('/%t\((.*)\)/', config('MYSQL_TBLPREFIX','').'$1');
-	$fmt = preg_replace('/%%/', '%s');
+	$fmt = preg_replace('/%t\((.*)\)/', config('MYSQL_TBLPREFIX','').'$1', $fmt);
+	$fmt = preg_replace('/%%/', '%s', $fmt);
 	array_walk($args, create_function('&$v', '$v=mysql_real_escape_string($v);'));
-	return mysql_query(vsprintf($fmt, $args)) or showDBError();
+	$result = mysql_query(vsprintf($fmt, $args));
+	if ($result === false) showDBError();
+	return $result;
 }
 
 /**

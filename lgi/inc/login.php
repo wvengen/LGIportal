@@ -39,8 +39,6 @@ function hash_password($password, $salt=NULL) {
 
 /** A user of the LGI portal.
  * 
- * 
- * 
  * @author wvengen
  */
 class LGIUser {
@@ -48,14 +46,26 @@ class LGIUser {
 	/** Userid of this user. */
 	protected $userid;
 	
-	/** Creates new LGI user from username in database */
-	function LGIUser($userid) {
-		$this->userid = $userid;
+	/** Creates new LGI user object.
+	 *
+	 * The user should be present in the database, though this is not
+	 * checked currently (subsequent methods may fail though).
+	 * 
+	 * @param $user username, or null to get from session
+	 */
+	function LGIUser($user=null) {
+		if (is_null($user)) $user = $_SESSION['user'];
+		$this->userid = $user;
 	}
 	
-	/** Return whether supplied password is correct or no. */
+	/** Return whether supplied password is correct or no for this user. */
 	function password_check($password) {
-		$result = lgi_mysql_query("SELECT password_hash FROM %t(users) WHERE userid='%%'", $this->userid);
+		return password_check_user($this->userid, $password);
+	}
+	
+	/** Return whether specified username/password combination is correct or no. */
+	static function password_check_user($userid, $password) {
+		$result = lgi_mysql_query("SELECT passwd_hash FROM %t(users) WHERE name='%%'", $userid);
 		if (!($row=mysql_fetch_row($result))) return false;
 		$hash = $row[0];
 		return hash_password($password, $hash) === $hash;
@@ -64,7 +74,7 @@ class LGIUser {
 	/** Update password in the database */
 	function password_update($password) {
 		$hash = hash_password($password);
-		lgi_mysql_query("UPDATE %t(users) SET password_hash='%%' WHERE userid='%%'",$hash, $this->userid);
+		lgi_mysql_query("UPDATE %t(users) SET passwd_hash='%%' WHERE name='%%'",$hash, $this->userid);
 	}
 	
 	/** Create a new user in the database.

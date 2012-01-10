@@ -35,7 +35,6 @@ $page = $argv[0];
 define('LGI_PORTAL', 1);
 portal_page($page);
 
-
 /**
 * Open the named page in the portal.
 * 
