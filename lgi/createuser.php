@@ -7,7 +7,7 @@
  */
 /** */
 require_once(dirname(__FILE__).'/inc/common.php');
-require_once('inc/login.php');
+require_once('inc/user.php');
 
 
 // only to be called from command-line

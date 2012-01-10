@@ -11,7 +11,7 @@ if (!defined('LGI_PORTAL')) throw new Exception('Page requested outside of porta
 
 require_once('inc/dwoo.php');
 require_once('inc/sessions.php');
-require_once('inc/login.php');
+require_once('inc/user.php');
 require_once('inc/jobs.php');
 
 
