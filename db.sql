@@ -2,7 +2,7 @@
 --
 -- LGIportal database structure
 --
-----
+-- --
 
 
 --
@@ -44,7 +44,8 @@ CREATE TABLE `usercerts` (
 --
 CREATE TABLE `usergroups` (
 	`usercertid`   INTEGER REFERENCES `usercerts`(`id`),
-	`name`         VARCHAR(20)
+	`name`         VARCHAR(20),
+	PRIMARY KEY(`usercertid`, `name`)
 );
 
 --
@@ -53,6 +54,7 @@ CREATE TABLE `usergroups` (
 --
 CREATE TABLE `userprojects` (
 	`usercertid`   INTEGER REFERENCES `usercerts`(`id`),
-	`name`         VARCHAR(20)
+	`name`         VARCHAR(20),
+	PRIMARY KEY(`usercertid`, `name`)
 );
 
