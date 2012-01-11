@@ -31,7 +31,36 @@
 		<ul class="user">
 			<li><a href="{$approot}/resources">Resources</a> </li>
 			<li><a href="{$approot}/user">Settings</a> </li>
-			<li><a href="{$approot}/user#groups"><img src="{$webroot}/icons/system-users_16.png" width="16" height="16" alt="Group:" /> {$lgi.group}</a> </li>
+			<li id="nav_user_groups"><a href="{$approot}/user#groups"><img src="{$webroot}/icons/system-users_16.png" width="16" height="16" alt="Group:" /> {$lgi.group}</a>
+				<script type="text/javascript"><!--
+				var approot = "{$approot}";
+				// enhance group switch button with drop-down menu to dynamically switch group
+				document.write('<ul class="dropdown" style="display:none"><li class="header">switch group</li>');
+				{foreach $lgi.groups g}
+				document.write('<li><a href="javascript:switch_group(\'{$g}\')"><img src="{$webroot}/icons/system-users_16.png" width="16" height="16" alt="Group" /> {$g}</a></li>');
+				{/foreach}{*
+				*}{literal}
+				document.write('</ul>');
+				// open menu on hover
+				$(document).ready(function() {
+					$('#nav_user_groups').hover(function() {
+						$('#nav_user_groups ul').fadeIn();
+					}, function() {
+						$('#nav_user_groups ul').fadeOut();
+					});
+					// TODO handle focusin and focusout as well
+				});
+				// handle menu events
+				function switch_group($g) {
+					// update group using ajax
+					// TODO implement json handling in LGIportal, now just returns html page :o
+					data = {'json':true, 'submit_dfl':true, 'group': $g};
+					$.post(approot+'/user', data, function(data) {
+						// then reload page
+						window.location.reload();
+					});
+				}
+				//-->{/literal}</script></li>
 			<li><a href="{$approot}/logout">Logout {$user}</a></li>
 		</ul>
 {/block}

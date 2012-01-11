@@ -57,9 +57,9 @@ if (isset($_POST['submit_pwd'])) {
 // defaults form submitted
 if (isset($_POST['submit_dfl'])) {
 	// update defaults
-	$user->set_cur_project(trim($_POST['project']));
-	$user->set_groups(array_map('trim', explode(',', $_POST['groups'])));
-	$user->set_cur_group(trim($_POST['group']));
+	if (isset($_POST['project'])) $user->set_cur_project(trim($_POST['project']));
+	if (isset($_POST['groups'])) $user->set_groups(array_map('trim', explode(',', $_POST['groups'])));
+	if (isset($_POST['group'])) $user->set_cur_group(trim($_POST['group']));
 	$data->assign('infomessage', 'Defaults saved.');
 }
 
