@@ -56,7 +56,6 @@ if (isset($_POST['submit'])) {
 // no form, just show form
 $data->assign('nonce', generateNonce());
 $data->assign('servers', config_array('LGI_SERVER'));
-$data->assign('projects', config_array('LGI_PROJECT'));
 $dwoo->output('user.tpl', $data);
 
 ?>

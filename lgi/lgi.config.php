@@ -21,12 +21,6 @@ $LGI_ROOT="/lgi";
  */
 $LGI_SERVER='https://brokkenpiloot.nikhef.nl/LGI/';
 
-/** LGI project on server to work on
- *
- * (note at _LGI_SERVER_ applies here as well)
- */
-$LGI_PROJECT='BigGridLGIPortal';
-
 /** LGI applications that can be used; first is default
  *
  * (note at _LGI_SERVER_ applies here as well)

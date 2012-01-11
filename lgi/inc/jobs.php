@@ -43,19 +43,22 @@ class LGIPortalClient extends LGIClient
 {
 	/**
 	 * Create a new LGIPortalClient.
-	 *
-	 * @param string $user username to connect as, or null to get from portal login
-	 * @param string $groups groups to submit jobs with, or null to use same as user
+	 * 
+	 * If any of the parameters is null, it will be retrieved from the
+	 * user's {@link LGIUser LGIUser} object.
+	 * 
+	 * @param string $user username to connect as, or null to retrieve from session
+	 * @param string $groups groups to submit jobs with, or null to retrieve from user
 	 * @param string $server LGI project server url to connect with, or null to use {@link config config}('LGI_SERVER') when defined
-	 * @param string $project LGI project to connect to, or null to use {@link config config}('LGI_PROJECT') when defined
+	 * @param string $project LGI project to connect to, or null to retrieve from user
 	 */
 	function __construct($user=null, $groups=null, $server=null, $project=null)
 	{
-		$user = new LGIUser($user);
+		if (!$user instanceof LGIUser) $user = new LGIUser($user);
 		$username = $user->get_name();
-		if ($groups===null) $groups = $username;
+		if ($groups===null) $groups = $user->get_cur_group();
 		if ($server===null) $server = config('LGI_SERVER');
-		if ($project===null) $project = config('LGI_PROJECT');
+		if ($project===null) $project = $user->get_cur_project();
 		$ca = config('LGI_CA_FILE');
 		parent::__construct($server, $project, $username, $groups, $user->get_cert(), $user->get_key(), $ca);
 	}

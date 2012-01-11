@@ -11,19 +11,19 @@ require_once(dirname(__FILE__).'/common.php');
 require_once('inc/db.php');
 
 /**
-* Create a password hash.
-*
-* Currently uses SHA-512, but this may change.
-*
-* @see http://stackoverflow.com/questions/1581610/how-can-i-store-my-users-passwords-safely
-* @see http://stackoverflow.com/questions/401656/secure-hash-and-salt-for-php-passwords
-* @see http://net.tutsplus.com/tutorials/php/understanding-hash-functions-and-keeping-passwords-safe/
-* @see http://packages.python.org/passlib/modular_crypt_format.html
-*
-* @param string $password password to hash
-* @param string $salt hex salt to use, or omit to generate random 64-bit number
-* @return string password hash in modular crypt format
-*/
+ * Create a password hash.
+ *
+ * Currently uses SHA-512, but this may change.
+ *
+ * @see http://stackoverflow.com/questions/1581610/how-can-i-store-my-users-passwords-safely
+ * @see http://stackoverflow.com/questions/401656/secure-hash-and-salt-for-php-passwords
+ * @see http://net.tutsplus.com/tutorials/php/understanding-hash-functions-and-keeping-passwords-safe/
+ * @see http://packages.python.org/passlib/modular_crypt_format.html
+ *
+ * @param string $password password to hash
+ * @param string $salt hex salt to use, or omit to generate random 64-bit number
+ * @return string password hash in modular crypt format
+ */
 function hash_password($password, $salt=NULL) {
 	if ($salt==NULL) {
 		// no salt given, generate random
@@ -123,6 +123,8 @@ class LGIUser {
 			$certuser = $cn[0];
 			$certgroups = explode(',', $cn[1]);
 			$certprojects = explode(',', $cn[2]);
+		} else {
+			throw new LGIPortalException("Unsupported certificate: need 2 or 3 semicolon-separated fields in CN");
 		}
 		// update or insert key/certificate
 		$query = "%t(usercerts) SET `cert`='%%', `key`='%%', `username`='%%', `fixedgroups`='%%', `user`='%%'";
@@ -146,7 +148,7 @@ class LGIUser {
 		// and projects
 		lgi_mysql_query("DELETE FROM %t(userprojects) WHERE `usercertid`='%%'", $usercertid);
 		foreach($certprojects as $p)
-			lgi_mysql_query("INSERT INTO %t(usergroups) SET `usercertid`='%%', `name`='%%'", $usercertid, $p);
+			lgi_mysql_query("INSERT INTO %t(userprojects) SET `usercertid`='%%', `name`='%%'", $usercertid, $p);
 	}
 	
 	/** Returns the username */
@@ -159,13 +161,8 @@ class LGIUser {
 	 * This is cached in the session.
 	 */
 	function get_cert() {
-		if (!isset($_SESSION['user_cert'])) {
-			// not in session, get from db
-			$result = lgi_mysql_query("SELECT `cert`,`key` FROM %t(usercerts) WHERE `user`='%%'", $this->userid);
-			$row = mysql_fetch_row($result);		
-			$_SESSION['user_cert'] = $row[0];
-			$_SESSION['user_key'] = $row[1];
-		} 
+		if (!isset($_SESSION['user_cert']))
+			lgi_mysql_fetch_session("SELECT `cert` AS `user_cert`, `key` AS `user_key` FROM %t(usercerts) WHERE `user`='%%'", $this->userid);
 		return $_SESSION['user_cert'];
 	}
 	
@@ -175,8 +172,55 @@ class LGIUser {
 	 */
 	function get_key() {
 		// get_cert() also fetches key
-		if (!isset($_SESSION['user_key'])) $this->get_cert();
+		if (!isset($_SESSION['user_key']))
+			$this->get_cert();
 		return $_SESSION['user_key'];
+	}
+	
+	/** Returns an array with the user's projects.
+	 *
+	 * This is cached in the session.
+	 */
+	function get_projects() {
+		if (!isset($_SESSION['projects']))
+			lgi_mysql_fetch_session("SELECT GROUP_CONCAT(`name`) AS `projects` FROM %t(userprojects) AS p, %t(usercerts) AS c WHERE p.`usercertid`=c.`id` AND c.`user`='%%'", $this->userid);
+		return explode(',', $_SESSION['projects']);	
+	}
+
+	/** Returns an array with the user's groups.
+	 *
+	 * This is cached in the session.
+	 */
+	function get_groups() {
+		if (!isset($_SESSION['groups']))
+			lgi_mysql_fetch_session("SELECT GROUP_CONCAT(`name`) AS `groups` FROM %t(usergroups) AS p, %t(usercerts) AS c WHERE p.`usercertid`=c.`id` AND c.`user`='%%'", $this->userid);
+		return explode(',', $_SESSION['groups']);
+	}
+	
+	/** Returns the user's current group */
+	function get_cur_group() {
+		if (!isset($_SESSION['dfl_group'])) {
+			// return comma-separated list of default groups from database
+			lgi_mysql_fetch_session("SELECT GROUP_CONCAT(`name`) AS `dfl_group` FROM %t(usergroups) AS p, %t(usercerts) AS c WHERE p.`usercertid`=c.`id` AND c.`user`='%%' AND p.`dfl`=TRUE", $this->userid);
+			// maybe there were no groups defined and it is not specified in the certificate; then use username
+			//   TODO this will work only if usercerts.fixedgroups if TRUE, but I'm too lame to check that right now
+			if (!isset($_SESSION['dfl_group']))
+				$_SESSION['dfl_group'] = $this->userid;
+		}
+		return $_SESSION['dfl_group'];
+	}
+	
+	/** Returns the user's current project */
+	function get_cur_project() {
+		if (!isset($_SESSION['dfl_project'])) {
+			lgi_mysql_fetch_session("SELECT `dfl_project` AS `dfl_project` FROM %t(users) WHERE `name`='%%'", $this->userid);
+			// if not set, return first project found
+			if (!isset($_SESSION['dfl_project']))
+				lgi_mysql_fetch_session("SELECT `name` AS `dfl_project` FROM %t(userprojects) AS p, %t(usercerts) AS c WHERE p.`usercertid`=c.`id` AND c.`user`='%%' LIMIT 1", $this->userid);
+			if (!isset($_SESSION['dfl_project']))
+				throw new LGIPortalException("No LGI projects for user: check certificate.");
+		}
+		return $_SESSION['dfl_project'];
 	}
 	
 	/** Returns certificate CN.

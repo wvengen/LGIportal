@@ -34,7 +34,7 @@ function lgi_mysql_query() {
 	lgi_mysql_connect();
 	$args = func_get_args();
 	$fmt = array_shift($args);
-	$fmt = preg_replace('/%t\((.*)\)/', '`'.config('MYSQL_TBLPREFIX','').'$1`', $fmt);
+	$fmt = preg_replace('/%t\(([^)]+)\)/', '`'.preg_quote(config('MYSQL_TBLPREFIX','')).'$1`', $fmt);
 	$fmt = preg_replace('/%%/', '%s', $fmt);
 	array_walk($args, create_function('&$v', '$v=mysql_real_escape_string($v);'));
 	$result = mysql_query(vsprintf($fmt, $args));
@@ -42,12 +42,43 @@ function lgi_mysql_query() {
 	return $result;
 }
 
+/** Perform a query on the LGI database and update session.
+ * 
+ * Same as {@link mysql_query() mysql_query()} but results are used to
+ * update the {@link $_SESSION $_SESSION} variable. For example,
+ * <code>
+ * session_start();
+ * lgi_mysql_fetch_session("SELECT '%%' AS `answer`", "hi there");
+ * print $_SESSION['answer'];
+ * </code>
+ * will return "hi there".
+ * 
+ * Only the first row will be processed. If you want to have a comma-separated
+ * list of values for all rows, use
+ * {@link http://dev.mysql.com/doc/refman/5.0/en/group-by-functions.html#function%5Fgroup-concat GROUP_CONCAT}.
+ * 
+ * This function should only be used with SELECT statements, naturally.
+ * 
+ * @see lgi_mysql_query()
+ */
+function lgi_mysql_fetch_session() {
+	$result = call_user_func_array('lgi_mysql_query', func_get_args());
+	is_resource($result) or lgi_mysql_throw("No SQL result to fetch.");
+	$result = mysql_fetch_assoc($result);
+	foreach($result as $k=>$v)
+		$_SESSION[$k] = $v;
+	return $result;
+}
+
 /**
  * Throw and log MySQL database error.
+ * 
+ * @param string $msg error message to log, or null to get from mysql driver  
  */
-function lgi_mysql_throw() {
-  error_log("MySQL error: ".mysql_error());
-  throw new LGIPortalException("Server Error. Please contact web administrator.");
+function lgi_mysql_throw($msg=null) {
+	if (is_null($msg)) $msg = mysql_error();
+	error_log('MySQL error: '.$msg);
+	throw new LGIPortalException("Server Error. Please contact web administrator.");
 }
 
 ?> 

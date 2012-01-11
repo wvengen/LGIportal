@@ -10,6 +10,8 @@
 --
 CREATE TABLE `users` (
 	`name`         VARCHAR(20) PRIMARY KEY,
+	-- default project
+	`dfl_project`  VARCHAR(127),
 	-- local password
 	`passwd_hash`  VARCHAR(150)
 	-- any other authentication mechanisms can add fields here
@@ -45,6 +47,8 @@ CREATE TABLE `usercerts` (
 CREATE TABLE `usergroups` (
 	`usercertid`   INTEGER REFERENCES `usercerts`(`id`),
 	`name`         VARCHAR(20),
+	-- whether this group is part of the user's default groups
+	`dfl`          BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY(`usercertid`, `name`)
 );
 
