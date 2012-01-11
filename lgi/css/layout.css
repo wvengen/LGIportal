@@ -64,6 +64,9 @@
 	border-right: none;
 	border-left: 1px solid #fff;
 }
+#navigation img {
+	vertical-align: middle;
+}
 #content-container
 {
 	width: 100%;

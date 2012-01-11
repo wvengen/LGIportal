@@ -143,13 +143,18 @@ class LGIDwoo extends Dwoo
 		set_dwoo_or_array($data, 'webroot', config('LGI_ROOT'));
 		set_dwoo_or_array($data, 'approot', config('LGI_APPROOT'));
 		# lgi variables
-		$user = isset($_SESSION['user']) ? new LGIUser() : null;		
-		set_dwoo_or_array($data, 'lgi', array(
-			'server'      => config('LGI_SERVER'),
-			'projects'    => $user ? $user->get_projects() : '',
-			'project'     => $user ? $user->get_cur_project() : '',
-			'user'        => $user ? $user->get_name() : '',
-		));
+		$lgi = array();
+		$lgi['server'] = config('LGI_SERVER');
+		if (isset($_SESSION['user'])) {
+			$user = new LGIUser();
+			$lgi['projects']    = $user->get_projects();
+			$lgi['project']     = $user->get_cur_project();
+			$lgi['groups']      = $user->get_groups();
+			$lgi['group']       = $user->get_cur_group();
+			$lgi['fixedgroups'] = $user->get_fixedgroups();
+			$lgi['user']        = $user->get_name();     
+		}
+		set_dwoo_or_array($data, 'lgi', $lgi);
 		# if browser is running on windows or not
 		set_dwoo_or_array($data, 'ua_windows', preg_match('/windows|win32/i', @$_SERVER['HTTP_USER_AGENT']));
 		# add error message, if any

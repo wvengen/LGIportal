@@ -31,6 +31,7 @@
 		<ul class="user">
 			<li><a href="{$approot}/resources">Resources</a> </li>
 			<li><a href="{$approot}/user">Settings</a> </li>
+			<li><a href="{$approot}/user#groups"><img src="{$webroot}/icons/system-users_16.png" width="16" height="16" alt="Group:" /> {$lgi.group}</a> </li>
 			<li><a href="{$approot}/logout">Logout {$user}</a></li>
 		</ul>
 {/block}

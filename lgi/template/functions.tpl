@@ -67,16 +67,28 @@
 
 {*
 
+  select
+
+  An html select element, built from an array.
+*}
+{template select id values currentvalue}{*
+	*}<select name='{$id}' id='{$id}'>{*
+		*}{foreach $values a}{*
+			*}<option value='{$a}'{if $a==$currentvalue} selected='selected'{/if}>{$a}</option>{*
+		*}{/foreach}{*
+	*}</select>{*
+*}{/template}
+
+
+{*
+
   inputselect
 
   Either an html select or a text input element, depending on if values are given or not.
 *}
 {template inputselect id values currentvalue}{*
-	*}{if $values}<select name='{$id}' id='{$id}'>{*
-		*}{foreach $values a}{*
-			*}<option value='{$a}'{if $a==$currentvalue} selected='selected'{/if}>{$a}</option>{*
-		*}{/foreach}{*
-		*}</select>{*
+	*}{if $values}{*
+		*}{select $id $values $currentvalue}{*
 	*}{else}{*
 		*}<input type='text' name='{$id}' id='{$id}' value='{$currentvalue}' />{*
 	*}{/if}{*

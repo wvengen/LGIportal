@@ -11,18 +11,31 @@
 					<li><label for='pwd1'>New password:</label> <input type='password' name='pwd1' id='pwd1' /></li>
 					<li><label for='pwd2'>New password:</label> <input type='password' name='pwd2' id='pwd2' /> (repeat)</li>
 				</ol>
-				<div style='text-align:right'><input type='submit' name='submit' id='submit' value='Change password' /></div>
+				<div style='text-align:right'><input type='submit' name='submit_pwd' id='submit_pwd' value='Change password' /></div>
 			</fieldset>
-{*
 
 			<fieldset class="collapsible uncollapsed"><legend>Defaults</legend>
-				<ol>
-					<li><label for='server'>Project server</label> {inputselect 'server' $servers $servers[0]}</li>
-					<li><label for='server'>Project name</label> {inputselect 'project' $projects $projects[0]}</li>
-					<li title='Jobs that you submit will be owned by at least the names that you specify here.'><label for='groups'>Groups</label> <input type='text' name='groups' id='groups' value='{$groups}' /></li>
-				<ol>
+				<ol class="cmxform">
+					<li><label for='project'>Project</label> {inputselect 'project' $lgi.projects $lgi.project}</li>
+				{if $lgi.fixedgroups}{*	
+				*}	<li title='Jobs that you submit are accessible to members of this group.'><label for='group'>Default group</label> {inputselect 'group' $lgi.groups $lgi.group}</li>*}
+				*}{else}{*
+				*}</ol>
+				<div>You are free to use any group you like. In practice you'll work with a small number of groups.
+				Please enter the groups you want to use here, seperated by commas. Then select a default below.</div>
+				<ol class="cmxform">
+					<li><label for='groups'>Groups</label> <input type='text' name='groups' id='groups' value='{foreach $lgi.groups g implode=", "}{$g}{/foreach}' class='long' /></li>
+					<li><label for='group'>Default group</label> {select 'group' $lgi.groups $lgi.group}</li>
+				</ol>{*
+				*}{/if}
+				<div style='text-align:right'><input type='submit' name='submit_dfl' id='submit_dfl' value='Save defaults' /></div>
+				<script type="text/javascript"><!--
+				// update list of default groups when updating groups
+				$(document).ready(function() {
+					// TODO
+				});
+				//--></script>
 			</fieldset>
-*}
 
 			<fieldset class="collapsible uncollapsed"><legend>LGI credentials</legend>
 				<div>It is possible to do computations from your computer directly,

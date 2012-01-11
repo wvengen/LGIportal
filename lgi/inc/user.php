@@ -144,6 +144,10 @@ class LGIUser {
 			lgi_mysql_query("DELETE FROM %t(usergroups) WHERE `usercertid`='%%'", $usercertid);
 			foreach ($certgroups as $g)
 				lgi_mysql_query("INSERT INTO %t(usergroups) SET `usercertid`='%%', `name`='%%'", $usercertid, $g);
+		} else {
+			// when any group can be chosen, pre-fill database with username and admin as group
+			lgi_mysql_query("INSERT IGNORE INTO %t(usergroups) SET `usercertid`='%%', `name`='%%'", $usercertid, $this->userid);
+			lgi_mysql_query("INSERT IGNORE INTO %t(usergroups) SET `usercertid`='%%', `name`='admin'", $usercertid);
 		}
 		// and projects
 		lgi_mysql_query("DELETE FROM %t(userprojects) WHERE `usercertid`='%%'", $usercertid);
@@ -186,6 +190,19 @@ class LGIUser {
 			lgi_mysql_fetch_session("SELECT GROUP_CONCAT(`name`) AS `projects` FROM %t(userprojects) AS p, %t(usercerts) AS c WHERE p.`usercertid`=c.`id` AND c.`user`='%%'", $this->userid);
 		return explode(',', $_SESSION['projects']);	
 	}
+	
+	/** Sets the user's projects.
+	 * 
+	 * Only succeeds when fixedgroups is false for this user.
+	 */
+	function set_groups($groups) {
+		if ($this->get_fixedgroups())
+			throw new LGIPortalException("Cannot change groups for this user, certificate does not allow it.");
+		lgi_mysql_query("DELETE FROM %t(usergroups) WHERE `usercertid`=(SELECT `id` FROM %t(usercerts) WHERE `user`='%%')", $this->userid);
+		foreach ($groups as $g)
+			lgi_mysql_query("INSERT INTO %t(usergroups) SET `usercertid`=(SELECT `id` FROM %t(usercerts) WHERE `user`='%%'), `name`='%%'", $this->userid, $g);
+		$_SESSION['groups'] = implode(',', $groups);
+	}
 
 	/** Returns an array with the user's groups.
 	 *
@@ -195,6 +212,16 @@ class LGIUser {
 		if (!isset($_SESSION['groups']))
 			lgi_mysql_fetch_session("SELECT GROUP_CONCAT(`name`) AS `groups` FROM %t(usergroups) AS p, %t(usercerts) AS c WHERE p.`usercertid`=c.`id` AND c.`user`='%%'", $this->userid);
 		return explode(',', $_SESSION['groups']);
+	}
+	
+	/** Returns whether the user has a set of fixed groups or can choose any.
+	 * 
+	 * This is cached in the session.
+	 */
+	function get_fixedgroups() {
+		if (!isset($_SESSION['fixedgroups']))
+			lgi_mysql_fetch_session("SELECT `fixedgroups` AS `fixedgroups` FROM %t(usercerts) WHERE `user`='%%'", $this->userid);
+		return (bool)$_SESSION['fixedgroups'];
 	}
 	
 	/** Returns the user's current group */
@@ -210,6 +237,12 @@ class LGIUser {
 		return $_SESSION['dfl_group'];
 	}
 	
+	/** Sets the user's current group */
+	function set_cur_group($group) {
+		lgi_mysql_query("UPDATE %t(usergroups) SET `dfl`=(`name`='%%') WHERE `usercertid`=(SELECT `id` FROM %t(usercerts) WHERE `user`='%%')", $group, $this->userid);
+		$_SESSION['dfl_group'] = $group;
+	}
+	
 	/** Returns the user's current project */
 	function get_cur_project() {
 		if (!isset($_SESSION['dfl_project'])) {
@@ -221,6 +254,17 @@ class LGIUser {
 				throw new LGIPortalException("No LGI projects for user: check certificate.");
 		}
 		return $_SESSION['dfl_project'];
+	}
+	
+	/** Sets the user's default current project */
+	function set_cur_project($project) {
+		// make sure it is a valid project name
+		$result = lgi_mysql_query("SELECT p.`name` FROM %t(userprojects) AS p, %t(usercerts) AS c WHERE p.`usercertid`=c.`id` AND c.`user`='%%' AND p.`name`='%%' LIMIT 1", $this->userid, $project);
+		if (mysql_num_rows($result)<=0)
+			throw new LGIPortalException("Invalid project");
+		// then update
+		lgi_mysql_query("UPDATE %t(users) SET `dfl_project`='%%' WHERE `name`='%%'", $project, $this->userid);
+		$_SESSION['dfl_project'] = $project;
 	}
 	
 	/** Returns certificate CN.

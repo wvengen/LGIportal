@@ -37,6 +37,7 @@ function lgi_mysql_query() {
 	$fmt = preg_replace('/%t\(([^)]+)\)/', '`'.preg_quote(config('MYSQL_TBLPREFIX','')).'$1`', $fmt);
 	$fmt = preg_replace('/%%/', '%s', $fmt);
 	array_walk($args, create_function('&$v', '$v=mysql_real_escape_string($v);'));
+	//error_log("$fmt | ".var_export($args,true));
 	$result = mysql_query(vsprintf($fmt, $args));
 	if ($result === false) lgi_mysql_throw();
 	return $result;
