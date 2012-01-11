@@ -23,9 +23,10 @@ Setting up the database
 
 2. Create initial tables from db.sql
        
-2. Configure database access details in inc/db.php
-     If you want to put db.php in a more secure place (like outside Apache's
-     document root), configure the new path in lgi.config.php
+2. Configure database access details in lgi.config.php
+     If you want to put database details in a more secure place (outside the web
+     server's document root), require() that file from lgi.config.php instead.
+     This is highly recommended for production installations.
 
 
 Configuring the portal
@@ -35,12 +36,12 @@ Configuring the portal
 
 2. Modify configuration in lgi.config.php
    1. make sure _LGI_ROOT_ matches the subdirectory where the website is installed
-   2. set the LGI project server, project and application(s) to the your LGI setup you're using
+   2. set the LGI project server and application(s) to the your LGI setup you're using
    3. get the LGI project server's CA certificate and make $CA_FILE point to that
    4. shortly review the other options
 
 3. *(optional)* create a directory dwoo_c and give the PHP user full permissions.
-     This can be skipped, then a directory will be created in the system's
+     This can be skipped, in that case a directory will be created in the system's
      temporary directory. Creating dwoo_c manually may increase performance
      and stability.
 
@@ -56,6 +57,10 @@ createuser.php, for example like this:
 
 This creates a user 'john' with password 's3cretpw' that has a key and certificate in
 the directory /home/lgi/cert/.
+When you change the certificate (for example, replacing it with one that has more
+groups), the database should be updated as well. Currently this has to be done by
+removing and adding the user again; in the future this is may be done from an
+administration interface in the portal.
 
 
 Putting LGIportal on the LGI project server
