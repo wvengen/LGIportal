@@ -1,3 +1,7 @@
+2012-xx-xx LGIportal-0.4-dev wvengen
+* clean urls using PATH_INFO
+* new database structure; database needs to be updated
+
 2011-08-30 LGIportal-0.3 wvengen
 * small layout changes
 * make file upload during submit work with PHP versions below 5.3.1
