@@ -66,13 +66,13 @@ CREATE TABLE `userprojects` (
 --
 CREATE TABLE `_meta` (
 	-- which version of the database schema
-	`DBversion`   INTEGER PRIMARY KEY,
+	`db_version`      INTEGER PRIMARY KEY,
 	-- which version of LGIportal
-	`LGIversion`  VARCHAR(20),
+	`portal_version`  VARCHAR(20),
 	-- when the install or upgrade happened
-	`applied`     DATETIME NOT NULL,
+	`applied`         DATETIME NOT NULL,
 	-- optional user note
-	`note`        TEXT
+	`note`            TEXT
 );
-INSERT INTO `_meta` SET `DBversion`=1, `LGIversion`='0.4-dev', `applied`=NOW(), `note`='initial installation';
+INSERT INTO `_meta` SET `db_version`=1, `portal_version`='0.4-dev', `applied`=NOW(), `note`='initial installation';
 

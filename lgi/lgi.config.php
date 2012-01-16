@@ -71,4 +71,8 @@ $LGI_APPROOT=$LGI_ROOT.'/index.php';
 /** Default page to show after login */
 $LGI_DEFAULTPAGE='jobs';
 
+/** Version of this LGIportal */
+$LGI_HEXVERSION=0x040000;
+$LGI_VERSION='0.4';
+
 ?>

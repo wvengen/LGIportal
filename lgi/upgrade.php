@@ -77,6 +77,13 @@ if ($olddbver < 1) {
 			$user = new LGIUser($f[0]);
 			$user->set_certkey($f[1], $f[2]);
 		}
+		// create _meta table
+		lgi_mysql_query("CREATE TABLE `_meta` ("
+		               ."  `db_version`     INTEGER PRIMARY KEY,"
+		               ."  `portal_version` VARCHAR(20),"
+		               ."  `applied`        DATETIME NOT NULL,"
+		               ."  `note`           TEXT"
+		               .")");
 		// migration successful, delete old tables
 		lgi_mysql_query("DROP TABLE %t(usercertificates)");
 		lgi_mysql_query("DROP TABLE %t(users_old)");
@@ -86,11 +93,20 @@ if ($olddbver < 1) {
 		lgi_mysql_query("DROP TABLE %t(usercerts) IF EXISTS");
 		lgi_mysql_query("DROP TABLE %t(userprojects) IF EXISTS");
 		lgi_mysql_query("DROP TABLE %t(usergroups) IF EXISTS");
+		lgi_mysql_query("DROP TABLE %t(_meta) IF EXISTS");
 		lgi_mysql_query("RENAME TABLE %t(users_old) TO %t(users)");
 		throw $e;
 	}
 }
 
+
+// register this upgrade in the _meta table
+if (config('LGI_VERSION', null)!==null)
+	lgi_mysql_query("INSERT INTO %t(_meta) SET `db_version`=%s, `portal_version`='%s', `applied`=NOW(), `note`='by upgrade script (md5=%s)'", config('LGI_VERSION'), (int)$newdbver, md5_file(__FILE__));
+else
+	lgi_mysql_query("INSERT INTO %t(_meta) SET `db_version`=%s, `applied`=NOW(), `note`='by upgrade script (md5=%s)'", (int)$newdbver, md5_file(__FILE__));
+
+print("(upgrade succesfull!)\n");
 
 // done!
 exit(0);
@@ -101,7 +117,7 @@ function lgi_get_db_version() {
 	$r = lgi_mysql_query("SHOW TABLES");
 	while ($f=mysql_fetch_array($r)) {
 		if ($f[0]==config('MYSQL_TBLPREFIX', '').'_meta') {
-			$r = lgi_mysql_query("SELECT `DBversion` FROM %t(_meta) ORDER BY `DBversion` DESC LIMIT 1");
+			$r = lgi_mysql_query("SELECT `db_version` FROM %t(_meta) ORDER BY `db_version` DESC LIMIT 1");
 			$f = mysql_fetch_array($r);
 			return (int)$f[0];
 		}
