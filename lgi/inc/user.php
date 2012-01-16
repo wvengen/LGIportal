@@ -13,7 +13,8 @@ require_once('inc/db.php');
 /**
  * Create a password hash.
  *
- * Currently uses SHA-512, but this may change.
+ * Uses {@link crypt() crypt()}, but tries to select a strong mechanism
+ * when no salt is supplied.
  *
  * @see http://stackoverflow.com/questions/1581610/how-can-i-store-my-users-passwords-safely
  * @see http://stackoverflow.com/questions/401656/secure-hash-and-salt-for-php-passwords
@@ -24,16 +25,39 @@ require_once('inc/db.php');
  * @param string $salt hex salt to use, or omit to generate random 64-bit number
  * @return string password hash in modular crypt format
  */
-function hash_password($password, $salt=NULL) {
-	if ($salt==NULL) {
-		// no salt given, generate random
-		$salt = substr(sha1(mt_rand()),0,16);
-	} elseif ($salt[0]=='$') {
-		// salt is password hash, extract salt
+function hash_password($password, $salt=null) {
+	// support checking old-style password
+	if (strncmp($salt, '$LGIportal_old_1$', 17)==0) {
+		if (!function_exists('hash'))
+			throw new LGIPortalException('Missing hash extension for old-style password hash');
 		$salt = explode('$',$salt);
-		$salt = $salt[2];
-	} // otherwise use salt as-is
-	return '$6$'.$salt.'$'.hash('sha512', $salt.':'.$password);
+		return '$LGIportal_old_1$'.$salt[2].'$'.hash('sha512', $password.$salt[2]);
+	}
+	// just use crypt when salt given
+	if ($salt!==null)
+		return crypt($password, $salt);
+	// find available mechanism
+	if (CRYPT_SHA512==1) {
+		$saltlen = 16;
+		$saltchars = null; // all
+		$saltprefix = '$6$';
+	} elseif (CRYPT_SHA256==1) {
+		$saltlen = 16;
+		$saltchars = null; // all
+		$saltprefix = '$5$';
+	} elseif (CRYPT_BLOWFISH==1) {
+		$saltlen = 22;
+		$saltchars = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+		$saltprefix = '$2a$07$';
+	// no suitable mechanism found
+	} else {
+		throw new LGIPortalException("Crypt does not support SHA512, SHA256 or Blowfish.");
+	}
+	// generate salt and return crypted password
+	$salt = '';
+	for ($i=0;$i<$saltlen;$i++)
+		$salt .= is_null($saltchars) ? chr(mt_rand(0x20,256)) : $saltchars[mt_rand(0,strlen($saltchars))];
+	return crypt($password, $saltprefix.$salt);
 }
 
 
