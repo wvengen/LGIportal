@@ -4,7 +4,6 @@
 --
 -- --
 
-
 --
 -- users and their properties
 --
@@ -61,4 +60,19 @@ CREATE TABLE `userprojects` (
 	`name`         VARCHAR(20),
 	PRIMARY KEY(`usercertid`, `name`)
 );
+
+--
+-- table describing the database schema version and upgrades
+--
+CREATE TABLE `_meta` (
+	-- which version of the database schema
+	`DBversion`   INTEGER PRIMARY KEY,
+	-- which version of LGIportal
+	`LGIversion`  VARCHAR(20),
+	-- when the install or upgrade happened
+	`applied`     DATETIME NOT NULL,
+	-- optional user note
+	`note`        TEXT
+);
+INSERT INTO `_meta` SET `DBversion`=1, `LGIversion`='0.4-dev', `applied`=NOW(), `note`='initial installation';
 
