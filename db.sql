@@ -12,7 +12,7 @@ CREATE TABLE `users` (
 	-- default project
 	`dfl_project`  VARCHAR(127),
 	-- local password
-	`passwd_hash`  VARCHAR(150),
+	`passwd_hash`  VARCHAR(150)
 );
 
 --
@@ -20,11 +20,11 @@ CREATE TABLE `users` (
 --
 CREATE TABLE `auth_simplesamlphp` (
 	-- local username
-	`user`         VARCHAR(20) REFERENCES `users`(`name`),
+	`user`         VARCHAR(20) NOT NULL REFERENCES `users`(`name`),
 	-- external user id, for example the eduPersonPrincipalName (aka eppn)
 	`authid`       VARCHAR(255) PRIMARY KEY,
 	-- whether this user can login or no
-	`enabled`      BOOLEAN DEFAULT FALSE
+	`enabled`      BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 --
@@ -57,7 +57,7 @@ CREATE TABLE `usergroups` (
 	`usercertid`   INTEGER REFERENCES `usercerts`(`id`),
 	`name`         VARCHAR(20),
 	-- whether this group is part of the user's default groups
-	`dfl`          BOOLEAN DEFAULT FALSE,
+	`dfl`          BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY(`usercertid`, `name`)
 );
 
