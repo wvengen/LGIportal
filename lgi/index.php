@@ -11,25 +11,24 @@
 require_once(dirname(__FILE__).'/inc/common.php');
 require_once('inc/sessions.php');
 
-// require a login for everything
-$page = null;
-session_start();
-if(checkValidSession())
-{
-	// path info: appended to script: index.php/foo will return foo
-        $page = trim(@$_SERVER['PATH_INFO']);
-}
-else
-{
-	// login page
-	$page = '/login';
-}
+
+// path info: appended to script: index.php/foo will return foo
+$page = trim(@$_SERVER['PATH_INFO']);
 
 // validate page
+global $argv;
 $argv = explode('/', $page);
 if ($argv[0]!='') throw new LGIPortalException("Internal error: path_info does not start with /.");
 array_shift($argv);
 $page = $argv[0];
+
+// require login for everything
+session_start();
+if (!checkValidSession() && $page!='login') {
+	$page = 'login';
+	$argv = array($page);
+}
+
 
 // arguments are in argv
 define('LGI_PORTAL', 1);

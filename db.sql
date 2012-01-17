@@ -12,8 +12,9 @@ CREATE TABLE `users` (
 	-- default project
 	`dfl_project`  VARCHAR(127),
 	-- local password
-	`passwd_hash`  VARCHAR(150)
-	-- any other authentication mechanisms can add fields here
+	`passwd_hash`  VARCHAR(150),
+	-- simplesamlphp identifier
+	`simplesamlphp_name` VARCHAR(150)
 );
 
 

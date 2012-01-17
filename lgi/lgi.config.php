@@ -54,6 +54,13 @@ $MYSQL_DBNAME='lgi';
 /** Table prefix to use (leave empty unless required) */
 $MYSQL_TBLPREFIX='';
 
+/** SimpleSAMLphp
+ *
+ * TODO explain
+ */
+$SIMPLESAMLPHP_ROOT='/home/wvengen/wrk/oauth2lib/simplesamlphp';
+$SIMPLESAMLPHP_ATTR_USER='eppn';
+
 
 /*
  * You probably won't need to change the following settings.
@@ -71,7 +78,7 @@ $LGI_APPROOT=$LGI_ROOT.'/index.php';
 /** Default page to show after login */
 $LGI_DEFAULTPAGE='jobs';
 
-/** Version of this LGIportal */
+/** Version of LGIportal */
 $LGI_HEXVERSION=0x040000;
 $LGI_VERSION='0.4';
 
