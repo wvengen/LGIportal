@@ -77,8 +77,18 @@ virtual host, access with and without certificates should be allowed.
 
 Please note that not all browsers will be able to use optional client certificates,
 like some versions of Internet Explorer and Safari on the Mac. These browsers will
-then only be able to use the LGIportal, not the basic_interface.
+then only be able to use the LGIportal, not the basic\_interface.
 
+
+Upgrading LGIportal
+-------------------
+
+Upgrading LGIportal is as simple as replacing the web public files, and upgrading
+the database if there were any changes to its structure.
+
+Database upgrades are taken care of by the script `upgrade.php`. Database
+downgrading (for reverting to a previous version) is not supported, so make
+sure to backup the database before upgrading.
 
 
 [LGI]: http://gliteui.wks.gorlaeus.net/LGI/

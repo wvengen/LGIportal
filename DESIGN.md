@@ -15,10 +15,9 @@ LGIportal source code overview
      * **dwoo.php** - template functionality, wraps Dwoo
      * **errors.php** - error handling
      * **jobs.php** - for communication with LGI project server, wraps LGIClient
-     * **login.php** - user account functions
+     * **user.php** - user account functions, including login
      * **sessions.php** - session handling
-     * **db.php** - default database configuration file, referenced by
-                    lgi.config.php
+     * **db.php** - database handling
 
 All pages are accessed using index.php. PATH\_INFO is used to have clean URLs. In
 index.php, PATH\_INFO is parsed into $argv, which is accessible to all pages. The
@@ -30,24 +29,33 @@ Authentication
 ==============
 
 The system implements a form based user login. The username and hashed
-passwords are stored in a [MySQL][] database. Now we use SHA512 hashing with
-salt to store password. This can be easily changed. Username and password are
-compared against the data in database for authenticating a user. When a user is
-authenticated, a new session is created for that user. Further activities of
-user uses this session. Application expects an SSL connection between server
-and client.
+passwords are stored in a [MySQL][] database (using the [modular crypt
+format][]). Further activities of user uses this session. The portal expects an
+SSL connection between server and client.
 
 While there has been an option for http-digest authentication in LGIportal,
 this has been removed from the current version because of maintenance issues.
+
+Authentication using [SimpleSAMLphp][] is on the roadmap, which would enable
+SAML single sign-on.
 
 
 Database
 ========
 
-(TODO)
+All information is stored in a [MySQL][] database, except the LGI key and
+certificate files, which are stored on the web server (though these should
+_not_ be accessible to the web server!).
+
+Each user has a single LGI key and certificate, referenced from the table
+`usercerts`. When the certificate is imported into the database, it is
+parsed and the relevant properties are stored the tables `usergroups` and
+`userprojects`.
 
 
 [Dwoo]: http://www.dwoo.org/
 [MySQL]: http://www.mysql.org/
 [LGI]: http://gliteui.wks.gorlaeus.net/LGI/
+[modular crypt format]: http://packages.python.org/passlib/modular_crypt_format.html
+[SimpleSAMLphp]: http://simplesamlphp.org/
 
