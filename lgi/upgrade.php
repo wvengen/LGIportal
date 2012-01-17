@@ -84,6 +84,12 @@ if ($olddbver < 1) {
 			$user = new LGIUser($f[0]);
 			$user->set_certkey($f[1], $f[2]);
 		}
+		// create new simplesamlphp auth table
+		lgi_mysql_query("CREATE TABLE `auth_simplesamlphp` ("
+		               ."  `user`         VARCHAR(20) NOT NULL REFERENCES `users`(`name`),"
+		               ."  `authid`       VARCHAR(255) PRIMARY KEY,"
+		               ."  `enabled`      BOOLEAN NOT NULL DEFAULT FALSE"
+		               .")");
 		// create _meta table
 		lgi_mysql_query("CREATE TABLE `_meta` ("
 		               ."  `db_version`     INTEGER PRIMARY KEY,"
@@ -100,6 +106,7 @@ if ($olddbver < 1) {
 		lgi_mysql_query("DROP TABLE %t(usercerts) IF EXISTS");
 		lgi_mysql_query("DROP TABLE %t(userprojects) IF EXISTS");
 		lgi_mysql_query("DROP TABLE %t(usergroups) IF EXISTS");
+		lgi_mysql_query("DROP TABLE %t(auth_simplesamlphp) IF EXISTS");
 		lgi_mysql_query("DROP TABLE %t(_meta) IF EXISTS");
 		lgi_mysql_query("RENAME TABLE %t(users_old) TO %t(users)");
 		throw $e;
