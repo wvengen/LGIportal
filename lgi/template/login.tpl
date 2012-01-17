@@ -4,9 +4,7 @@
 {if $method!='local'}
 			<p>Login using
 				<a href="{$approot}/login/feide-openidp">Feide OpenIdp</a>,
-				<a href="{$approot}/login/google">Google</a>,
-				<a href="{$approot}/login/facebook">Facebook</a>,
-				<a href="{$approot}/login/nikhef">Nikhef</a> or
+				<a href="{$approot}/login/twitter">Twitter</a>,
 				<a href="{$approot}/login/idpdisco">another institution</a>.
 			</p>
 			<div>Or with a local account:</div>

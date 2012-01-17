@@ -13,10 +13,19 @@ CREATE TABLE `users` (
 	`dfl_project`  VARCHAR(127),
 	-- local password
 	`passwd_hash`  VARCHAR(150),
-	-- simplesamlphp identifier
-	`simplesamlphp_name` VARCHAR(150)
 );
 
+--
+-- SimpleSAMLphp ids for user
+--
+CREATE TABLE `auth_simplesamlphp` (
+	-- local username
+	`user`         VARCHAR(20) REFERENCES `users`(`name`),
+	-- external user id, for example the eduPersonPrincipalName (aka eppn)
+	`authid`       VARCHAR(255) PRIMARY KEY,
+	-- whether this user can login or no
+	`enabled`      BOOLEAN DEFAULT FALSE
+);
 
 --
 -- users' LGI credentials

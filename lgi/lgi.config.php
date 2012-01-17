@@ -54,17 +54,34 @@ $MYSQL_DBNAME='lgi';
 /** Table prefix to use (leave empty unless required) */
 $MYSQL_TBLPREFIX='';
 
-/** SimpleSAMLphp
+/** SimpleSAMLphp installation location (optional).
  *
- * TODO explain
+ * To use other authentication mechanisms than a local username/password
+ * combination, SimpleSAMLphp can be used. Please see INSTALL.md for
+ * more information.
+ *
+ * @see http://www.simplesamlphp.org/
+ *
+ * This variable should point to the full codebase, not just its web root. That
+ * means that the file $SIMPLESAMLPHP_DIR/lib/_autoload.php should exist.
  */
-$SIMPLESAMLPHP_ROOT='/home/wvengen/wrk/oauth2lib/simplesamlphp';
-$SIMPLESAMLPHP_ATTR_USER='eppn';
+$SIMPLESAMLPHP_DIR='/home/wvengen/wrk/oauth2lib/simplesamlphp';
 
 
 /*
  * You probably won't need to change the following settings.
  */
+
+/** SimpleSAMLphp attributes for user identification.
+ *
+ * The first non-null attribute of this array will be looked up in the
+ * authid field of the auth_simplesamlphp table.
+ */
+$SIMPLESAMLPHP_ATTR_USER=array(
+	'urn:mace:dir:attribute-def:eduPersonPrincipalName',
+	'eduPersonPrincipalName',
+	'twitter_screen_n_realm',
+);
 
 /** File system location where this application is installed. */
 $LGI_PREFIX=dirname(__FILE__);
@@ -79,7 +96,8 @@ $LGI_APPROOT=$LGI_ROOT.'/index.php';
 $LGI_DEFAULTPAGE='jobs';
 
 /** Version of LGIportal */
-$LGI_HEXVERSION=0x040000;
 $LGI_VERSION='0.4';
+/** Hexadecimal version of LGIportal (useful to check version in code) */
+$LGI_HEXVERSION=0x040000;
 
 ?>

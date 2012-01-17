@@ -23,27 +23,38 @@ $password = @$_POST['password'];
 if (!is_null($method) && $method!='local')
 {
 	// try to load SimpleSAMLphp first
-	$sspinclude = config('SIMPLESAMLPHP_ROOT').'/lib/_autoload.php';
+	$sspinclude = config('SIMPLESAMLPHP_DIR').'/lib/_autoload.php';
 	if (!is_readable($sspinclude))
 		throw new LGIPortalException('External authentication requested but no SimpleSAMLphp configured.');
 	require_once($sspinclude);
 	// and authenticate or redirect
 	$as = new SimpleSAML_Auth_Simple($method); // TODO check what characters are allowed in $method!
 	if ($as->isAuthenticated()) {
-		// authenticate and redirect to frontpage
+		// get user id from one of the attributes
 		$attrs = $as->getAttributes();
-		$suser = @$attrs[config('SIMPLESAMLPHP_ATTR_USER', 'eppn')];
-		if (is_null($suser))
-			throw new LGIPortalException('External authentication incorrectly configured (empty user).');
-		$res = lgi_mysql_query("SELECT `name` FROM %t(users) WHERE `simplesamlphp_user`='%s'", $suser);
+		$suser = null;
+		foreach (config('SIMPLESAMLPHP_ATTR_USER',array()) as $a) {
+			if (array_key_exists($a, $attrs) && !is_null($attrs[$a])) {
+				$suser = $attrs[$a];
+				if (!is_array($suser)) break;
+				if (count($suser)>1)
+					user_error('Multiple users returned for authsource '.$method.'; using first one.');
+				$suser = $suser[0];
+			}
+		}
+		if ($suser===null)
+			throw new LGIPortalException('External authentication incorrectly configured (no user attribute).');
+		$res = lgi_mysql_query("SELECT `user`,`enabled` FROM %t(auth_simplesamlphp) WHERE `authid`='%s'", $suser);
 		$num = mysql_num_rows($res);
 		if (!$res || $num<1)
-			throw new LGIPortalException('User '.$suser.' has no access to this portal, sorry.');
+			throw new LGIPortalException('User '.$suser.' is not known to this portal, sorry.');
 		if ($num>1)
 			throw new LGIPortalException('Multiple portal users found for this id, contact your portal administrator.');
 		$f = mysql_fetch_array($res);
+		if (!$f[1])
+			throw new LGIPortalException('User '.$suser.' has no access to this portal, sorry.');
 		setValidSession($f[0]);
-		$_SESSION['simplesamlphp_auth'] = true; // for logout
+		$_SESSION['simplesamlphp_authsource'] = $method; // for logout
 		http_redirect(config('LGI_APPROOT').'/'.config('LGI_DEFAULTPAGE'));
 	} else {
 		// redirect to SimpleSAMLphp for authentication
@@ -57,7 +68,7 @@ elseif (is_null($password) || is_null($username))
 elseif(LGIUser::password_check_user($username, $password))
 {
 	setValidSession($username);
-	$_SESSION['simplesamlphp_auth'] = false;
+	$_SESSION['simplesamlphp_authsource'] = false;
 	// user has logged in, go to default page
 	http_redirect(config('LGI_APPROOT').'/'.config('LGI_DEFAULTPAGE'));
 }
