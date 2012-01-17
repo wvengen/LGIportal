@@ -20,7 +20,7 @@ if (@$_SERVER['REQUEST_URI']) exit(0);
 
 // handle help or missing options
 if (in_array('-h', $argv) || in_array('--help', $argv)) {
-	print("Usage: $argv[0] [-h]\n");
+	print("Usage: $argv[0] [-h] [-y]\n");
 	print("Run this tool after updating LGIportal to upgrade the database.\n");
 	exit(1);
 }
@@ -36,6 +36,13 @@ if ($olddbver > $newdbver) {
 	exit(1);
 }
 print("(database upgrade from schema version $olddbver to $newdbver)\n");
+
+if (in_array('-y', $argv) || in_array('--yes', $argv)) {
+	print("Before upgrading it is strongly recommended to BACKUP YOUR DATABASE!\n");
+	print("In case of any errors, you can then restore the old version. Upgrading may not be reversible.\n");
+	print("Then to do the upgrade, specify the -y option.\n");
+	exit(0);
+}
 
 
 // LGIportal 0.4 saw a complete restructuring of the database
