@@ -36,7 +36,7 @@ if ($authsource && $authsource!='local')
 		// First step is to authenticate using SimpleSAMLphp
 		$as->requireAuth();
 		exit(0);
-	} else {
+	} else try {
 		// Then we come back here and set the LGIportal session
 		// First figure out what attributes we should look at for this authsource
 		$attrselect = config('SIMPLESAMLPHP_ATTR_USER',array());
@@ -68,6 +68,11 @@ if ($authsource && $authsource!='local')
 			throw new LGIPortalException('User '.$suser.' has no access to this portal, sorry.');
 		setValidSession($f[0], $authsource);
 		http_redirect(config('LGI_APPROOT').'/'.config('LGI_DEFAULTPAGE'));
+		exit(0);
+	} catch(Exception $e) {
+		// go back to login page upon failure
+		pushErrorMessage($e->getMessage());
+		http_redirect(config('LGI_APPROOT').'/login');
 		exit(0);
 	}
 }
