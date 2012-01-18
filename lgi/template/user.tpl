@@ -5,6 +5,7 @@
 		<form action='{$approot}/user' method='POST'>
 			<input type='hidden' name='nonce' value='{$nonce}' />
 
+{if !isset($authsource) || $authsource=='local'}
 			<fieldset class="collapsible uncollapsed"><legend>Password</legend>
 				<ol class="cmxform">
 					<li><label for='pwd_old'>Old password:</label> <input type='password' name='pwd_old' id='pwd_old' /></li>
@@ -13,6 +14,7 @@
 				</ol>
 				<div style='text-align:right'><input type='submit' name='submit_pwd' id='submit_pwd' value='Change password' /></div>
 			</fieldset>
+{/if}
 
 			<fieldset class="collapsible uncollapsed"><legend>Defaults</legend>
 				<ol class="cmxform">

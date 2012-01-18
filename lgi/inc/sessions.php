@@ -22,10 +22,12 @@ function checkValidSession()
 }
 
 /**
- * Clear previous session and sets a new session. Usefull when a user login. The username of user logged in should be passed.
+ * Clear previous session and starts a new session for a logged-in user.
+ *
  * @param string $user username of the user logged in	
+ * @param string $authsource SimpleSAMLphp authentication source used, or 'local'
  */
-function setValidSession($user)
+function setValidSession($user, $authsource)
 {
 	//$user :- expecting a clean username, where it is processed for preventing cross site scripting.
 	session_unset();
@@ -35,6 +37,7 @@ function setValidSession($user)
 	session_start();
 	session_regenerate_id(true);
 	$_SESSION['user']=$user;
+	$_SESSION['authsource']=$authsource;
 	return true;
 }
 

@@ -14,13 +14,13 @@ require_once('inc/errors.php');
 
 
 // if argument was given, the first one is the method
-$method = @$argv[1];
+$authsource = @$argv[1];
 
 $username = strip_tags(@$_REQUEST['name']); // to avoid XSS on display; stored in session later
 $password = @$_POST['password'];
 
 
-if (!is_null($method) && $method!='local')
+if (!is_null($authsource) && $authsource!='local')
 {
 	// try to load SimpleSAMLphp first
 	$sspinclude = config('SIMPLESAMLPHP_DIR').'/lib/_autoload.php';
@@ -28,7 +28,7 @@ if (!is_null($method) && $method!='local')
 		throw new LGIPortalException('External authentication requested but no SimpleSAMLphp configured.');
 	require_once($sspinclude);
 	// and authenticate or redirect
-	$as = new SimpleSAML_Auth_Simple($method); // TODO check what characters are allowed in $method!
+	$as = new SimpleSAML_Auth_Simple($authsource); // TODO check what characters are allowed in $authsource!
 	if ($as->isAuthenticated()) {
 		// get user id from one of the attributes
 		$attrs = $as->getAttributes();
@@ -38,7 +38,7 @@ if (!is_null($method) && $method!='local')
 				$suser = $attrs[$a];
 				if (!is_array($suser)) break;
 				if (count($suser)>1)
-					user_error('Multiple users returned for authsource '.$method.'; using first one.');
+					user_error('Multiple users returned for authsource '.$authsource.'; using first one.');
 				$suser = $suser[0];
 			}
 		}
@@ -53,8 +53,7 @@ if (!is_null($method) && $method!='local')
 		$f = mysql_fetch_array($res);
 		if (!$f[1])
 			throw new LGIPortalException('User '.$suser.' has no access to this portal, sorry.');
-		setValidSession($f[0]);
-		$_SESSION['simplesamlphp_authsource'] = $method; // for logout
+		setValidSession($f[0], $authsource);
 		http_redirect(config('LGI_APPROOT').'/'.config('LGI_DEFAULTPAGE'));
 	} else {
 		// redirect to SimpleSAMLphp for authentication
@@ -63,12 +62,11 @@ if (!is_null($method) && $method!='local')
 }
 elseif (is_null($password) || is_null($username))
 {
-        LGIDwoo::show('login.tpl', array('name'=>$username, 'method'=>$method));
+        LGIDwoo::show('login.tpl', array('name'=>$username, 'authsource'=>$authsource));
 }
 elseif(LGIUser::password_check_user($username, $password))
 {
-	setValidSession($username);
-	$_SESSION['simplesamlphp_authsource'] = false;
+	setValidSession($username, 'local');
 	// user has logged in, go to default page
 	http_redirect(config('LGI_APPROOT').'/'.config('LGI_DEFAULTPAGE'));
 }
@@ -76,7 +74,7 @@ else {
 	// Username or password does not match a valid user. Try again.
 	// TODO prevent brute force attacks
 	pushErrorMessage("Invalid username or password. Try Again.");
-	LGIDwoo::show('login.tpl', array('name'=>$username, 'method'=>$method));
+	LGIDwoo::show('login.tpl', array('name'=>$username, 'authsource'=>$authsource));
 }
 
 ?>

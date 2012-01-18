@@ -1,7 +1,7 @@
 {extends "home_base.tpl"}
 {block "menu"}{/block}
 {block "content"}
-{if $method!='local'}
+{if $authsource!='local'}
 			<p>Login using
 				<a href="{$approot}/login/feide-openidp">Feide OpenIdp</a>,
 				<a href="{$approot}/login/twitter">Twitter</a>,

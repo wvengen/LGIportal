@@ -153,6 +153,7 @@ class LGIDwoo extends Dwoo
 			$lgi['group']       = $user->get_cur_group();
 			$lgi['fixedgroups'] = $user->get_fixedgroups();
 			$lgi['user']        = $user->get_name();     
+			set_dwoo_or_array($data, 'authsource', $_SESSION['authsource']);
 		}
 		set_dwoo_or_array($data, 'lgi', $lgi);
 		# if browser is running on windows or not
