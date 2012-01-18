@@ -21,12 +21,12 @@ Setting up the database
 
 1. Create a MySQL database and create a user with full permissions on that database.
 
-2. Create initial tables from db.sql
+2. Create initial tables from <db.sql>
        
-2. Configure database access details in lgi.config.php
+2. Configure database access details in [lgi.config.php][]
      If you want to put database details in a more secure place (outside the web
-     server's document root), require() that file from lgi.config.php instead.
-     This is highly recommended for production installations.
+     server's document root), `require()` that file from [lgi.config.php][]
+     instead. This is highly recommended for production installations.
 
 
 Configuring the portal
@@ -34,15 +34,15 @@ Configuring the portal
 
 1. Copy the lgi/ folder to the webroot.
 
-2. Modify configuration in lgi.config.php
-   1. make sure _LGI_ROOT_ matches the subdirectory where the website is installed
+2. Modify configuration in [lgi.config.php][]
+   1. make sure `$LGI_ROOT` matches the subdirectory where the website is installed
    2. set the LGI project server and application(s) to the your LGI setup you're using
-   3. get the LGI project server's CA certificate and make $CA_FILE point to that
+   3. get the LGI project server's CA certificate and make `$CA_FILE` point to that
    4. shortly review the other options
 
-3. *(optional)* create a directory dwoo_c and give the PHP user full permissions.
+3. *(optional)* create a directory dwoo\_c and give the PHP user full permissions.
      This can be skipped, in that case a directory will be created in the system's
-     temporary directory. Creating dwoo_c manually may increase performance
+     temporary directory. Creating dwoo\_c manually may increase performance
      and stability.
 
 
@@ -50,7 +50,7 @@ Setting up users
 ----------------
 
 You need a valid LGI certificate and private key. Then use the script
-createuser.php, for example like this:
+<createuser.php>, for example like this:
 
     cd /var/www/lgi/
     php createuser.php john s3cretpw /home/lgi/cert/john.crt /home/lgi/cert/john.key
@@ -88,9 +88,9 @@ Upgrading LGIportal
 Upgrading LGIportal is as simple as replacing the web public files, and upgrading
 the database if there were any changes to its structure.
 
-Database upgrades are taken care of by the script `upgrade.php`. Database
-downgrading (for reverting to a previous version) is not supported, so make
-sure to backup the database before upgrading.
+Database upgrades are taken care of by the script [upgrade.php][lgi/upgrade.php].
+Database downgrading (for reverting to a previous version) is not supported, so
+make sure to backup the database before upgrading.
 
 
 [LGI]: http://gliteui.wks.gorlaeus.net/LGI/
@@ -103,3 +103,5 @@ sure to backup the database before upgrading.
 [Dwoo]: http://dwoo.org/                
 [SSLVerifyClient]: http://httpd.apache.org/docs/current/mod/mod_ssl.html#sslverifyclient
 [AUTHENTICATION]: AUTHENTICATION.md
+[lgi.config.php]: lgi/lgi.config.php
+

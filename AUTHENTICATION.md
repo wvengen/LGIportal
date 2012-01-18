@@ -11,7 +11,7 @@ Both mechanisms can be used at the same time.
 Local users
 -----------
 The easiest way to get started is to use local users (the default when creating
-a new user with `createuser.php`). A local password hash is stored in the
+a new user with [createuser.php][]). A local password hash is stored in the
 database in the `users` table. Users can change their password on the settings
 page.
 
@@ -23,13 +23,13 @@ SimpleSAMLphp. This is a web application that needs to be setup separately from
 LGIportal first, as a service provider (SP). Configure the authentication
 sources that you want to use.
 
-To integrate it with LGIportal, set `$SIMPLESAMLPHP_DIR` in `lgi.config.php` to
-point to the SimpleSAMLphp installation (the full codebase, not just its
+To integrate it with LGIportal, set `$SIMPLESAMLPHP_DIR` in the [lgi config][]
+to point to the SimpleSAMLphp installation (the full codebase, not just its
 web-accessible part; `$SIMPLESAMLPHP_DIR/lib/_autoload.php` must be present).
 
 SimpleSAMLphp returns a list of attributes after successful login. Which one of
 these is used as a user identifier, is configured by `$SIMPLESAMLPHP_ATTR_USER`
-in `lgi.config.php`; the first non-null attribute found for the authsource is
+in the [lgi config][]; the first non-null attribute found for the authsource is
 looked up in the table `auth_simplesamlphp` to obtain the portal username.
 
 To log in using a specific SimpleSAMLphp authentication source (defined in its
@@ -51,7 +51,7 @@ are numerous examples already present in that file. For SAML-based authsources,
 LGIportal expects an [eduPersonPrincipalName][] attribute (or its scoped
 variant). For some other common services like Twitter, Google and Facebook
 some attributes have been defined by default; in other cases you may need
-to update `$SIMPLESAMLPHP_ATTR_USER` in `lgi.config.php`.
+to update `$SIMPLESAMLPHP_ATTR_USER` in the [lgi config][].
 
 Some authsource entries may need some extra attention. To enable Google as
 authentication source, the `openid` module needs to be enabled in SimpleSAMLphp
@@ -90,4 +90,5 @@ LGIportal's local user database.
 
 [SimpleSAMLphp]: http://www.simplesamlphp.org/
 [eduPersonPrincipalName]: http://middleware.internet2.edu/eduperson/
+[lgi config]: lgi/lgi.config.php
 
