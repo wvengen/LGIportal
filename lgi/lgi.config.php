@@ -74,13 +74,22 @@ $SIMPLESAMLPHP_DIR=null;
 
 /** SimpleSAMLphp attributes for user identification.
  *
- * The first non-null attribute of this array will be looked up in the
- * authid field of the auth_simplesamlphp table.
+ * The keys of this array are indices for SimpleSAMLphp authsources. The values
+ * are attribute names. The first non-null matching attribute will be
+ * looked up in the authid field of the auth_simplesamlphp table (for that
+ * authsource).
+ *
+ * If an authsource is not found in this array, '*' is used as a catch-all.
  */
 $SIMPLESAMLPHP_ATTR_USER=array(
-	'urn:mace:dir:attribute-def:eduPersonPrincipalName',
-	'eduPersonPrincipalName',
-	'twitter_screen_n_realm',
+	/* Most common attributes for SAML single sign-on */
+	'*' => array(
+		'urn:mace:dir:attribute-def:eduPersonPrincipalName',
+		'eduPersonPrincipalName',
+	),
+	/* Some well-known online accounts */
+	'twitter'  => array('twitter.name'),
+	'google'   => array('http://axschema.org/contact/email'),
 );
 
 /** File system location where this application is installed. */

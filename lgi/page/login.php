@@ -24,19 +24,29 @@ $sspinclude = config('SIMPLESAMLPHP_DIR','').'/lib/_autoload.php';
 $ssp_exists = is_readable($sspinclude);
 
 
-if (!is_null($authsource) && $authsource!='local')
+if ($authsource && $authsource!='local')
 {
-	// try to load SimpleSAMLphp first
+	// need SimpleSAMLphp now
 	if (!$ssp_exists)
 		throw new LGIPortalException('External authentication requested but no SimpleSAMLphp configured.');
 	require_once($sspinclude);
-	// and authenticate or redirect
+	// User comes here first, is redirected to SimpleSAMLphp, logs in, and is redirected back here.
 	$as = new SimpleSAML_Auth_Simple($authsource); // TODO check what characters are allowed in $authsource!
-	if ($as->isAuthenticated()) {
-		// get user id from one of the attributes
+	if (!$as->isAuthenticated()) {
+		// First step is to authenticate using SimpleSAMLphp
+		$as->requireAuth();
+		exit(0);
+	} else {
+		// Then we come back here and set the LGIportal session
+		// First figure out what attributes we should look at for this authsource
+		$attrselect = config('SIMPLESAMLPHP_ATTR_USER',array());
+		if (array_key_exists($authsource, $attrselect)) $attrselect = $attrselect[$authsource];
+		elseif (array_key_exists('*', $attrselect)) $attrselect = $attrselect['*'];
+		else $attrselect = array();
+		// Find attribute to use as user identifier
 		$attrs = $as->getAttributes();
 		$suser = null;
-		foreach (config('SIMPLESAMLPHP_ATTR_USER',array()) as $a) {
+		foreach ($attrselect as $a) {
 			if (array_key_exists($a, $attrs) && !is_null($attrs[$a])) {
 				$suser = $attrs[$a];
 				if (!is_array($suser)) break;
@@ -47,21 +57,17 @@ if (!is_null($authsource) && $authsource!='local')
 		}
 		if ($suser===null)
 			throw new LGIPortalException('External authentication incorrectly configured (no user attribute).');
-		$res = lgi_mysql_query("SELECT `user`,`enabled` FROM %t(auth_simplesamlphp) WHERE `authid`='%s'", $suser);
+		$res = lgi_mysql_query("SELECT `user`,`enabled` FROM %t(auth_simplesamlphp) WHERE `authid`='%s' AND `authsource`='%s'", $suser, $authsource);
 		$num = mysql_num_rows($res);
 		if (!$res || $num<1)
-			throw new LGIPortalException('User '.$suser.' is not known to this portal, sorry.');
+			throw new LGIPortalException("$authsource user $suser is not known to this portal, sorry.");
 		if ($num>1)
-			throw new LGIPortalException('Multiple portal users found for this id, contact your portal administrator.');
+			throw new LGIPortalException('Multiple portal users match your login, contact your portal administrator.');
 		$f = mysql_fetch_array($res);
 		if (!$f[1])
 			throw new LGIPortalException('User '.$suser.' has no access to this portal, sorry.');
 		setValidSession($f[0], $authsource);
 		http_redirect(config('LGI_APPROOT').'/'.config('LGI_DEFAULTPAGE'));
-		exit(0);
-	} else {
-		// redirect to SimpleSAMLphp for authentication
-		$as->requireAuth();
 		exit(0);
 	}
 }
@@ -84,7 +90,7 @@ else {
 
 LGIDwoo::show('login.tpl', array(
 	'name'=>$username,
-	'authsource'=>$authsource,
+	'authsource'=>$authsource ? $authsource : '',
 	'simplesamlphp_exists'=>$ssp_exists,
 ));
 ?>

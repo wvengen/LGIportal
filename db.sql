@@ -21,10 +21,13 @@ CREATE TABLE `users` (
 CREATE TABLE `auth_simplesamlphp` (
 	-- local username
 	`user`         VARCHAR(20) NOT NULL REFERENCES `users`(`name`),
+	-- SimpleSAMLphp authsource that this authid is valid for
+	`authsource`   VARCHAR(255) NOT NULL,
 	-- external user id, for example the eduPersonPrincipalName (aka eppn)
-	`authid`       VARCHAR(255) PRIMARY KEY,
+	`authid`       VARCHAR(255) NOT NULL,
 	-- whether this user can login or no
-	`enabled`      BOOLEAN NOT NULL DEFAULT FALSE
+	`enabled`      BOOLEAN NOT NULL DEFAULT FALSE,
+	PRIMARY KEY(`authsource`, `authid`)
 );
 
 --

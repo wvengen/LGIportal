@@ -87,8 +87,10 @@ if ($olddbver < 1) {
 		// create new simplesamlphp auth table
 		lgi_mysql_query("CREATE TABLE `auth_simplesamlphp` ("
 		               ."  `user`         VARCHAR(20) NOT NULL REFERENCES `users`(`name`),"
-		               ."  `authid`       VARCHAR(255) PRIMARY KEY,"
-		               ."  `enabled`      BOOLEAN NOT NULL DEFAULT FALSE"
+		               ."  `authsource`   VARCHAR(255) NOT NULL,"
+		               ."  `authid`       VARCHAR(255) NOT NULL,"
+		               ."  `enabled`      BOOLEAN NOT NULL DEFAULT FALSE,"
+		               ."   PRIMARY KEY(`authsource`, `authid`)"
 		               .")");
 		// create _meta table
 		lgi_mysql_query("CREATE TABLE `_meta` ("

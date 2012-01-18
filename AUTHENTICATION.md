@@ -27,14 +27,14 @@ web-accessible part; `$SIMPLESAMLPHP_DIR/lib/_autoload.php` must be present).
 
 SimpleSAMLphp returns a list of attributes after successful login. Which one of
 these is used as a user identifier, is configured by `$SIMPLESAMLPHP_ATTR_USER`
-in `lgi.config.php`; the first non-null attribute found from this list is
+in `lgi.config.php`; the first non-null attribute found for the authsource is
 looked up in the table `auth_simplesamlphp` to obtain the portal username.
 
 To log in using a specific SimpleSAMLphp authentication source (defined in its
 `config/authsources.php`), append the authentication source name to the login
-url. When the LGIportal website is at `http://example.org/lgi/`, the url to
+url. When the LGIportal website is at <http://example.org/lgi/>, the url to
 login using the `my-saml` authsource would become
-`http://example.org/lgi/index.php/login/my-saml`.
+<http://example.org/lgi/index.php/login/my-saml>.
 Please note that `local` can not be used as an authsource name, since that
 is used to do LGIportal's local authentication.
 
