@@ -4,8 +4,8 @@ How to deploy the LGI portal
 Requirements
 ------------
 
-0. An [LGI] deployment, ready to use
-1. [Apache][] webserver
+0. An [LGI] deployment, ready to use.
+1. [Apache][] webserver.
 2. [PHP] 5+ with [MySQL][PHP-MySQL], [Curl][PHP-Curl] and [JSON][PHP-JSON] support.
      PHP 5.2.0 has the JSON module built-in, otherwise you may need to install it
      from PECL: `pecl install json`.
@@ -13,7 +13,7 @@ Requirements
     An installed system or PEAR package is sufficient (LGIportal tries
     to load both Dwoo/dwooAutoload.php or dwoo/dwooAutoload.php,
     whichever succeeds first).
-4. [MySQL][] server
+4. [MySQL][] server.
 
 
 Setting up the database
@@ -21,9 +21,9 @@ Setting up the database
 
 1. Create a MySQL database and create a user with full permissions on that database.
 
-2. Create initial tables from [db.sql][]
+2. Create initial tables from [db.sql][].
        
-2. Configure database access details in [lgi.config.php][]
+2. Configure database access details in [lgi.config.php][].
      If you want to put database details in a more secure place (outside the web
      server's document root), `require()` that file from [lgi.config.php][]
      instead. This is highly recommended for production installations.
@@ -34,7 +34,7 @@ Configuring the portal
 
 1. Copy the lgi/ folder to the webroot.
 
-2. Modify configuration in [lgi.config.php][]
+2. Modify configuration in [lgi.config.php][].
    1. make sure `$LGI_ROOT` matches the subdirectory where the website is installed
    2. set the LGI project server and application(s) to the your LGI setup you're using
    3. get the LGI project server's CA certificate and make `$CA_FILE` point to that
@@ -62,7 +62,7 @@ groups), the database should be updated as well. Currently this has to be done b
 removing and adding the user again; in the future this is may be done from an
 administration interface in the portal.
 
-For more advanced authentication requirement, see [AUTHENTICATION][]
+For more advanced authentication requirements, see [AUTHENTICATION][]
 
 
 Putting LGIportal on the LGI project server
