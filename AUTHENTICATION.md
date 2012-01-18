@@ -59,36 +59,43 @@ by creating the (empty) file `modules/openid/enable` in the SimpleSAMLphp
 codebase. Then email attribute should be requested from `authsources.php`:
 
 ```php
-    // Authsource that authenticates against Google
-    'google' => array(
-      'openid:OpenIDConsumer',
-      'target' => 'https://www.google.com/accounts/o8/id',
-      'attributes.ax_required' => array('http://axschema.org/contact/email'),
-    ),
-
+<?php
+$config = array(
+  // Authsource that authenticates against Google
+  'google' => array(
+    'openid:OpenIDConsumer',
+    'target' => 'https://www.google.com/accounts/o8/id',
+    'attributes.ax_required' => array('http://axschema.org/contact/email'),
+  ),
+);
+?>
 ```
 
 Just because it's possible: here is an authsource that authenticates against
 LGIportal's local user database.
 
 ```php
-    // at beginning of authsources.php read LGI database config
-    global $MYSQL_SERVER, $MYSQL_DBNAME, $MYSQL_USER, $MYSQL_PASSWORD;
-    include_once('/path/to/lgi/lgi.config.php');
+<?php
+// at beginning of authsources.php read LGI database config
+global $MYSQL_SERVER, $MYSQL_DBNAME, $MYSQL_USER, $MYSQL_PASSWORD;
+include_once('/path/to/lgi/lgi.config.php');
 
-    $config = array(
-      // Local auth test using MySQL's crypt() (does not work on Windows) :)
-      'local2' => array(
-        'sqlauth:SQL',
-        'dsn' => 'mysql:host='.$MYSQL_SERVER.';dbname='.$MYSQL_DBNAME,
-        'username' => $MYSQL_USER,
-        'password' => $MYSQL_PASSWORD,
-        'query' => 'SELECT CONCAT(`name`,"@LGIportal") FROM `users` WHERE `name`=:username AND `passwd_hash`=ENCRYPT(:password,`passwd_hash`)',
-    );
+$config = array(
+  // Local auth test using MySQL's crypt() (does not work on Windows) :)
+  'local2' => array(
+    'sqlauth:SQL',
+    'dsn' => 'mysql:host='.$MYSQL_SERVER.';dbname='.$MYSQL_DBNAME,
+    'username' => $MYSQL_USER,
+    'password' => $MYSQL_PASSWORD,
+    'query' => 'SELECT CONCAT(`name`,"@LGIportal") AS `eduPersonPrincipalName` FROM `users` WHERE `name`=:username AND `passwd_hash`=ENCRYPT(:password,`passwd_hash`)',
+  ),
+);
+?>
 ```
 
 
 [SimpleSAMLphp]: http://www.simplesamlphp.org/
 [eduPersonPrincipalName]: http://middleware.internet2.edu/eduperson/
 [lgi config]: lgi/lgi.config.php
+[createuser.php]: lgi/createuser.php
 
