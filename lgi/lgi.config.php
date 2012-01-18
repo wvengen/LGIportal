@@ -57,7 +57,7 @@ $MYSQL_TBLPREFIX='';
 /** SimpleSAMLphp installation location (optional).
  *
  * To use other authentication mechanisms than a local username/password
- * combination, SimpleSAMLphp can be used. Please see INSTALL.md for
+ * combination, SimpleSAMLphp can be used. Please see AUTHENTICATION.md for
  * more information.
  *
  * @see http://www.simplesamlphp.org/
@@ -65,7 +65,7 @@ $MYSQL_TBLPREFIX='';
  * This variable should point to the full codebase, not just its web root. That
  * means that the file $SIMPLESAMLPHP_DIR/lib/_autoload.php should exist.
  */
-$SIMPLESAMLPHP_DIR='/home/wvengen/wrk/oauth2lib/simplesamlphp';
+$SIMPLESAMLPHP_DIR=null;
 
 
 /*

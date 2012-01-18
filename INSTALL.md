@@ -62,6 +62,8 @@ groups), the database should be updated as well. Currently this has to be done b
 removing and adding the user again; in the future this is may be done from an
 administration interface in the portal.
 
+For more advanced authentication requirement, see [AUTHENTICATION][]
+
 
 Putting LGIportal on the LGI project server
 -------------------------------------------
@@ -100,3 +102,4 @@ sure to backup the database before upgrading.
 [MySQL]: http://www.mysql.org/
 [Dwoo]: http://dwoo.org/                
 [SSLVerifyClient]: http://httpd.apache.org/docs/current/mod/mod_ssl.html#sslverifyclient
+[AUTHENTICATION]: AUTHENTICATION.md
