@@ -19,12 +19,15 @@ $authsource = @$argv[1];
 $username = strip_tags(@$_REQUEST['name']); // to avoid XSS on display; stored in session later
 $password = @$_POST['password'];
 
+// find out whether SimpleSAMLphp is installed or not
+$sspinclude = config('SIMPLESAMLPHP_DIR','').'/lib/_autoload.php';
+$ssp_exists = is_readable($sspinclude);
+
 
 if (!is_null($authsource) && $authsource!='local')
 {
 	// try to load SimpleSAMLphp first
-	$sspinclude = config('SIMPLESAMLPHP_DIR').'/lib/_autoload.php';
-	if (!is_readable($sspinclude))
+	if (!$ssp_exists)
 		throw new LGIPortalException('External authentication requested but no SimpleSAMLphp configured.');
 	require_once($sspinclude);
 	// and authenticate or redirect
@@ -55,26 +58,33 @@ if (!is_null($authsource) && $authsource!='local')
 			throw new LGIPortalException('User '.$suser.' has no access to this portal, sorry.');
 		setValidSession($f[0], $authsource);
 		http_redirect(config('LGI_APPROOT').'/'.config('LGI_DEFAULTPAGE'));
+		exit(0);
 	} else {
 		// redirect to SimpleSAMLphp for authentication
 		$as->requireAuth();
+		exit(0);
 	}
 }
 elseif (is_null($password) || is_null($username))
 {
-        LGIDwoo::show('login.tpl', array('name'=>$username, 'authsource'=>$authsource));
+	/* show page */
 }
 elseif(LGIUser::password_check_user($username, $password))
 {
 	setValidSession($username, 'local');
 	// user has logged in, go to default page
 	http_redirect(config('LGI_APPROOT').'/'.config('LGI_DEFAULTPAGE'));
+	exit(0);
 }
 else {
 	// Username or password does not match a valid user. Try again.
 	// TODO prevent brute force attacks
 	pushErrorMessage("Invalid username or password. Try Again.");
-	LGIDwoo::show('login.tpl', array('name'=>$username, 'authsource'=>$authsource));
 }
 
+LGIDwoo::show('login.tpl', array(
+	'name'=>$username,
+	'authsource'=>$authsource,
+	'simplesamlphp_exists'=>$ssp_exists,
+));
 ?>
