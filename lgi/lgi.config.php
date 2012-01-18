@@ -90,6 +90,7 @@ $SIMPLESAMLPHP_ATTR_USER=array(
 	/* Some well-known online accounts */
 	'twitter'  => array('twitter.name'),
 	'google'   => array('http://axschema.org/contact/email'),
+	'facebook' => array('facebook_user'),
 );
 
 /** File system location where this application is installed. */
