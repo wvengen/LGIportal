@@ -1,6 +1,8 @@
 2012-xx-xx LGIportal-0.4-dev wvengen
 * clean urls using PATH_INFO
-* new database structure; database needs to be updated using update script
+* group functionality for collaboration
+* external authentication using SimpleSAMLphp
+* new database structure; database needs to be updated using upgrade script
 
 2011-08-30 LGIportal-0.3 wvengen
 * small layout changes
