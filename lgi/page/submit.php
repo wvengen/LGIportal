@@ -17,14 +17,21 @@ if(!isset($_POST['submit']))
 	//display form
 	$dwoo = new LGIDwoo();
 	$data = new Dwoo_Data();
+	$user = new LGIUser();
 
 	// set nonce to avoid cross-site request forgery (see generateNonce)
 	$data->assign('nonce', generateNonce());
 	$data->assign('applications', config_array('LGI_APPLICATION', null));
+	// read access for current group, but not for the user or admin since he has it already
+	$readxs = @$_REQUEST['read_access'];
+	if ($readxs===null) {
+		$readxs = $user->get_cur_group();
+		if ($readxs=='admin' || $readxs == $user->get_name()) $readxs='';
+	}
 	$data->assign(array(
 	    'input' => @$_REQUEST['input'],
 	    'application' => @$_REQUEST['application'],
-	    'read_access' => @$_REQUEST['read_access'],
+	    'read_access' => $readxs,
 	    'write_access' => @$_REQUEST['write_access'],
 	));
 	$dwoo->output('submit.tpl', $data);
