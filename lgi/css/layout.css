@@ -187,6 +187,15 @@ td.spacer, th.spacer {
 .nonimp {
 	color: #777;
 }
+/* jquery.MultiFile delete image */
+a.MultiFile-remove {
+	font-size: 0;
+	display: block;
+	float: left;
+	width: 16px; height: 16px;
+	background: url('../icons/action-delete_16.png');
+	position: relative; top: 3px;
+}
 
 /*
  * Forms
