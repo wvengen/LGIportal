@@ -181,7 +181,7 @@
         // 2008-Apr-29: New customizable naming convention (see url below)
         // http://groups.google.com/group/jquery-dev/browse_frm/thread/765c73e41b34f924#
         slave.name = String(MultiFile.namePattern
-         /*master name*/.replace(/\$name/gi,$(MultiFile.clone).attr('name')+'_'+slave_count)
+         /*master name*/.replace(/\$name/gi,$(MultiFile.clone).attr('name'))
          /*master id  */.replace(/\$id/gi,  $(MultiFile.clone).attr('id'))
          /*group count*/.replace(/\$g/gi,   group_count)//(group_count>0?group_count:''))
          /*slave count*/.replace(/\$i/gi,   slave_count)//(slave_count>0?slave_count:''))
@@ -474,7 +474,7 @@
 		
 		// STRING: collection lets you show messages in different languages
 		STRING: {
-      remove: '<img src="icons/action-delete_16.png" height="16" width="16" alt="remove"/>',
+			remove:'x',
 			denied:'You cannot select a $ext file.\nTry again...',
 			file:'$file',
 			selected:'File selected: $file',

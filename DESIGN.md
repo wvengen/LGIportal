@@ -53,9 +53,21 @@ parsed and the relevant properties are stored the tables `usergroups` and
 `userprojects`.
 
 
+Imported code
+=============
+
+* [jQuery][] - lgi/js/jquery.js
+  * [jQuery.collapse][] - lgi/js/jquery.collapsible.js
+  * [jQuery.MultiFile][] - lgi/js/jquery.MultiFile.js
+
+
 [Dwoo]: http://www.dwoo.org/
 [MySQL]: http://www.mysql.org/
 [LGI]: http://gliteui.wks.gorlaeus.net/LGI/
 [modular crypt format]: http://packages.python.org/passlib/modular_crypt_format.html
 [SimpleSAMLphp]: http://simplesamlphp.org/
+[jQuery]: http://www.jquery.org/
+[jQuery.MultiFile]: http://code.google.com/p/jquery-multifile-plugin/
+[jQuery.collapse]: http://michael.theirwinfamily.net/articles/jquery/collapsible-fieldsets-jquery-plugin-drupal-style
+[jQuery.tagsinput]: http://xoxco.com/projects/code/tagsinput/
 
