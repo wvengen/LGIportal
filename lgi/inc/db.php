@@ -82,4 +82,4 @@ function lgi_mysql_throw($msg=null) {
 	throw new LGIPortalException("Server Error. Please contact web administrator.");
 }
 
-?> 
+?>

@@ -9,6 +9,7 @@ if (!defined('LGI_PORTAL')) throw new Exception('Page requested outside of porta
 
 require_once('inc/sessions.php');
 
+
 // logout of SimpleSAMLphp first
 if (isset($_SESSION['authsource']) && $_SESSION['authsource']!='local') {
 	$sspinclude = config('SIMPLESAMLPHP_DIR').'/lib/_autoload.php';
