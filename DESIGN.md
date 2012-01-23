@@ -10,7 +10,7 @@ LGIportal source code overview
   * **page** - each page has a corresponding php file here
   * **template** - [Dwoo][] templates for the portals pages
   * **inc** 
-     * **LGI** - code for accessing the [LGI][] project server
+     * **LGI** - code for accessing the [LGI][LGI2] project server
      * **common.php** - general stuff, included in all files
      * **dwoo.php** - template functionality, wraps Dwoo
      * **errors.php** - error handling
@@ -61,9 +61,10 @@ Imported code
   * [jQuery.MultiFile][] - lgi/js/jquery.MultiFile.js
 
 
+[LGI1]: http://gliteui.wks.gorlaeus.net/LGI/
+[LGI2]: http://github.com/wvengen/LGI/wiki
 [Dwoo]: http://www.dwoo.org/
 [MySQL]: http://www.mysql.org/
-[LGI]: http://gliteui.wks.gorlaeus.net/LGI/
 [modular crypt format]: http://packages.python.org/passlib/modular_crypt_format.html
 [SimpleSAMLphp]: http://simplesamlphp.org/
 [jQuery]: http://www.jquery.org/
