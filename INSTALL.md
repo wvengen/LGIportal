@@ -4,7 +4,7 @@ How to deploy the LGI portal
 Requirements
 ------------
 
-0. An [LGI] deployment, ready to use.
+0. An [LGI][LGI2] deployment, ready to use.
 1. [Apache][] webserver.
 2. [PHP] 5+ with [MySQL][PHP-MySQL], [Curl][PHP-Curl] and [JSON][PHP-JSON] support.
      PHP 5.2.0 has the JSON module built-in, otherwise you may need to install it
@@ -14,6 +14,11 @@ Requirements
     to load both Dwoo/dwooAutoload.php or dwoo/dwooAutoload.php,
     whichever succeeds first).
 4. [MySQL][] server.
+
+User certificates are currently required to have a projects field defined. One
+without will refuse to import with the error "Unsupported certificate: need 2
+or 3 semicolon-separated fields in CN". Please see the [LGI design document][],
+section Certificates.
 
 
 Setting up the database
@@ -92,7 +97,9 @@ downgrading (for reverting to a previous version) is not supported, so make
 sure to backup the database before upgrading.
 
 
-[LGI]: http://gliteui.wks.gorlaeus.net/LGI/
+[LGI1]: http://gliteui.wks.gorlaeus.net/LGI/
+[LGI2]: http://github.com/wvengen/LGI/wiki
+[LGI design document]: https://github.com/wvengen/LGI/blob/master/docs/LGI.pdf?raw=true
 [Apache]: http://httpd.apache.org/
 [PHP]: http://php.net/
 [PHP-MySQL]: http://php.net/manual/en/book.mysql.php
