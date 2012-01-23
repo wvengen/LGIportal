@@ -114,9 +114,13 @@ class LGIUser {
 	 * @param string $key LGI credential private key file location
 	 * @return unknown
 	 */
-	static function create($userid, $password, $cert=NULL, $key=NULL) {
-		$hash = hash_password($password);
-		lgi_mysql_query("INSERT INTO %t(users) SET `name`='%%', `passwd_hash`='%%'", $userid, $hash);
+	static function create($userid, $password=NULL, $cert=NULL, $key=NULL) {
+		if (!is_null($password)) {
+			$hash = hash_password($password);
+			lgi_mysql_query("INSERT INTO %t(users) SET `name`='%%', `passwd_hash`='%%'", $userid, $hash);
+		} else {
+			lgi_mysql_query("INSERT INTO %t(users) SET `name`='%%'", $userid);
+		}
 		$o = new LGIUser($userid);
 		if ($cert && $key) $o->set_certkey($cert, $key);
 		return $o;
