@@ -7,6 +7,7 @@
  * @package contrib
  */
 /** */
+define('LGI_OUTPUT_TYPE', 'text/plain');
 require_once(dirname(__FILE__).'/inc/common.php');
 require_once('inc/user.php');
 
