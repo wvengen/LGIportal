@@ -470,7 +470,7 @@
 		max: -1,    // maximum number of selectable files
 		
 		// name to use for newly created elements
-		namePattern: '$name', // same name by default (which creates an array)
+		namePattern: '$name_$i', // same name by default (which creates an array) (LOCAL CUSTOMIZATION TO ADD INDEX)
 		
 		// STRING: collection lets you show messages in different languages
 		STRING: {
