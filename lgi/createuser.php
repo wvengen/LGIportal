@@ -163,7 +163,7 @@ function user_delete($username, $authsource=null, $authid=null) {
 		$args[] = $authid;
 	}
 	// select
-	$qwhere = $filt ? "WHERE ".implode(' AND ', $filt) : '';
+	$qwhere = $filt ? "AND ".implode(' AND ', $filt) : '';
 	$args = array_merge(array("$qfull $qwhere"), $args);
 	$result = call_user_func_array('lgi_mysql_query', $args);
 	
