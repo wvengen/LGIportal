@@ -17,6 +17,8 @@ $url = urldecode($_REQUEST['url']);
 if (isset($_REQUEST['file'])) {
 	// download file
 	$filename = urldecode($_REQUEST['file']);
+	// make sure any spurious whitespace is deleted
+	ob_clean();
 	$fullurl = $url.'/'.$filename;
 	// give proper filename for saveas function of browser
 	header('Content-Disposition: inline;filename='.$filename);
