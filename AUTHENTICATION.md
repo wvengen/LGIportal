@@ -72,7 +72,8 @@ $config = array(
 ```
 
 Just because it's possible: here is an authsource that authenticates against
-LGIportal's local user database.
+LGIportal's local user database (except when the password was created with
+LGIportal 0.3 or below).
 
 ```php
 <?php
@@ -92,6 +93,17 @@ $config = array(
 );
 ?>
 ```
+
+
+Setting up users
+----------------
+Users can be managed with the `createuser.php` script. By default passwords
+are set using the local database, but when specifying the -m option, external
+authentication sources can be managed.
+
+Each user can have multiple authentication sources, so it is possible to login
+from different identity providers into the same account. Please see the
+script's help (-h) for more information.
 
 
 [SimpleSAMLphp]: http://www.simplesamlphp.org/

@@ -53,14 +53,13 @@ You need a valid LGI certificate and private key. Then use the script
 [createuser.php][], for example like this:
 
     cd /var/www/lgi/
-    php createuser.php john s3cretpw /home/lgi/cert/john.crt /home/lgi/cert/john.key
+    php createuser.php -u john -p s3cretpw -c /home/lgi/cert/john.crt -k /home/lgi/cert/john.key
 
-This creates a user 'john' with password 's3cretpw' that has a key and certificate in
-the directory /home/lgi/cert/.
-When you change the certificate (for example, replacing it with one that has more
-groups), the database should be updated as well. Currently this has to be done by
-removing and adding the user again; in the future this is may be done from an
-administration interface in the portal.
+This creates a user 'john' with password 's3cretpw' that has a key and
+certificate in the directory /home/lgi/cert/.
+When you change the certificate (for example, replacing it with one that has
+more groups), the database should be updated as well. This can be done by the
+same command, leaving out the password option.
 
 For more advanced authentication requirements, see [AUTHENTICATION][]
 
