@@ -145,7 +145,7 @@ class LGIDwoo extends Dwoo
 		# lgi variables
 		$lgi = array();
 		$lgi['server'] = config('LGI_SERVER');
-		if (isset($_SESSION['user'])) {
+		if (isset($_SESSION['user'])) try {
 			$user = new LGIUser();
 			$lgi['projects']    = $user->get_projects();
 			$lgi['project']     = $user->get_cur_project();
@@ -153,7 +153,7 @@ class LGIDwoo extends Dwoo
 			$lgi['group']       = $user->get_cur_group();
 			$lgi['fixedgroups'] = $user->get_fixedgroups();
 			$lgi['user']        = $user->get_name();     
-		}
+		} catch(Exception $e) { /* don't fail when user has trouble, e.g .in db */ }
 		set_dwoo_or_array($data, 'lgi', $lgi);
 		# if browser is running on windows or not
 		set_dwoo_or_array($data, 'ua_windows', preg_match('/windows|win32/i', @$_SERVER['HTTP_USER_AGENT']));
