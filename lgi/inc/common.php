@@ -40,13 +40,21 @@ class LGIPortalException extends Exception {
  * This catches uncaught exceptions and stores the error message. Then the
  * most sensible page is shown with the error message.
  *
+ * If the constant LGI_OUTPUT_TYPE is set to 'text/plain', a plain-text
+ * error message will be shown. This is useful for command-line scripts.
+ *
  * @todo show either calling page or same page, with error message
  */
 function lgi_portal_exception_handler($exception)
 {
-	require_once('inc/dwoo.php');
 	pushErrorMessage($exception);
-	LGIDwoo::show('error.tpl');
+	if (defined('LGI_OUTPUT_TYPE') && constant('LGI_OUTPUT_TYPE')=='text/plain') {
+		print("Error: ".getErrorMessage()."\n");
+		clearErrorMessage();
+	} else {
+		require_once('inc/dwoo.php');
+		LGIDwoo::show('error.tpl');
+	}
 	exit(0);
 }
 set_exception_handler('lgi_portal_exception_handler');

@@ -6,6 +6,7 @@
  * @package contrib
  */
 /** */
+define('LGI_OUTPUT_TYPE', 'text/plain');
 require_once(dirname(__FILE__).'/inc/common.php');
 require_once('inc/db.php');
 require_once('inc/user.php');
@@ -116,7 +117,7 @@ if ($olddbver < 1) {
 	} catch (Exception $e) {
 		// migration failed, restore old situation
 		print("\n");
-		print("ERROR, restoring old database structure.");
+		print("error, reverting old database\n");
 		@lgi_mysql_query("DROP TABLE %t(users)"); 
 		@lgi_mysql_query("DROP TABLE %t(usercerts)"); 
 		@lgi_mysql_query("DROP TABLE %t(userprojects)"); 
