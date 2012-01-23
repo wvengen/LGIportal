@@ -56,7 +56,7 @@ to update `$SIMPLESAMLPHP_ATTR_USER` in the [lgi config][].
 Some authsource entries may need some extra attention. To enable Google as
 authentication source, the `openid` module needs to be enabled in SimpleSAMLphp
 by creating the (empty) file `modules/openid/enable` in the SimpleSAMLphp
-codebase. Then email attribute should be requested from `authsources.php`:
+codebase. Then the email attribute should be requested from `authsources.php`:
 
 ```php
 <?php
