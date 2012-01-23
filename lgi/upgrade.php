@@ -133,7 +133,7 @@ if ($olddbver < 1) {
 // register this upgrade in the _meta table
 print("updating _meta table with new version information\n");
 if (config('LGI_VERSION', null)!==null)
-	lgi_mysql_query("INSERT INTO %t(_meta) SET `db_version`=%s, `portal_version`='%s', `applied`=NOW(), `note`='by upgrade script (md5=%s)'", config('LGI_VERSION'), (int)$newdbver, md5_file(__FILE__));
+	lgi_mysql_query("INSERT INTO %t(_meta) SET `db_version`=%s, `portal_version`='%s', `applied`=NOW(), `note`='by upgrade script (md5=%s)'", (int)$newdbver, config('LGI_VERSION'), md5_file(__FILE__));
 else
 	lgi_mysql_query("INSERT INTO %t(_meta) SET `db_version`=%s, `applied`=NOW(), `note`='by upgrade script (md5=%s)'", (int)$newdbver, md5_file(__FILE__));
 
