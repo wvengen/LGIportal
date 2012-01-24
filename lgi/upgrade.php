@@ -118,12 +118,13 @@ if ($olddbver < 1) {
 		// migration failed, restore old situation
 		print("\n");
 		print("error, reverting old database\n");
-		@lgi_mysql_query("DROP TABLE %t(users)"); 
-		@lgi_mysql_query("DROP TABLE %t(usercerts)"); 
-		@lgi_mysql_query("DROP TABLE %t(userprojects)"); 
-		@lgi_mysql_query("DROP TABLE %t(usergroups)"); 
-		@lgi_mysql_query("DROP TABLE %t(auth_simplesamlphp)"); 
-		@lgi_mysql_query("DROP TABLE %t(_meta)");
+		// using try/catch instead of error operator @ because of custom error handler
+		try { lgi_mysql_query("DROP TABLE %t(users)"); } catch(Exception $f) {}
+		try { lgi_mysql_query("DROP TABLE %t(usercerts)"); } catch(Exception $f) {}
+		try { lgi_mysql_query("DROP TABLE %t(userprojects)"); } catch(Exception $f) {}
+		try { lgi_mysql_query("DROP TABLE %t(usergroups)"); } catch(Exception $f) {}
+		try { lgi_mysql_query("DROP TABLE %t(auth_simplesamlphp)"); } catch(Exception $f) {}
+		try { lgi_mysql_query("DROP TABLE %t(_meta)"); } catch(Exception $f) {}
 		lgi_mysql_query("RENAME TABLE %t(users_old) TO %t(users)");
 		throw $e;
 	}
