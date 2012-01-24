@@ -63,7 +63,9 @@ function lgi_mysql_query() {
  * @see lgi_mysql_query()
  */
 function lgi_mysql_fetch_session() {
-	$result = call_user_func_array('lgi_mysql_query', func_get_args());
+	// call_user_func_array('foo', func_get_args()) does not work in some php versions
+	$args = func_get_args();
+	$result = call_user_func_array('lgi_mysql_query', $args);
 	is_resource($result) or lgi_mysql_throw("No SQL result to fetch.");
 	$result = mysql_fetch_assoc($result);
 	foreach($result as $k=>$v)
