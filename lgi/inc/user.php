@@ -67,6 +67,7 @@ function hash_password($password, $salt=null) {
  * assumes mostly that there is a single certificate for each user.
  * 
  * @author wvengen
+ * @package utilities
  */
 class LGIUser {
 
