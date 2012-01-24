@@ -54,7 +54,7 @@ if ($olddbver < 1) {
 		lgi_mysql_query("CREATE TABLE %t(users) ("
 		               ."  `name`         VARCHAR(20) PRIMARY KEY,"
 		               ."  `dfl_project`  VARCHAR(127),"
-		               ."  `passwd_hash`  VARCHAR(150)"
+		               ."  `passwd_hash`  VARCHAR(255)"
 		               .") SELECT "
 		               ."    `userId` AS `name`,"
 		               ."    CONCAT('\$LGIportal_old_1\$',`salt`,'\$',`passwordHash`) AS `passwd_hash`"

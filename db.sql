@@ -12,7 +12,7 @@ CREATE TABLE `users` (
 	-- default project
 	`dfl_project`  VARCHAR(127),
 	-- local password
-	`passwd_hash`  VARCHAR(150)
+	`passwd_hash`  VARCHAR(255)
 );
 
 --
