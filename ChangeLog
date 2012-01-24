@@ -1,4 +1,4 @@
-2012-01-23 LGIportal-0.4 wvengen
+2012-01-24 LGIportal-0.4 wvengen
 * clean urls using PATH_INFO
 * group functionality for collaboration
 * external authentication using SimpleSAMLphp
