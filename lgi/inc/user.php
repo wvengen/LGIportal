@@ -170,11 +170,13 @@ class LGIUser {
 		}
 		// create groups
 		if ($certgroups!==null) {
+			// only the user's own group + the ones specified
 			lgi_mysql_query("DELETE FROM %t(usergroups) WHERE `usercertid`='%%'", $usercertid);
+			lgi_mysql_query("INSERT IGNORE INTO %t(usergroups) SET `usercertid`='%%', `name`='admin'", $usercertid);
 			foreach ($certgroups as $g)
 				lgi_mysql_query("INSERT INTO %t(usergroups) SET `usercertid`='%%', `name`='%%'", $usercertid, $g);
 		} else {
-			// when any group can be chosen, pre-fill database with username and admin as group
+			// when any group can be chosen, pre-fill database with admin
 			lgi_mysql_query("INSERT IGNORE INTO %t(usergroups) SET `usercertid`='%%', `name`='%%'", $usercertid, $this->userid);
 			lgi_mysql_query("INSERT IGNORE INTO %t(usergroups) SET `usercertid`='%%', `name`='admin'", $usercertid);
 		}
