@@ -30,14 +30,13 @@ Authentication
 
 The system implements a form based user login. The username and hashed
 passwords are stored in a [MySQL][] database (using the [modular crypt
-format][]). Further activities of user uses this session. The portal expects an
-SSL connection between server and client.
+format][]). Further activities of the user uses this session. The portal
+expects an SSL connection between server and client.
 
 While there has been an option for http-digest authentication in LGIportal,
 this has been removed from the current version because of maintenance issues.
 
-Authentication using [SimpleSAMLphp][] is on the roadmap, which would enable
-SAML single sign-on.
+For more advanced authentication options, see [AUTHENTICATION][].
 
 
 Database
@@ -71,4 +70,5 @@ Imported code
 [jQuery.MultiFile]: http://code.google.com/p/jquery-multifile-plugin/
 [jQuery.collapse]: http://michael.theirwinfamily.net/articles/jquery/collapsible-fieldsets-jquery-plugin-drupal-style
 [jQuery.tagsinput]: http://xoxco.com/projects/code/tagsinput/
+[AUTHENTICATION]: AUTHENTICATION.md
 
