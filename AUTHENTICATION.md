@@ -40,6 +40,12 @@ login using the `my-saml` authsource would become
 Please note that `local` can not be used as an authsource name, since that
 is used to do LGIportal's local authentication.
 
+In case you're using an IdP discovery service but still want to be able to
+direct users to a specified IdP directly, you can use the `idp` parameter like
+<http://example.org/lgi/index.php/login/idpdisco?idp=urn:foo:bar>. If this IdP
+is present in the loaded metadata, the user will be redirected to that IdP
+instead of the discovery page.
+
 You probably need to update `templates/login.tpl` to give users an option
 to login with the authsources you configured.
 

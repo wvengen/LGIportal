@@ -15,6 +15,9 @@ require_once('inc/errors.php');
 
 // if argument was given, the first one is the method
 $authsource = @$argv[1];
+// if idp parameter was given, use that for saml. 
+//    since this can be a full url, it's not nice as PATH_INFO param
+$authident = @$_REQUEST['idp'];
 
 $username = strip_tags(@$_REQUEST['name']); // to avoid XSS on display; stored in session later
 $password = @$_POST['password'];
@@ -34,7 +37,7 @@ if ($authsource && $authsource!='local')
 	$as = new SimpleSAML_Auth_Simple($authsource); // TODO check what characters are allowed in $authsource!
 	if (!$as->isAuthenticated()) {
 		// First step is to authenticate using SimpleSAMLphp
-		$as->requireAuth();
+		$as->requireAuth(array('saml:idp'=>$authident));
 		exit(0);
 	} else try {
 		// Then we come back here and set the LGIportal session

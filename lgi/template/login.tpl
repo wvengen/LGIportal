@@ -3,9 +3,12 @@
 {block "content"}
 {if $simplesamlphp_exists && $authsource!='local'}
 			<p>Login using
-				<a href="{$approot}/login/feide-openidp">Feide OpenIdp</a>,
+				<a href="{$approot}/login/feide-openidp">Feide OpenIdp</a>, {*
+				<-- alternate way using the idpdiscovery service -->
+				<a href="{$approot}/login/idpdisco?idp=https://openidp.feide.no">Feide OpenIdP</a>, *}
 				<a href="{$approot}/login/twitter">Twitter</a>,
 				<a href="{$approot}/login/google">Google</a>,
+				<a href="{$approot}/login/idpdisco?idp=https://idp.nikhef.nl">Nikhef</a>,
 				<a href="{$approot}/login/idpdisco">another institution</a>.
 			</p>
 			<div>Or with a local account:</div>
