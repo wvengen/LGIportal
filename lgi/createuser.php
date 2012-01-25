@@ -46,7 +46,7 @@ if (array_key_exists('l', $opts)) {
 		print("Must specify both key and certificate, or none.\n");
 		exit(1);
 	}
-	user_add($opts['u'], @$opts['m'], @$opts['p'], @$opts['c'], @$opts['k']);
+	user_add($opts['u'], @$opts['m'], @$opts['p'], @$opts['k'], @$opts['c']);
 }
 
 
