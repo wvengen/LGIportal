@@ -78,7 +78,7 @@ LGIportal 0.3 or below).
 ```php
 <?php
 // at beginning of authsources.php read LGI database config
-global $MYSQL_SERVER, $MYSQL_DBNAME, $MYSQL_USER, $MYSQL_PASSWORD;
+global $MYSQL_SERVER, $MYSQL_DBNAME, $MYSQL_TBLPREFIX, $MYSQL_USER, $MYSQL_PASSWORD;
 include_once('/path/to/lgi/lgi.config.php');
 
 $config = array(
@@ -88,7 +88,7 @@ $config = array(
     'dsn' => 'mysql:host='.$MYSQL_SERVER.';dbname='.$MYSQL_DBNAME,
     'username' => $MYSQL_USER,
     'password' => $MYSQL_PASSWORD,
-    'query' => 'SELECT CONCAT(`name`,"@LGIportal") AS `eduPersonPrincipalName` FROM `users` WHERE `name`=:username AND `passwd_hash`=ENCRYPT(:password,`passwd_hash`)',
+    'query' => 'SELECT `name` AS `eduPersonPrincipalName` FROM `'.$MYSQL_TBLPREFIX.'users` WHERE `name`=:username AND `passwd_hash`=ENCRYPT(:password,`passwd_hash`)',
   ),
 );
 ?>
