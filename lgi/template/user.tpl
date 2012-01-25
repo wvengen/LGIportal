@@ -20,7 +20,7 @@
 				<ol class="cmxform">
 					<li><label for='project'>Project</label> {inputselect 'project' $lgi.projects $lgi.project}</li>
 				{if $lgi.fixedgroups}{*	
-				*}	<li title='Jobs that you submit are accessible to members of this group.'><label for='group'>Default group</label> {inputselect 'group' $lgi.groups $lgi.group}</li>*}
+				*}	<li title='Jobs that you submit are accessible to members of this group.'><label for='group'>Default group</label> {inputselect 'group' $lgi.groups $lgi.group}</li>{*
 				*}{else}{*
 				*}</ol>
 				<div>You are free to use any group you like. In practice you'll work with a small number of groups.
