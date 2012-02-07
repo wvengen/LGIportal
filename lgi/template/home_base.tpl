@@ -1,8 +1,10 @@
 {*
-	This file is the base template for a page that user sees after logging in. This is template is used by home.php, submit.php, delete.php etc. Replace only the "content" to use this template in other pages.
-	Add more options to this file in block "menu"
+	This file is the base template for a page that user sees after logging in.
+	All 'normal' pages will use this, and replace the block "content".
+	Additional header items can be added using the block "addhead".
 
-*}<html>
+*}<!DOCTYPE html>
+<html>
 <head>
 	<title>LGI Portal - {block "title"}{/block}</title>
 	<link rel="stylesheet" href="{$webroot}/css/layout.css" type="text/css" media="screen" />
