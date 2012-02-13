@@ -31,12 +31,14 @@
 				</ol>{*
 				*}{/if}
 				<div style='text-align:right'><input type='submit' name='submit_dfl' id='submit_dfl' value='Save defaults' /></div>
+{*
 				<script type="text/javascript"><!--
-				// update list of default groups when updating groups
+				// TODO update list of default groups when updating groups
 				$(document).ready(function() {
 					// TODO
 				});
 				//--></script>
+*}
 			</fieldset>
 
 			<fieldset class="collapsible uncollapsed"><legend>LGI credentials</legend>

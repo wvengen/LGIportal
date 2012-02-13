@@ -77,7 +77,7 @@
 {/block}		
 		</div>
 		<div id="aside">{block "aside"}{/block}</div>
-		<div id="footer">&copy;2011 <a href="http://www.biggrid.nl/">BiG Grid</a></div>
 	</div>
+	<div id="footer">&copy;2011 <a href="http://www.biggrid.nl/">BiG Grid</a></div>
 </div></body>
 </html> 

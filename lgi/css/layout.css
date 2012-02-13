@@ -103,8 +103,7 @@
 
 #content-container
 {
-	width: 100%;
-	background: #fff url('layoutbg.gif') repeat-y 68% 0;
+	background: #ddd;
 }
 
 #error
@@ -127,9 +126,10 @@
 #content
 {
 	clear: left;
-	width: 60%;
-	padding: 3ex 0 3ex 3ex;
+	padding: 3ex;
 	margin: 0;
+	width: 75%;
+	background: white;
 }
 
 #content h2
@@ -144,9 +144,7 @@
 
 #aside
 {
-	width: 26%;
-	padding: 20px 0;
-	margin: 0 2% 0 0;
+	width: 23%;
 	display: inline;
 }
 
@@ -187,6 +185,9 @@ td.spacer, th.spacer {
 .nonimp {
 	color: #777;
 }
+/* nice background for large fieldsets to overlap right border */
+fieldset           { background: white; }
+fieldset.collapsed { background: inherit; }
 /* jquery.MultiFile delete image */
 a.MultiFile-remove {
 	font-size: 0;
@@ -252,7 +253,6 @@ table.list
 {
 	border: 2px solid #ccc;
 	border-collapse: collapse;
-	width: 100%;
 }
 table.list tr
 {
@@ -269,7 +269,7 @@ table.list.interactive tr:hover, table.list th
 table.list td, table.list th
 {
 	padding-left: 0.4em;
-	padding-right: 0.2em;
+	padding-right: 0.6em;
 	text-align: left;
 }
 table.list td {
@@ -289,8 +289,8 @@ table.desc th {
 /*
  * Job, file and resource list & details
  */
-table.joblist .name { width: 10em; text-align: left; }
-table.joblist .id   { width:  2em; text-align: right; }
+table.joblist .name { min-width: 8em; text-align: left; }
+table.joblist .id   { min-width: 2em; text-align: right; }
 table.joblist .app  { min-width: 5em; }
 
 /* make table cells clicklable, not just links */
