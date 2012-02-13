@@ -3,7 +3,7 @@
 	All 'normal' pages will use this, and replace the block "content".
 	Additional header items can be added using the block "addhead".
 
-*}<!DOCTYPE html>
+*}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
 	<title>LGI Portal - {block "title"}{/block}</title>
@@ -37,12 +37,12 @@
 				<script type="text/javascript"><!--
 				var approot = "{$approot}";
 				// enhance group switch button with drop-down menu to dynamically switch group
-				document.write('<ul class="dropdown" style="display:none"><li class="header">switch group</li>');
+				document.write('<ul class="dropdown" style="display:none"><li class="header">switch group<\/li>');
 				{foreach $lgi.groups g}
-				document.write('<li><a href="javascript:switch_group(\'{$g}\')"><img src="{$webroot}/icons/system-users_16.png" width="16" height="16" alt="Group" /> {$g}</a></li>');
+				document.write('<li><a href="javascript:switch_group(\'{$g}\')"><img src="{$webroot}/icons/system-users_16.png" width="16" height="16" alt="Group" /> {$g}<\/a><\/li>');
 				{/foreach}{*
 				*}{literal}
-				document.write('</ul>');
+				document.write('<\/ul>');
 				// open menu on hover
 				$(document).ready(function() {
 					$('#nav_user_groups').hover(function() {
@@ -78,6 +78,6 @@
 		</div>
 		<div id="aside">{block "aside"}{/block}</div>
 	</div>
-	<div id="footer">&copy;2011 <a href="http://www.biggrid.nl/">BiG Grid</a></div>
+	<div id="footer">&#169;2011 <a href="http://www.biggrid.nl/">BiG Grid</a></div>
 </div></body>
 </html> 

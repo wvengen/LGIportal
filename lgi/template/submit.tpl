@@ -10,11 +10,12 @@
 {block "content"}
 {load_templates "functions.tpl"}
 				<form id='newjob' action='{$approot}/submit' method='post' enctype='multipart/form-data'>
-					<input type='hidden' name='nonce' value='{$nonce}' />
+					<fieldset class='noframe'>
+						<input type='hidden' name='nonce' value='{$nonce}' />
 
-					<div><label for='input'>Input</label></div>
-					<textarea name='input' id='input' wrap='off' cols='80' rows='15'>{$input}</textarea>
-					<p></p>
+						<div><label for='input'>Input</label></div>
+						<textarea name='input' id='input' wrap='off' cols='80' rows='15'>{$input}</textarea>
+					</fieldset>
 
 					<fieldset class='collapsible uncollapsed'><legend>Attach files</legend>
 						<input name='uploaded_file' id='uploaded_file' type='file' class='multi' />
@@ -33,7 +34,7 @@
 						</div>
 					</fieldset>
 
-					<p style="text-align: right"><input type='submit' name='submit' id='submit' value='Submit job' />
+					<p style="text-align: right"><input type='submit' name='submit' id='submit' value='Submit job' /></p>
 				</form>
 {/block}
 

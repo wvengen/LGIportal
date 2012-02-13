@@ -15,11 +15,11 @@
 
 *}
 {template actionbutton action jobid nonce title image width=16 height=16}{*
-*}<form action='{$action}' method='POST'>{*
+*}<form action='{$action}' method='post'><fieldset class='noframe'>{*
 		*}<input type='hidden' name='nonce' value='{$nonce}'/>{*
 		*}<input type='hidden' name='job_id' value='{$jobid}'/>{*
-		*}<input type='image' name='submit' value='{$title}' title='{$title}' width='{$width}' height='{$height}' src='{$image}'/>{*
-	*}</form>{*
+		*}<input type='image' name='submit' value='{$title}' title='{$title}' style='width: {$width}; height: {$height}' src='{$image}'/>{*
+	*}</fieldset></form>{*
 *}{/template}
 
 {*

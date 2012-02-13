@@ -2,8 +2,10 @@
 {block "title"}Your profile{/block}
 {block "content"}
 {load_templates "functions.tpl"}
-		<form action='{$approot}/user' method='POST'>
-			<input type='hidden' name='nonce' value='{$nonce}' />
+		<form action='{$approot}/user' method='post'>
+			<fieldset class='noframe'>
+				<input type='hidden' name='nonce' value='{$nonce}' />
+			</fieldset>
 
 {if !isset($authsource) || $authsource=='local'}
 			<fieldset class="collapsible uncollapsed"><legend>Password</legend>
