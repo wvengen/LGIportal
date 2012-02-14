@@ -38,7 +38,7 @@ function verifyJobid($jobid, $returnto)
  */
 function lgi_guess_title($application, $input)
 {
-	if (preg_match('/^\s*[^#\n]*#\s*(.*?)\s*[.;\n$]/', $input, &$matches))
+	if (preg_match('/^\s*[^#\n]*#\s*(.*?)\s*(\.|;|\r|\n|$).*/', $input, &$matches))
 		return $matches[1];
 	return null;
 }
@@ -52,7 +52,6 @@ function lgi_guess_title($application, $input)
  *
  * Also repository access is checked against LGI_REPOSITORY configuration.
  *
- * @todo add job name to job info (joblist/jobinfo/submit)
  * @package utilities
  */
 class LGIPortalClient extends LGIClient
