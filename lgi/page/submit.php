@@ -57,7 +57,10 @@ else
 		$files[$f['name']] = $f['tmp_name'];
 	}
 
-	$result = $lgi->jobSubmit($application, $input, 'any', $write_access, $read_access, $files);
+	// job title is first comment line
+	$job_specifics = array();
+	if ( ($title=lgi_guess_title($application, $input))!==null) $job_specifics['title'] = $title;
+	$result = $lgi->jobSubmit($application, $input, 'any', $job_specifics, $write_access, $read_access, $files);
 
 	// success! redirect to allow user to reload
 	http_redirect(config('LGI_APPROOT').'/job/'.urlencode($result['job']['job_id']));

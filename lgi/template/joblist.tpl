@@ -16,7 +16,7 @@
 					<td class="state">{stateimg $state}</td>
 					<td class="id"><a href="{$__.approot}/job/{$job_id}">{$job_id}</a></td>
 					<td class="app"><a href="{$__.approot}/job/{$job_id}">{$application}</a></td>
-					<td class="name"><a href="{$__.approot}/job/{$job_id}">{tif $name ? $name: '(untitled)'}</a></td>
+					<td class="name"><a href="{$__.approot}/job/{$job_id}">{tif $job_specifics.title ? $job_specifics.title : '(untitled)'}</a></td>
 					<td class="owners">{$owners}</td>
 					<td class="target">{$target_resources}</td>
 					<td class="action spacer">{abdelbutton $job_id $state $__.nonce}</td>

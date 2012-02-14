@@ -10,7 +10,7 @@
 			<table class="jobdetails desc">
 				<tr class="id">
 					<th>Job:</th>
-					<td>{$job.job_id} {if $job.job_name && $job.job_name!='(untitled)'}: <i>{$job_name}</i>{/if}</td>
+					<td>{$job.job_id}{if $job.job_specifics.title} <i>{$job.job_specifics.title}</i>{/if}</td>
 				</tr>
 				<tr class="app">
 					<th>Application:</th>

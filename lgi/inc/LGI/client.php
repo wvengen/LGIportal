@@ -180,6 +180,8 @@ class LGIClient extends LGIConnection
 	 *
 	 * @param string $application application name to submit to
 	 * @param string $target_resources valid resources, or 'any'
+	 * @param string $job_specifics job specifics; can be either a string
+	 *          or a flat associative array that will be converted to xml
 	 * @param string $write_access comma-separated list of users/groups
 	 *          to give additional write access to
 	 * @param string $read_access comma-separated list of users/groups
@@ -190,7 +192,7 @@ class LGIClient extends LGIConnection
 	 * @throws LGIConnectionException when there is a connection or server problem
 	 * @throws LGIServerException when the project server returns an error response
 	 */
-	function jobSubmit($application, $input=null, $target_resources='any', $write_access=null, $read_access=null, $files=array())
+	function jobSubmit($application, $input=null, $target_resources='any', $job_specifics=null, $write_access=null, $read_access=null, $files=array())
 	{
 		$args = array(
 			'project' => $this->project,
@@ -200,6 +202,15 @@ class LGIClient extends LGIConnection
 		);
 		if ($application!==null) $args['application'] = $application;
 		if ($target_resources!==null) $args['target_resources'] = $target_resources;
+		if ($job_specifics!==null) {
+			if (is_array($job_specifics)) {
+				array_walk($job_specifics, create_function('&$value,$key', '
+						$value="<$key>".htmlspecialchars($value)."</$key>";
+					'));
+				$job_specifics = implode($job_specifics);
+			}
+			$args['job_specifics'] = $job_specifics;
+		}
 		if ($write_access!==null) $args['write_access'] = $write_access;
 		if ($read_access!==null) $args['read_access'] = $read_access;
 		if ($input!==null) $args['input'] = implode(unpack('H*', $input));

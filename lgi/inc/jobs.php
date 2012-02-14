@@ -28,6 +28,22 @@ function verifyJobid($jobid, $returnto)
 }
 
 /**
+ * Try to extract a title from the input field.
+ *
+ * Currently returns the first comment line, or null if not present.
+ *
+ * @param string $application application name
+ * @param string $input input
+ * @return string title, or null when nothing found.
+ */
+function lgi_guess_title($application, $input)
+{
+	if (preg_match('/^\s*[^#\n]*#\s*(.*?)\s*[.;\n$]/', $input, &$matches))
+		return $matches[1];
+	return null;
+}
+
+/**
  * LGIClient that integrates with the portal
  *
  * By default the LGI project server details are used from the LGIportal
