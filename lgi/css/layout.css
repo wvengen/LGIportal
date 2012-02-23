@@ -280,7 +280,8 @@ table.list td, table.list th
 	text-align: left;
 }
 table.list td {
-	border: 1px solid #eee;
+	/*border: 1px solid #eee;*/
+	padding-top: 0.25ex;
 	border-collapse: collapse;
 }
 
@@ -325,3 +326,17 @@ table.serverlist td.url {
 table.resourcelist .old {
   color: #999;
 }
+
+/* job list: collapsible rows */
+table.joblist .container .id             { font-style: italic; }
+table.joblist .uncollapsed.child-top     { border-top: 1px solid #ccc; }
+table.joblist .contained.child-bottom    { border-bottom: 1px solid #ccc; }
+table.joblist .contained.child-bottom td { padding-bottom: 0.5ex; }
+table.joblist .uncollapsed.child-top td  { padding-top: 0.5ex; }
+table.joblist .contained td.collapse {
+        background: url('expander_line_10.png') center repeat-y;
+}
+table.joblist .contained.child-bottom td.collapse {
+        background: url('expander_end_10.png') center top no-repeat;
+}
+

@@ -121,4 +121,28 @@ function http_redirect($url)
         header('Location: '.$url);
 }
 
+/**
+ * Find common prefix of a number of strings
+ *
+ * @see http://stackoverflow.com/questions/1336207/finding-common-prefix-of-array-of-strings
+ */
+function str_prefix()
+{
+	$in = func_get_args();
+	// take the first item as initial prefix
+	$prefix = array_shift($in);
+	$length = strlen($prefix);
+	// compare the current prefix with the prefix of the same length of the other items
+	foreach ($in as $item) {
+		// check if there is a match; if not, decrease the prefix by one character at a time
+		while ($length && substr($item, 0, $length) !== $prefix) {
+			$length--;
+			$prefix = substr($prefix, 0, -1);
+		}
+		if (!$length)
+			break;
+	}
+	return $prefix;
+}
+
 ?>

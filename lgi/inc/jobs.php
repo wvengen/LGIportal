@@ -118,6 +118,34 @@ class LGIPortalClient extends LGIClient
 		throw new LGIPortalException('Repository not allowed');
 	}
 
+	/** Return job list (with derived fields)
+     *
+     * @see LGIClient::jobList
+     */
+	function jobList($application=null, $state=null, $start=null, $limit=null) {
+        $ret = parent::jobList($application, $state, $start, $limit);
+
+        // count number of children each parent job has
+        $jobs = &$ret['job'];
+        $parentjobs = array();
+        foreach ($jobs as $job) {
+            $p = @$job['job_specifics']['parent'];
+            if (!$p) continue;
+            if (!array_key_exists($p, $parentjobs))
+                $parentjobs[$p] = 1;
+            else
+                $parentjobs[$p]++;
+        }
+        // set properties of parent job
+        for ($i=0; $i<count($jobs); $i++) {
+            $job = &$jobs[$i];
+            if (array_key_exists($job['job_id'], $parentjobs)) {
+                $job['job_specifics']['parent'] = $job['job_id'];
+                $job['job_specifics']['nchildren'] = $parentjobs[$job['job_id']];
+            }
+        }
+        return $ret;
+    }
 }
 
 ?>
