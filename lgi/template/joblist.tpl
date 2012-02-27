@@ -1,25 +1,38 @@
 {extends "home_base.tpl"}
 {block "addhead"}
 <script type="text/javascript"><!--
+
+// list of collapsed container ids
+var collapsed = [];
+
 function collapse_container(id, collapse, animation) {
 	var container = $('#container-'+id);
         if (typeof(collapse)=='undefined') collapse = container.hasClass('uncollapsed');
-	if (typeof(animation)=='undefined') animation = 'fold';
-	// do so
+	if (typeof(animation)=='undefined') animation = 100;
         if (collapse) {
+		collapsed.push(id);
                 $('.contained-by-'+id).hide(animation, function() {
                         container.removeClass('child-top');
+			update_rows(container.parent());
                 });
                 container.removeClass('uncollapsed').addClass('collapsed');
 		$('.collapse img', container)[0].src = '{$webroot}/css/menu-collapsed.png';
-		// TODO fix table colouring
         } else {
 		$('.collapse img', container)[0].src = '{$webroot}/css/menu-expanded.png';
                 container.removeClass('collapsed').addClass('uncollapsed child-top');
                 $('.contained-by-'+id).show(animation);
-		// TODO fix table colouring
+		collapsed = jQuery.grep(collapsed, function(a){ return a!=id; });
+		update_rows(container.parent());
         }
 	return container;
+}
+
+// update even/odd row colouring, according to collapsed rows
+function update_rows(container) {
+	var sel = '';
+	for (i in collapsed) sel += ':not(.contained-by-'+collapsed[i]+')';
+	$('tr'+sel+':even', container).removeClass('even odd').addClass('even');
+	$('tr'+sel+':odd ', container).removeClass('even odd').addClass('odd');
 }
 
 // collapse by default
@@ -33,7 +46,7 @@ $(function() {
 	});
 	// collapse them
 	for (var i in ids) {
-		collapse_container(ids[i], true, null);
+		collapse_container(ids[i], true, 0);
 	}
 });
 --></script>
