@@ -33,11 +33,11 @@ for ($i=0; $i<count($jobs); $i++) {
         $newjob['isparent'] = true;
         unset($newjob['target_resources']); // not too useful for placeholder
         array_splice($jobs, $i, 0, array($newjob));
-        $parentsdone[$parent] = array($i, 0); // index, childrenfound
+        $parentsdone[$parent] = array($i, array()); // index, list of child ids
         $i++;
     }
     $parentjob = &$jobs[$parentsdone[$parent][0]];
-    $parentsdone[$parent][1]++;
+    $parentsdone[$parent][1][] = $job['job_id'];
     // number of children is available at real parent job, get it from there
     if (array_key_exists('nchildren', $job['job_specifics'])) {
         // plus one because the parent job counts as a child as well in the interface
@@ -45,8 +45,10 @@ for ($i=0; $i<count($jobs); $i++) {
     }
     // last child gets special flag
     if (array_key_exists('nchildren', $parentjob['job_specifics']) &&
-            intval($parentjob['job_specifics']['nchildren']) == $parentsdone[$parent][1]) {
+            intval($parentjob['job_specifics']['nchildren']) == count($parentsdone[$parent][1])) {
         $job['child_bottom'] = 1;
+        // and now we have the last child, set children of parent job
+        $parentjob['job_id'] = implode(',', $parentsdone[$parent][1]);
     }
     // title is that part of the title that is shared by all children
     if (array_key_exists('title', $job['job_specifics'])) {

@@ -27,13 +27,16 @@ else
 {
 	// delete job
 	verifyNonce($_POST['nonce']);
-	$job_id = verifyJobid($_POST['job_id'], 'jobs');
+    $job_ids = array();
+    foreach (explode(',', $_POST['job_id']) as $job_id)
+        $job_ids[] = verifyJobid($job_id, 'jobs');
 
 	$lgi = new LGIPortalClient();
-	$result = $lgi->jobDelete($job_id);
+    foreach($job_ids as $job_id)
+        $result = $lgi->jobDelete($job_id);
 
-	if (!in_array($result['job']['state'], array('deleted', 'aborting', 'aborted')))
-		throw new LGIPortalException('Failed to delete job '.$job_id);
+    if (count($job_ids)==1 && !in_array($result['job']['state'], array('deleted', 'aborting', 'aborted')))
+		throw new LGIPortalException('Failed to delete jobs '.$job_ids);
 
 	// success! redirect to allow user to reload
 	http_redirect(config('LGI_APPROOT').'/jobs');
