@@ -46,23 +46,23 @@ function hash_password($password, $salt=null) {
 	} elseif (defined('CRYPT_BLOWFISH') && CRYPT_BLOWFISH==1) {
 		$saltlen = 22;
 		$saltprefix = '$2a$07$';
-    // fallback to DES, which should be available everywhere ... :o
-    } elseif (config('LGIPORTAL_ALLOW_INSECURE_PASSWORD',0)==1) {
-        trigger_error('Using INSECURE password hashing algorithm MD5. Don\'t do this in production!', E_WARNING);
-        $saltlen = 12;
-        $saltprefix = '$1$';
+	// fallback to DES, which should be available everywhere ... :o
+	} elseif (config('LGIPORTAL_ALLOW_INSECURE_PASSWORD',0)==1) {
+		trigger_error('Using INSECURE password hashing algorithm MD5. Don\'t do this in production!', E_USER_WARNING);
+		$saltlen = 12;
+		$saltprefix = '$1$';
 	} else {
-        throw new LGIPortalException("Crypt does not support SHA512, SHA256 or Blowfish; "
-                                    ."for non-production deployments you may set "
-                                    ."LGIPORTAL_ALLOW_INSECURE_PASSWORD=1 in lgi.config.php");
-    }
+		throw new LGIPortalException("Crypt does not support SHA512, SHA256 or Blowfish; "
+		                            ."for non-production deployments you may set "
+		                            ."LGIPORTAL_ALLOW_INSECURE_PASSWORD=1 in lgi.config.php");
+	}
 	// generate salt
 	$salt = '';
-    static $saltchars = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+	static $saltchars = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 	for ($i=0;$i<$saltlen;$i++)
 		$salt .= $saltchars[mt_rand(0,strlen($saltchars))];
-    // return hashed password
-    return crypt($password, $saltprefix.$salt);
+	// return hashed password
+	return crypt($password, $saltprefix.$salt);
 }
 
 
